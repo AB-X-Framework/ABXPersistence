@@ -1,4 +1,4 @@
-package org.abx.console.creds;
+package org.abx.persistence.creds;
 
 
 import jakarta.persistence.EntityManagerFactory;
@@ -23,7 +23,7 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "org.abx.console.creds.dao",
+        basePackages = "org.abx.persistence.creds.dao",
         entityManagerFactoryRef = "credsEntityManagerFactory",
         transactionManagerRef = "credsTransactionManager"
 )

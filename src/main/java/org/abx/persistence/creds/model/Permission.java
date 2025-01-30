@@ -1,4 +1,4 @@
-package org.abx.console.creds.model;
+package org.abx.persistence.creds.model;
 
 
 import java.util.Collection;

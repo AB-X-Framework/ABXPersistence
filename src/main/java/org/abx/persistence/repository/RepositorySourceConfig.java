@@ -1,4 +1,4 @@
-package org.abx.console.repository;
+package org.abx.persistence.repository;
 
 
 import jakarta.persistence.EntityManagerFactory;
@@ -24,7 +24,7 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "org.abx.console.repository.dao",
+        basePackages = "org.abx.persistence.repository.dao",
         entityManagerFactoryRef = "repositoryEntityManagerFactory",
         transactionManagerRef = "repositoryTransactionManager"
 )

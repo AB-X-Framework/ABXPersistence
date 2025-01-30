@@ -1,8 +1,8 @@
-package org.abx.console.console;
+package org.abx.persistence;
 
 import org.junit.jupiter.api.Test;
 
-class ABXConsoleTest {
+class ABXPersistenceTest {
 
 	@Test
 	public void doBasicTest() {

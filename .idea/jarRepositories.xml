@@ -27,14 +27,14 @@
       <option name="url" value="https://repo1.maven.org/maven2" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="5_openimaj-snapshots" />
-      <option name="name" value="mavenopenimajsnapshots" />
-      <option name="url" value="http://snapshots.openimaj.org/" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="7_eclipse-maven" />
       <option name="name" value="eclipse" />
       <option name="url" value="https://repo.eclipse.org/content/repositories/jgit-releases/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="5_openimaj-snapshots" />
+      <option name="name" value="mavenopenimajsnapshots" />
+      <option name="url" value="http://snapshots.openimaj.org/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="5_openimaj-maven" />

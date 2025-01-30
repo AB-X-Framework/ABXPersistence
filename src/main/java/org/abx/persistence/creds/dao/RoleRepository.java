@@ -1,6 +1,6 @@
-package org.abx.console.creds.dao;
+package org.abx.persistence.creds.dao;
 
-import org.abx.console.creds.model.Role;
+import org.abx.persistence.creds.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {

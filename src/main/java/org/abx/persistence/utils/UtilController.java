@@ -1,10 +1,10 @@
-package org.abx.console.utils;
+package org.abx.persistence.utils;
 
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.abx.console.creds.model.Role;
-import org.abx.console.creds.CredsDataLoader;
+import org.abx.persistence.creds.model.Role;
+import org.abx.persistence.creds.CredsDataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;

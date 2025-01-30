@@ -1,6 +1,6 @@
-package org.abx.console.repository;
+package org.abx.persistence.repository;
 
-import org.abx.console.repository.dao.UserDetailsRepository;
+import org.abx.persistence.repository.dao.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

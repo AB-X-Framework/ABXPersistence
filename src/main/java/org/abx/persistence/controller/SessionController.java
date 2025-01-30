@@ -1,4 +1,4 @@
-package org.abx.console.controller;
+package org.abx.persistence.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

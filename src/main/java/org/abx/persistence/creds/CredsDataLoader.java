@@ -1,12 +1,12 @@
-package org.abx.console.creds;
+package org.abx.persistence.creds;
 
 
-import org.abx.console.creds.dao.PermissionRepository;
-import org.abx.console.creds.dao.RoleRepository;
-import org.abx.console.creds.dao.UserRepository;
-import org.abx.console.creds.model.Permission;
-import org.abx.console.creds.model.Role;
-import org.abx.console.creds.model.User;
+import org.abx.persistence.creds.dao.PermissionRepository;
+import org.abx.persistence.creds.dao.RoleRepository;
+import org.abx.persistence.creds.dao.UserRepository;
+import org.abx.persistence.creds.model.Permission;
+import org.abx.persistence.creds.model.Role;
+import org.abx.persistence.creds.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
