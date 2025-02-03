@@ -47,7 +47,7 @@ public class RepositorySourceConfig {
         properties.put("hibernate.hbm2ddl.auto", ddlAuto); // Ensures schema update
         return builder
                 .dataSource(dataSource)
-                .packages("org.abx.console.repository.model") // Your entity package
+                .packages("org.abx.persistence.repository.model") // Your entity package
                 .persistenceUnit("repository")
                 .properties(properties)
                 .build();
