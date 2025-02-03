@@ -32,7 +32,7 @@ public class PersistenceDataLoader {
     @Transactional(transactionManager = "persistenceTransactionManager")
     public RepoDetails createRepoIfNotFound(UserDetails userDetails, final String name, String url,
                                             String branch, String creds) {
-        String globalName = userDetails.getName() + name;
+        String globalName = userDetails.getName() +"/"+ name;
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
         if (repoDetails == null) {
             repoDetails = new RepoDetails(globalName);
