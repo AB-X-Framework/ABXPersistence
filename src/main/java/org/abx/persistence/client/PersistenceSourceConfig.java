@@ -28,7 +28,7 @@ import java.util.Map;
         entityManagerFactoryRef = "persistenceEntityManagerFactory",
         transactionManagerRef = "persistenceTransactionManager"
 )
-public class RepositorySourceConfig {
+public class PersistenceSourceConfig {
 
     @Bean(name = "persistenceDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.persistence")

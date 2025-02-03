@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class RepositoryDataLoader {
+public class PersistenceDataLoader {
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;

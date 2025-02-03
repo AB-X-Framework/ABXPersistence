@@ -1,7 +1,7 @@
 package org.abx.persistence.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.abx.persistence.client.RepositoryDataLoader;
+import org.abx.persistence.client.PersistenceDataLoader;
 import org.abx.persistence.client.model.RepoDetails;
 import org.abx.persistence.client.model.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class PersistenceController {
 
     @Autowired
-    private RepositoryDataLoader dataLoader;
+    private PersistenceDataLoader dataLoader;
 
     @Secured("persistence")
     @RequestMapping(value = "/user")
