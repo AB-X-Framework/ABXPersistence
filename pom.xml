@@ -8,6 +8,15 @@
 		<version>3.2.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<repositories>
+		<repository>
+			<id>github-ABXUSArch</id>
+			<url>https://maven.pkg.github.com/AB-X-Framework/ABXUSArch</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 	<groupId>org.abx.persitence</groupId>
 	<artifactId>persistence</artifactId>
 	<version>1.0-SNAPSHOT</version>
