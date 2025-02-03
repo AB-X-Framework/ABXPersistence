@@ -69,6 +69,27 @@ class ABXPersistenceTest {
         Assertions.assertEquals(branch, repos.getJSONObject(0).getString("branch"));
         Assertions.assertEquals(url, repos.getJSONObject(0).getString("url"));
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
+
+        branch = "newBranch";
+        req = servicesClient.post("persistence", "/persistence/newRepo");
+        req.addPart("name", repoName);
+        req.addPart("branch", branch);
+        req.addPart("url", url);
+        req.addPart("creds", creds);
+        req.jwt(token);
+        servicesClient.process(req);
+
+        req = servicesClient.get("persistence", "/persistence/repos");
+        req.jwt(token);
+        resp = servicesClient.process(req);
+         repos = resp.asJSONArray();
+        Assertions.assertEquals(1, repos.length());
+
+        Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("name"));
+        Assertions.assertEquals(branch, repos.getJSONObject(0).getString("branch"));
+        Assertions.assertEquals(url, repos.getJSONObject(0).getString("url"));
+        Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
+
     }
 
     @AfterAll
