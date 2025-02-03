@@ -1,14 +1,14 @@
 package org.abx.persistence.client.dao;
 
-import org.abx.persistence.client.model.UserDetail;
+import org.abx.persistence.client.model.UserDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserDetailsRepository extends JpaRepository<UserDetail, Long> {
+public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> {
 
-    UserDetail findByName(String name);
+    UserDetails findByName(String name);
 
     @Override
-    void delete(UserDetail userDetail);
+    void delete(UserDetails userDetails);
 
 
 }

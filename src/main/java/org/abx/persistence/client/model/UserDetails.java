@@ -6,7 +6,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "userdetail")
-public class UserDetail {
+public class UserDetails {
 
     @Id
     @Column(unique = true, nullable = false)
@@ -20,13 +20,13 @@ public class UserDetail {
     @JoinTable(name = "user_repositories",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "repo_id", referencedColumnName = "id"))
-    private Collection<RepoDetails> permissions;
+    private Collection<RepoDetails> repoDetails;
 
-    public UserDetail() {
+    public UserDetails() {
         super();
     }
 
-    public UserDetail(final String name) {
+    public UserDetails(final String name) {
         super();
         this.name = name;
     }
@@ -37,5 +37,13 @@ public class UserDetail {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public Collection<RepoDetails> getRepoDetails() {
+        return repoDetails;
+    }
+
+    public void setRepoDetails(Collection<RepoDetails> repoDetails) {
+        this.repoDetails = repoDetails;
     }
 }

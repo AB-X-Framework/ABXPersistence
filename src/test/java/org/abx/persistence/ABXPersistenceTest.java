@@ -43,6 +43,18 @@ class ABXPersistenceTest {
 		req.jwt(token);
 		ServiceResponse resp = servicesClient.process(req);
 		Assertions.assertEquals(username,resp.asString());
+
+		String repoName = "myRepo";
+		String branch = "main";
+		String url = "git@github.com:AB-X-Framework/ABXPersistence.git";
+		req = servicesClient.post("persistence", "/persistence/newRepo");
+		req.addPart("name",repoName);
+		req.addPart("branch",branch);
+		req.addPart("url",url);
+		req.addPart("creds","{}");
+		req.jwt(token);
+		 resp = servicesClient.process(req);
+		Assertions.assertEquals(repoName,resp.asString());
 	}
 
 	@AfterAll

@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RepoDetailsRepository extends JpaRepository<RepoDetails, Long> {
 
+    RepoDetails findByGlobalName(String name);
+    
     @Override
     void delete(RepoDetails repoDetails);
 
