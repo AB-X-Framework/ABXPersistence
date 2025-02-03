@@ -1,4 +1,4 @@
-package org.abx.persistence.repository;
+package org.abx.persistence.client;
 
 
 import jakarta.persistence.EntityManagerFactory;
@@ -24,43 +24,42 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "org.abx.persistence.repository.dao",
-        entityManagerFactoryRef = "repositoryEntityManagerFactory",
-        transactionManagerRef = "repositoryTransactionManager"
+        basePackages = "org.abx.persistence.client.dao",
+        entityManagerFactoryRef = "persistenceEntityManagerFactory",
+        transactionManagerRef = "persistenceTransactionManager"
 )
 public class RepositorySourceConfig {
 
-    @Bean(name = "repositoryDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.repository")
+    @Bean(name = "persistenceDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.persistence")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "repositoryEntityManagerFactory")
-    @ConfigurationProperties(prefix = "spring.datasource.repository.jpa")
+    @Bean(name = "persistenceEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            @Qualifier("repositoryEntityManagerFactoryBuilder")  EntityManagerFactoryBuilder builder,
-            @Qualifier("repositoryDataSource") DataSource dataSource,
-            @Value("${spring.datasource.repository.hbm2ddl.auto}") String ddlAuto) {
+            @Qualifier("persistenceEntityManagerFactoryBuilder")  EntityManagerFactoryBuilder builder,
+            @Qualifier("persistenceDataSource") DataSource dataSource,
+            @Value("${spring.datasource.persistence.hbm2ddl.auto}") String ddlAuto) {
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", ddlAuto); // Ensures schema update
         return builder
                 .dataSource(dataSource)
-                .packages("org.abx.persistence.repository.model") // Your entity package
-                .persistenceUnit("repository")
+                .packages("org.abx.persistence.client.model") // Your entity package
+                .persistenceUnit("persistence")
                 .properties(properties)
                 .build();
     }
 
     @Primary
-    @Bean(name = "repositoryTransactionManager")
+    @Bean(name = "persistenceTransactionManager")
     public PlatformTransactionManager transactionManager(
-            @Qualifier("repositoryEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+            @Qualifier("persistenceEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 
-    @Bean(name = "repositoryEntityManagerFactoryBuilder")
+    @Bean(name = "persistenceEntityManagerFactoryBuilder")
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
         return new EntityManagerFactoryBuilder(new HibernateJpaVendorAdapter(), new HashMap<>(), null);
     }

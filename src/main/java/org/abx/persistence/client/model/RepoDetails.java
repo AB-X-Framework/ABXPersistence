@@ -1,4 +1,4 @@
-package org.abx.persistence.repository.model;
+package org.abx.persistence.client.model;
 
 import jakarta.persistence.*;
 

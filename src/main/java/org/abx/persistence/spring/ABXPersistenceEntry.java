@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "org.abx.persistence.spring",
         "org.abx.services",
         "org.abx.jwt",
-        "org.abx.persistence.repository",
+        "org.abx.persistence.client",
         "org.abx.persistence.controller"})
 public class ABXPersistenceEntry {
 
