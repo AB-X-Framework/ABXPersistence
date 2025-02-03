@@ -4,8 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
+        "org.abx.sec",
         "org.abx.persistence.spring",
         "org.abx.services",
+        "org.abx.jwt",
         "org.abx.persistence.repository",
         "org.abx.persistence.controller"})
 public class ABXPersistenceEntry {
