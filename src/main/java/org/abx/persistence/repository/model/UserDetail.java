@@ -2,6 +2,8 @@ package org.abx.persistence.repository.model;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
 @Table(name = "userdetail")
 public class UserDetail {
@@ -12,6 +14,13 @@ public class UserDetail {
     private Long id;
 
     private String name;
+
+
+    @OneToMany
+    @JoinTable(name = "user_repositories",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "repo_id", referencedColumnName = "id"))
+    private Collection<RepoDetails> permissions;
 
     public UserDetail() {
         super();
