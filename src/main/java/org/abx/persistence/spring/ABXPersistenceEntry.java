@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "org.abx.persistence.spring",
         "org.abx.persistence.utils",
         "org.abx.persistence.repository",
-        "org.abx.persistence.creds",
         "org.abx.persistence.controller"})
 public class ABXPersistenceEntry {
 

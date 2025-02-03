@@ -1,7 +1,0 @@
-
-CREATE DATABASE abxCreds;
-CREATE USER 'abx'@'localhost' IDENTIFIED BY 'admin';
-CREATE USER 'abx'@'%' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON abxCreds.* TO 'abx'@'localhost' WITH GRANT OPTION;
-GRANT ALL PRIVILEGES ON abxCreds.* TO 'abx'@'%' WITH GRANT OPTION;
-FLUSH PRIVILEGES;

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/session")
-public class SessionController {
+public class PersistenceController {
 
 
     @RequestMapping(value = "/login", produces = "application/json")
