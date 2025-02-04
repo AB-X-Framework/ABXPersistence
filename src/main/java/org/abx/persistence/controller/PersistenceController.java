@@ -76,4 +76,28 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         return dataLoader.createSimSpecs(username,name,folder,path,type).getName();
     }
+
+    @Secured("persistence")
+    @RequestMapping(value = "/dropSims", produces = MediaType.APPLICATION_JSON_VALUE)
+    public int dropSims(HttpServletRequest request) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        return dataLoader.dropSims(username);
+    }
+
+    @Secured("persistence")
+    @RequestMapping(value = "/sims", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String sims(HttpServletRequest request) {
+        String username = request.getUserPrincipal().getName();
+        JSONArray jsonRepos = new JSONArray();
+        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
+        for (SimSpecs repoDetails : userDetails.getSimSpecs()) {
+            JSONObject jsonRepo = new JSONObject();
+            jsonRepos.put(jsonRepo);
+            jsonRepo.put("name", repoDetails.getName());
+            jsonRepo.put("folder", repoDetails.getFolder());
+            jsonRepo.put("path", repoDetails.getPath());
+            jsonRepo.put("type", repoDetails.getType());
+        }
+        return jsonRepos.toString();
+    }
 }

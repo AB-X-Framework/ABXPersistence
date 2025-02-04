@@ -40,47 +40,38 @@ public class AddSimTest {
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("persistence"));
 
-        ServiceRequest req = servicesClient.get("persistence", "/persistence/user");
-        req.jwt(token);
-        ServiceResponse resp = servicesClient.process(req);
-        Assertions.assertEquals(username, resp.asString());
 
-        String repoName = "myRepo";
-        String branch = "main";
-        String url = "git@github.com:AB-X-Framework/ABXPersistence.git";
-        String creds = "{\"password\":\"123\"}";
-        req = servicesClient.post("persistence", "/persistence/newRepo");
-        req.addPart("name", repoName);
-        req.addPart("branch", branch);
-        req.addPart("url", url);
-        req.addPart("creds", creds);
+        ServiceRequest req = servicesClient.get("persistence", "/persistence/dropSims");
         req.jwt(token);
-        resp = servicesClient.process(req);
-        Assertions.assertEquals(repoName, resp.asString());
-
-        req = servicesClient.get("persistence", "/persistence/repos");
-        req.jwt(token);
-        resp = servicesClient.process(req);
-        JSONArray repos = resp.asJSONArray();
-        Assertions.assertEquals(1, repos.length());
-
-        Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("name"));
-        Assertions.assertEquals(branch, repos.getJSONObject(0).getString("branch"));
-        Assertions.assertEquals(url, repos.getJSONObject(0).getString("url"));
-        Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
+        servicesClient.process(req);
 
 
         req = servicesClient.post("persistence", "/persistence/addSim");
         req.jwt(token);
-        String simName= "basic";
+        String simName = "basic";
+        String folder = "src/folder/";
+        String path = "script.js";
+        String type = "test";
         req.addPart("name", simName);
-        req.addPart("folder", "src/folder/");
-        req.addPart("path", "script.js");
-        req.addPart("type", "test");
-        resp = servicesClient.process(req);
+        req.addPart("folder", folder);
+        req.addPart("path", path);
+        req.addPart("type", type);
+        ServiceResponse resp = servicesClient.process(req);
         String result = resp.asString();
-        Assertions.assertEquals(simName,result);
+        Assertions.assertEquals(simName, result);
 
+        req = servicesClient.get("persistence", "/persistence/sims");
+        req.jwt(token);
+        resp = servicesClient.process(req);
+        JSONArray sims = resp.asJSONArray();
+
+        Assertions.assertEquals(1, sims.length());
+
+
+        Assertions.assertEquals(folder, sims.getJSONObject(0).getString("folder"));
+        Assertions.assertEquals(path, sims.getJSONObject(0).getString("path"));
+        Assertions.assertEquals(simName, sims.getJSONObject(0).getString("name"));
+        Assertions.assertEquals(type, sims.getJSONObject(0).getString("type"));
     }
 
     @AfterAll

@@ -72,18 +72,6 @@ public class RepoDetails {
         this.creds = creds;
     }
 
-    public String getGlobalName() {
-        return globalName;
-    }
-
-    public void setGlobalName(String globalName) {
-        this.globalName = globalName;
-    }
-
-    public UserDetails getUserDetails() {
-        return userDetails;
-    }
-
     public void setUserDetails(UserDetails userDetails) {
         this.userDetails = userDetails;
     }

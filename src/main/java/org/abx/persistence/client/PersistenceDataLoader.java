@@ -33,7 +33,6 @@ public class PersistenceDataLoader {
         return userDetails;
     }
 
-
     @Transactional
     public RepoDetails createRepoIfNotFound(String username, final String name, String url,
                                             String branch, String creds) {
@@ -57,7 +56,6 @@ public class PersistenceDataLoader {
         return repoDetails;
     }
 
-
     @Transactional
     public boolean deleteRepo(String username, final String name) {
         String globalName = username + "/" + name;
@@ -68,7 +66,6 @@ public class PersistenceDataLoader {
         repoDetailsRepository.delete(repoDetails);
         return true;
     }
-
 
     @Transactional
     public SimSpecs createSimSpecs(String username, String name, String folder, String path, String type) {
@@ -81,6 +78,15 @@ public class PersistenceDataLoader {
         specs.setType(type);
         simSpecsRepository.save(specs);
         return specs;
+    }
+
+    @Transactional
+    public int dropSims(String username) {
+        UserDetails userDetails = userDetailsRepository.findByName(username);
+        int size = userDetails.getSimSpecs().size();
+        userDetails. getSimSpecs().clear();
+        userDetailsRepository.save(userDetails);
+        return size;
     }
 }
 

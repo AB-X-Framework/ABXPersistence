@@ -33,9 +33,6 @@ public class SimSpecs {
     @Column
     private String type;
 
-    public UserDetails getUserDetails() {
-        return userDetails;
-    }
 
     public void setUserDetails(UserDetails userDetails) {
         this.userDetails = userDetails;

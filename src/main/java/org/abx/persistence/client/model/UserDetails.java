@@ -53,8 +53,4 @@ public class UserDetails {
     public Collection<SimSpecs> getSimSpecs() {
         return simSpecs;
     }
-
-    public void setSimSpecs(Collection<SimSpecs> simSpecs) {
-        this.simSpecs = simSpecs;
-    }
 }
