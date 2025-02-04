@@ -1,6 +1,8 @@
 package org.abx.persistence.client.model;
 
 import jakarta.persistence.*;
+import org.apache.catalina.User;
+
 @Entity
 @Table(name = "simspecs")
 public class SimSpecs {
@@ -13,11 +15,11 @@ public class SimSpecs {
 
     @ManyToOne
     @JoinTable(name = "userSimulations",
-            joinColumns    = @JoinColumn(name = "simId", referencedColumnName = "simId"),
+            joinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
     private UserDetails userDetails;
 
-    public SimSpecs(){
+    public SimSpecs() {
         super();
     }
 
@@ -36,6 +38,10 @@ public class SimSpecs {
 
     public void setUserDetails(UserDetails userDetails) {
         this.userDetails = userDetails;
+    }
+
+    public UserDetails getUserDetails() {
+        return userDetails;
     }
 
     public String getName() {

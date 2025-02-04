@@ -93,5 +93,19 @@ public class PersistenceDataLoader {
         userDetailsRepository.save(userDetails);
         return size;
     }
+
+    @Transactional
+    public boolean dropSim(String username, long simId) {
+        SimSpecs specs = simSpecsRepository.findBySimId(simId);
+        if (specs == null){
+            return false;
+        }
+        UserDetails user = specs.getUserDetails();
+        if (!username.equals(user.getName())){
+            return false;
+        }
+        simSpecsRepository.delete(specs);
+        return true;
+    }
 }
 

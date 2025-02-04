@@ -1,5 +1,6 @@
 package org.abx.persistence;
 
+import io.jsonwebtoken.lang.Assert;
 import org.abx.jwt.JWTUtils;
 import org.abx.persistence.spring.ABXPersistenceEntry;
 import org.abx.services.ServiceRequest;
@@ -62,8 +63,7 @@ public class AddSimTest {
         req = servicesClient.get("persistence", "/persistence/sims");
         req.jwt(token);
         resp = servicesClient.process(req);
-        String data = resp.asString();
-        JSONArray sims = new JSONArray(data);
+        JSONArray sims = resp.asJSONArray();
 
         Assertions.assertEquals(1, sims.length());
 
@@ -73,6 +73,20 @@ public class AddSimTest {
         Assertions.assertEquals(simName, sims.getJSONObject(0).getString("name"));
         Assertions.assertEquals(type, sims.getJSONObject(0).getString("type"));
         Assertions.assertEquals(id, sims.getJSONObject(0).getLong("id"));
+
+
+        req = servicesClient.post("persistence", "/persistence/dropSim");
+        req.addPart("simId",id+"");
+        req.jwt(token);
+        resp = servicesClient.process(req);
+        Assertions.assertTrue(resp.asBoolean());
+
+
+        req = servicesClient.get("persistence", "/persistence/sims");
+        req.jwt(token);
+        resp = servicesClient.process(req);
+        Assertions.assertEquals(0,resp.asJSONArray().length());
+
     }
 
     @AfterAll
