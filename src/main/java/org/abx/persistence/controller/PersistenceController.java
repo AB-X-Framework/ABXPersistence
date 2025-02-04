@@ -3,6 +3,7 @@ package org.abx.persistence.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.persistence.client.PersistenceDataLoader;
 import org.abx.persistence.client.model.RepoDetails;
+import org.abx.persistence.client.model.SimSpecs;
 import org.abx.persistence.client.model.UserDetails;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,8 +38,7 @@ public class PersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        RepoDetails repoDetails = dataLoader.createRepoIfNotFound(userDetails, name, url, branch, creds);
+        RepoDetails repoDetails = dataLoader.createRepoIfNotFound(username, name, url, branch, creds);
         return repoDetails.getName();
     }
 
@@ -46,8 +46,7 @@ public class PersistenceController {
     @RequestMapping(value = "/deleteRepo")
     public boolean deleteRepo(HttpServletRequest request, @RequestParam String name) {
         String username = request.getUserPrincipal().getName();
-        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        return dataLoader.deleteRepo(userDetails, name);
+        return dataLoader.deleteRepo(username, name);
     }
 
     @Secured("persistence")
@@ -75,7 +74,6 @@ public class PersistenceController {
                          @RequestParam String path,
                          @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
-        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        throw new RuntimeException("NOt ready");
+        return dataLoader.createSimSpecs(username,name,folder,path,type).getName();
     }
 }

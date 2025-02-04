@@ -1,15 +1,14 @@
 package org.abx.persistence.client;
 
 import org.abx.persistence.client.dao.RepoDetailsRepository;
+import org.abx.persistence.client.dao.SimSpecsRepository;
 import org.abx.persistence.client.dao.UserDetailsRepository;
 import org.abx.persistence.client.model.RepoDetails;
+import org.abx.persistence.client.model.SimSpecs;
 import org.abx.persistence.client.model.UserDetails;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
 
 @Component
 public class PersistenceDataLoader {
@@ -21,6 +20,8 @@ public class PersistenceDataLoader {
     @Autowired
     private RepoDetailsRepository repoDetailsRepository;
 
+    @Autowired
+    private SimSpecsRepository simSpecsRepository;
 
     @Transactional
     public UserDetails createUserIfNotFound(final String name) {
@@ -34,9 +35,10 @@ public class PersistenceDataLoader {
 
 
     @Transactional
-    public RepoDetails createRepoIfNotFound(UserDetails userDetails, final String name, String url,
+    public RepoDetails createRepoIfNotFound(String username, final String name, String url,
                                             String branch, String creds) {
-        String globalName = userDetails.getName() + "/" + name;
+        String globalName = username + "/" + name;
+        UserDetails userDetails = userDetailsRepository.findByName(username);
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
         if (repoDetails == null) {
             repoDetails = new RepoDetails(globalName);
@@ -57,14 +59,28 @@ public class PersistenceDataLoader {
 
 
     @Transactional
-    public boolean deleteRepo(UserDetails userDetails, final String name) {
-        String globalName = userDetails.getName() + "/" + name;
+    public boolean deleteRepo(String username, final String name) {
+        String globalName = username + "/" + name;
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
         if (repoDetails == null) {
             return false;
         }
         repoDetailsRepository.delete(repoDetails);
         return true;
+    }
+
+
+    @Transactional
+    public SimSpecs createSimSpecs(String username, String name, String folder, String path, String type) {
+        UserDetails userDetails = userDetailsRepository.findByName(username);
+        SimSpecs specs = new SimSpecs();
+        specs.setUserDetails(userDetails);
+        specs.setName(name);
+        specs.setFolder(folder);
+        specs.setPath(path);
+        specs.setType(type);
+        simSpecsRepository.save(specs);
+        return specs;
     }
 }
 

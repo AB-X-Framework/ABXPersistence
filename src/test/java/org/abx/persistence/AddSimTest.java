@@ -70,6 +70,17 @@ public class AddSimTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
 
+        req = servicesClient.post("persistence", "/persistence/addSim");
+        req.jwt(token);
+        String simName= "basic";
+        req.addPart("name", simName);
+        req.addPart("folder", "src/folder/");
+        req.addPart("path", "script.js");
+        req.addPart("type", "test");
+        resp = servicesClient.process(req);
+        String result = resp.asString();
+        Assertions.assertEquals(simName,result);
+
     }
 
     @AfterAll
