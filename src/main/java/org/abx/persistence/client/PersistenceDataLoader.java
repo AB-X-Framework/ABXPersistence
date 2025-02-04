@@ -34,13 +34,6 @@ public class PersistenceDataLoader {
 
 
     @Transactional
-    public Collection<RepoDetails> repoDetails(final String name) {
-        UserDetails userDetails = userDetailsRepository.findByName(name);
-        Hibernate.initialize(userDetails.getRepoDetails());
-        return userDetails.getRepoDetails();
-    }
-
-    @Transactional
     public RepoDetails createRepoIfNotFound(UserDetails userDetails, final String name, String url,
                                             String branch, String creds) {
         String globalName = userDetails.getName() + "/" + name;

@@ -55,7 +55,8 @@ public class PersistenceController {
     public String repos(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
-        for (RepoDetails repoDetails : dataLoader.repoDetails(username)) {
+        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
+        for (RepoDetails repoDetails : userDetails.getRepoDetails()) {
             JSONObject jsonRepo = new JSONObject();
             jsonRepos.put(jsonRepo);
             jsonRepo.put("name", repoDetails.getName());
