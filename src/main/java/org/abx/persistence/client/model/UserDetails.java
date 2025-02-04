@@ -22,6 +22,13 @@ public class UserDetails {
             inverseJoinColumns = @JoinColumn(name = "repo_id", referencedColumnName = "id"))
     private Collection<RepoDetails> repoDetails;
 
+    @OneToMany
+    @JoinTable(name = "user_simulations",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "sim_id", referencedColumnName = "id"))
+    private Collection<SimSpecs> simSpecs;
+
+
     public UserDetails() {
         super();
     }
@@ -45,5 +52,13 @@ public class UserDetails {
 
     public void setRepoDetails(Collection<RepoDetails> repoDetails) {
         this.repoDetails = repoDetails;
+    }
+
+    public Collection<SimSpecs> getSimSpecs() {
+        return simSpecs;
+    }
+
+    public void setSimSpecs(Collection<SimSpecs> simSpecs) {
+        this.simSpecs = simSpecs;
     }
 }

@@ -18,10 +18,16 @@ public class RepoDetails {
             inverseJoinColumns = @JoinColumn(name = "repo_id", referencedColumnName = "id"))
     private UserDetails userDetails;
 
+    @Column(unique = true)
     private String globalName;
+
+    @Column
     private String name;
+    @Column
     private String url;
+    @Column
     private String branch;
+    @Column
     private String creds;
 
     public RepoDetails() {
