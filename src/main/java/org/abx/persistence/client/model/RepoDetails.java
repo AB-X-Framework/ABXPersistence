@@ -9,13 +9,13 @@ public class RepoDetails {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long repo_id;
+    private Long repoId;
 
 
     @ManyToOne
-    @JoinTable(name = "user_repositories",
-            joinColumns    = @JoinColumn(name = "repo_id", referencedColumnName = "repo_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    @JoinTable(name = "userRepositories",
+            joinColumns    = @JoinColumn(name = "repoId", referencedColumnName = "repoId"),
+            inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
     private UserDetails userDetails;
 
     @Column(unique = true)

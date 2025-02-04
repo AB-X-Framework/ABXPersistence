@@ -11,21 +11,21 @@ public class UserDetails {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long user_id;
+    private Long userId;
 
     private String name;
 
 
     @OneToMany
-    @JoinTable(name = "user_repositories",
-            joinColumns    = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-            inverseJoinColumns   = @JoinColumn(name = "repo_id", referencedColumnName = "repo_id"))
+    @JoinTable(name = "userRepositories",
+            joinColumns    = @JoinColumn(name = "userId", referencedColumnName = "userId"),
+            inverseJoinColumns   = @JoinColumn(name = "repoId", referencedColumnName = "repoId"))
     private Collection<RepoDetails> repoDetails;
 
     @OneToMany
-    @JoinTable(name = "user_simulations",
-            joinColumns   = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "sim_id", referencedColumnName = "sim_id"))
+    @JoinTable(name = "userSimulations",
+            joinColumns   = @JoinColumn(name = "userId", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"))
     private Collection<SimSpecs> simSpecs;
 
 

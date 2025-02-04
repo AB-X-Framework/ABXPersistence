@@ -69,12 +69,12 @@ public class PersistenceController {
 
     @Secured("persistence")
     @RequestMapping(value = "/addSim", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String addSim(HttpServletRequest request, @RequestParam String name,
+    public long addSim(HttpServletRequest request, @RequestParam String name,
                          @RequestParam String folder,
                          @RequestParam String path,
                          @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.createSimSpecs(username,name,folder,path,type).getName();
+        return dataLoader.createSimSpecs(username,name,folder,path,type).getSimId();
     }
 
     @Secured("persistence")
@@ -97,6 +97,7 @@ public class PersistenceController {
             jsonRepo.put("folder", repoDetails.getFolder());
             jsonRepo.put("path", repoDetails.getPath());
             jsonRepo.put("type", repoDetails.getType());
+            jsonRepo.put("id", repoDetails.getSimId());
         }
         return jsonRepos.toString();
     }

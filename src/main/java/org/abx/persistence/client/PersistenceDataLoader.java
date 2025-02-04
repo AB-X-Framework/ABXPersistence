@@ -23,8 +23,7 @@ public class PersistenceDataLoader {
     @Autowired
     private SimSpecsRepository simSpecsRepository;
 
-    @Transactional
-    public UserDetails createUserIfNotFound(final String name) {
+    private UserDetails createOrFind(final String name) {
         UserDetails userDetails = userDetailsRepository.findByName(name);
         if (userDetails == null) {
             userDetails = new UserDetails(name);
@@ -34,10 +33,16 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
+    public UserDetails createUserIfNotFound(final String name) {
+        return createOrFind(name);
+    }
+
+
+    @Transactional
     public RepoDetails createRepoIfNotFound(String username, final String name, String url,
                                             String branch, String creds) {
         String globalName = username + "/" + name;
-        UserDetails userDetails = userDetailsRepository.findByName(username);
+        UserDetails userDetails = createOrFind(username);
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
         if (repoDetails == null) {
             repoDetails = new RepoDetails(globalName);
@@ -69,7 +74,7 @@ public class PersistenceDataLoader {
 
     @Transactional
     public SimSpecs createSimSpecs(String username, String name, String folder, String path, String type) {
-        UserDetails userDetails = userDetailsRepository.findByName(username);
+        UserDetails userDetails = createOrFind(username);
         SimSpecs specs = new SimSpecs();
         specs.setUserDetails(userDetails);
         specs.setName(name);
@@ -82,9 +87,9 @@ public class PersistenceDataLoader {
 
     @Transactional
     public int dropSims(String username) {
-        UserDetails userDetails = userDetailsRepository.findByName(username);
+        UserDetails userDetails = createOrFind(username);
         int size = userDetails.getSimSpecs().size();
-        userDetails. getSimSpecs().clear();
+        userDetails.getSimSpecs().clear();
         userDetailsRepository.save(userDetails);
         return size;
     }

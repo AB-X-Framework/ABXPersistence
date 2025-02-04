@@ -8,13 +8,13 @@ public class SimSpecs {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long sim_id;
+    private Long simId;
 
 
     @ManyToOne
-    @JoinTable(name = "user_simulations",
-            joinColumns    = @JoinColumn(name = "sim_id", referencedColumnName = "sim_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    @JoinTable(name = "userSimulations",
+            joinColumns    = @JoinColumn(name = "simId", referencedColumnName = "simId"),
+            inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
     private UserDetails userDetails;
 
     public SimSpecs(){
@@ -69,4 +69,9 @@ public class SimSpecs {
     public void setType(String type) {
         this.type = type;
     }
+
+    public Long getSimId() {
+        return simId;
+    }
+
 }

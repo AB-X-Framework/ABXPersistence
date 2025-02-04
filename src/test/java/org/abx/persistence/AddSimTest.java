@@ -57,13 +57,13 @@ public class AddSimTest {
         req.addPart("path", path);
         req.addPart("type", type);
         ServiceResponse resp = servicesClient.process(req);
-        String result = resp.asString();
-        Assertions.assertEquals(simName, result);
+        long id = resp.asLong();
 
         req = servicesClient.get("persistence", "/persistence/sims");
         req.jwt(token);
         resp = servicesClient.process(req);
-        JSONArray sims = resp.asJSONArray();
+        String data = resp.asString();
+        JSONArray sims = new JSONArray(data);
 
         Assertions.assertEquals(1, sims.length());
 
@@ -72,6 +72,7 @@ public class AddSimTest {
         Assertions.assertEquals(path, sims.getJSONObject(0).getString("path"));
         Assertions.assertEquals(simName, sims.getJSONObject(0).getString("name"));
         Assertions.assertEquals(type, sims.getJSONObject(0).getString("type"));
+        Assertions.assertEquals(id, sims.getJSONObject(0).getLong("id"));
     }
 
     @AfterAll
