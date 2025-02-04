@@ -46,7 +46,6 @@ public class PersistenceSourceConfig {
         return builder
                 .dataSource(dataSource)
                 .packages("org.abx.persistence.client.model") // Your entity package
-                .persistenceUnit("persistence")
                 .properties(properties)
                 .build();
     }
