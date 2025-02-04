@@ -25,8 +25,7 @@ import java.util.Map;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = "org.abx.persistence.client.dao",
-        entityManagerFactoryRef = "persistenceEntityManagerFactory",
-        transactionManagerRef = "persistenceTransactionManager"
+        entityManagerFactoryRef = "persistenceEntityManagerFactory"
 )
 public class PersistenceSourceConfig {
 
@@ -52,8 +51,7 @@ public class PersistenceSourceConfig {
                 .build();
     }
 
-    @Primary
-    @Bean(name = "persistenceTransactionManager")
+    @Bean
     public PlatformTransactionManager transactionManager(
             @Qualifier("persistenceEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);

@@ -9,7 +9,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/persistence")
@@ -36,7 +38,7 @@ public class PersistenceController {
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        RepoDetails repoDetails= dataLoader.createRepoIfNotFound(userDetails,name,url,branch,creds);
+        RepoDetails repoDetails = dataLoader.createRepoIfNotFound(userDetails, name, url, branch, creds);
         return repoDetails.getName();
     }
 
@@ -45,33 +47,32 @@ public class PersistenceController {
     public boolean deleteRepo(HttpServletRequest request, @RequestParam String name) {
         String username = request.getUserPrincipal().getName();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        return  dataLoader.deleteRepo(userDetails,name);
+        return dataLoader.deleteRepo(userDetails, name);
     }
 
     @Secured("persistence")
-    @RequestMapping(value = "/repos" , produces = MediaType.APPLICATION_JSON_VALUE)
-    public String repos(HttpServletRequest request) throws Exception{
+    @RequestMapping(value = "/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String repos(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
-        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
         JSONArray jsonRepos = new JSONArray();
-        for (RepoDetails repoDetails: userDetails.getRepoDetails()){
+        for (RepoDetails repoDetails : dataLoader.repoDetails(username)) {
             JSONObject jsonRepo = new JSONObject();
             jsonRepos.put(jsonRepo);
-            jsonRepo.put("name",repoDetails.getName());
-            jsonRepo.put("branch",repoDetails.getBranch());
-            jsonRepo.put("url",repoDetails.getUrl());
-            jsonRepo.put("creds",repoDetails.getCreds());
+            jsonRepo.put("name", repoDetails.getName());
+            jsonRepo.put("branch", repoDetails.getBranch());
+            jsonRepo.put("url", repoDetails.getUrl());
+            jsonRepo.put("creds", repoDetails.getCreds());
         }
         return jsonRepos.toString();
     }
 
 
     @Secured("persistence")
-    @RequestMapping(value = "/addSim" , produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/addSim", produces = MediaType.APPLICATION_JSON_VALUE)
     public String addSim(HttpServletRequest request, @RequestParam String name,
                          @RequestParam String folder,
                          @RequestParam String path,
-                         @RequestParam String type) throws Exception{
+                         @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
         throw new RuntimeException("NOt ready");

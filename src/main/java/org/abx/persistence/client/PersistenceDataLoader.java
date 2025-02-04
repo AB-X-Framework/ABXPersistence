@@ -4,9 +4,12 @@ import org.abx.persistence.client.dao.RepoDetailsRepository;
 import org.abx.persistence.client.dao.UserDetailsRepository;
 import org.abx.persistence.client.model.RepoDetails;
 import org.abx.persistence.client.model.UserDetails;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 @Component
 public class PersistenceDataLoader {
@@ -19,7 +22,7 @@ public class PersistenceDataLoader {
     private RepoDetailsRepository repoDetailsRepository;
 
 
-    @Transactional(transactionManager = "persistenceTransactionManager")
+    @Transactional
     public UserDetails createUserIfNotFound(final String name) {
         UserDetails userDetails = userDetailsRepository.findByName(name);
         if (userDetails == null) {
@@ -29,10 +32,18 @@ public class PersistenceDataLoader {
         return userDetails;
     }
 
-    @Transactional(transactionManager = "persistenceTransactionManager")
+
+    @Transactional
+    public Collection<RepoDetails> repoDetails(final String name) {
+        UserDetails userDetails = userDetailsRepository.findByName(name);
+        Hibernate.initialize(userDetails.getRepoDetails());
+        return userDetails.getRepoDetails();
+    }
+
+    @Transactional
     public RepoDetails createRepoIfNotFound(UserDetails userDetails, final String name, String url,
                                             String branch, String creds) {
-        String globalName = userDetails.getName() +"/"+ name;
+        String globalName = userDetails.getName() + "/" + name;
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
         if (repoDetails == null) {
             repoDetails = new RepoDetails(globalName);
@@ -52,11 +63,11 @@ public class PersistenceDataLoader {
     }
 
 
-    @Transactional(transactionManager = "persistenceTransactionManager")
+    @Transactional
     public boolean deleteRepo(UserDetails userDetails, final String name) {
-        String globalName = userDetails.getName() +"/"+ name;
+        String globalName = userDetails.getName() + "/" + name;
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
-        if (repoDetails ==null){
+        if (repoDetails == null) {
             return false;
         }
         repoDetailsRepository.delete(repoDetails);

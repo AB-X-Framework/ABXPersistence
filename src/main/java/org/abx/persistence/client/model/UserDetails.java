@@ -50,10 +50,6 @@ public class UserDetails {
         return repoDetails;
     }
 
-    public void setRepoDetails(Collection<RepoDetails> repoDetails) {
-        this.repoDetails = repoDetails;
-    }
-
     public Collection<SimSpecs> getSimSpecs() {
         return simSpecs;
     }
