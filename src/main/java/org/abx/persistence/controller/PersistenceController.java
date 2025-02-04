@@ -41,6 +41,14 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
+    @RequestMapping(value = "/deleteRepo")
+    public boolean deleteRepo(HttpServletRequest request, @RequestParam String name) {
+        String username = request.getUserPrincipal().getName();
+        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
+        return  dataLoader.deleteRepo(userDetails,name);
+    }
+
+    @Secured("persistence")
     @RequestMapping(value = "/repos" , produces = MediaType.APPLICATION_JSON_VALUE)
     public String repos(HttpServletRequest request) throws Exception{
         String username = request.getUserPrincipal().getName();
@@ -55,5 +63,17 @@ public class PersistenceController {
             jsonRepo.put("creds",repoDetails.getCreds());
         }
         return jsonRepos.toString();
+    }
+
+
+    @Secured("persistence")
+    @RequestMapping(value = "/addSim" , produces = MediaType.APPLICATION_JSON_VALUE)
+    public String addSim(HttpServletRequest request, @RequestParam String name,
+                         @RequestParam String folder,
+                         @RequestParam String path,
+                         @RequestParam String type) throws Exception{
+        String username = request.getUserPrincipal().getName();
+        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
+        throw new RuntimeException("NOt ready");
     }
 }

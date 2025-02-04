@@ -21,6 +21,17 @@ public class SimSpecs {
         super();
     }
 
+    @Column
+    private String name;
+
+    @Column
+    private String folder;
+
+    @Column
+    private String path;
+
+    @Column
+    private String type;
 
     public UserDetails getUserDetails() {
         return userDetails;

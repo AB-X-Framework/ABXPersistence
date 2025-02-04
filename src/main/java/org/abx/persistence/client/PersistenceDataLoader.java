@@ -50,5 +50,17 @@ public class PersistenceDataLoader {
         }
         return repoDetails;
     }
+
+
+    @Transactional(transactionManager = "persistenceTransactionManager")
+    public boolean deleteRepo(UserDetails userDetails, final String name) {
+        String globalName = userDetails.getName() +"/"+ name;
+        RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
+        if (repoDetails ==null){
+            return false;
+        }
+        repoDetailsRepository.delete(repoDetails);
+        return true;
+    }
 }
 

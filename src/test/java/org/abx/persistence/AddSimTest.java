@@ -18,9 +18,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.List;
 
-
 @SpringBootTest(classes = ABXPersistenceEntry.class)
-class ABXPersistenceTest {
+public class AddSimTest {
 
     @Value("${jwt.private}")
     private String privateKey;
@@ -37,7 +36,7 @@ class ABXPersistenceTest {
 
     @Test
     public void doBasicTest() throws Exception {
-        String username = "root";
+        String username = "SimUser";
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("persistence"));
 
@@ -70,40 +69,6 @@ class ABXPersistenceTest {
         Assertions.assertEquals(url, repos.getJSONObject(0).getString("url"));
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
-        branch = "newBranch";
-        req = servicesClient.post("persistence", "/persistence/newRepo");
-        req.addPart("name", repoName);
-        req.addPart("branch", branch);
-        req.addPart("url", url);
-        req.addPart("creds", creds);
-        req.jwt(token);
-        servicesClient.process(req);
-
-        req = servicesClient.get("persistence", "/persistence/repos");
-        req.jwt(token);
-        resp = servicesClient.process(req);
-        repos = resp.asJSONArray();
-        Assertions.assertEquals(1, repos.length());
-
-        Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("name"));
-        Assertions.assertEquals(branch, repos.getJSONObject(0).getString("branch"));
-        Assertions.assertEquals(url, repos.getJSONObject(0).getString("url"));
-        Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
-
-
-        req = servicesClient.post("persistence", "/persistence/deleteRepo");
-        req.jwt(token);
-        req.addPart("name",repoName);
-        resp = servicesClient.process(req);
-        boolean status  = resp.asBoolean();
-        Assertions.assertTrue(status);
-
-        req = servicesClient.get("persistence", "/persistence/repos");
-        req.jwt(token);
-        resp = servicesClient.process(req);
-        repos = resp.asJSONArray();
-        Assertions.assertEquals(0, repos.length());
-
 
     }
 
@@ -111,5 +76,4 @@ class ABXPersistenceTest {
     public static void teardown() {
         context.stop();
     }
-
 }
