@@ -91,9 +91,8 @@ class ABXPersistenceTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
 
-        req = servicesClient.post("persistence", "/persistence/deleteRepo");
+        req = servicesClient.delete("persistence", "/persistence/repo/"+repoName);
         req.jwt(token);
-        req.addPart("name",repoName);
         resp = servicesClient.process(req);
         boolean status  = resp.asBoolean();
         Assertions.assertTrue(status);

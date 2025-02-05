@@ -1,5 +1,6 @@
 package org.abx.persistence.controller;
 
+import com.oracle.svm.core.annotate.Delete;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.persistence.client.PersistenceDataLoader;
 import org.abx.persistence.client.model.RepoDetails;
@@ -41,14 +42,14 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @RequestMapping(value = "/deleteRepo")
-    public boolean deleteRepo(HttpServletRequest request, @RequestParam String name) {
+    @DeleteMapping(value = "/repo/{reponame}")
+    public boolean deleteRepo(HttpServletRequest request, @PathVariable String reponame) {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.deleteRepo(username, name);
+        return dataLoader.deleteRepo(username, reponame);
     }
 
     @Secured("persistence")
-    @RequestMapping(value = "/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/repos", produces = MediaType.APPLICATION_JSON_VALUE)
     public String repos(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
