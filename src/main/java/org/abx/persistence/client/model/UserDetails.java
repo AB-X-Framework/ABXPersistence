@@ -2,7 +2,7 @@ package org.abx.persistence.client.model;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "UserDetails")
@@ -16,24 +16,6 @@ public class UserDetails {
     @Column(length = 100)
     private String name;
 
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserRepositories",
-            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"))
-    private Collection<RepoDetails> repoDetails;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserSimulations",
-            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"))
-    private Collection<SimSpecs> simSpecs;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserExecs",
-            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"))
-    private Collection<ExecDetails> execs;
 
     public UserDetails() {
         super();
@@ -52,11 +34,14 @@ public class UserDetails {
         this.name = name;
     }
 
-    public Collection<RepoDetails> getRepoDetails() {
-        return repoDetails;
+    @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
+    private List<UserProjects> userProjects;
+
+    public List<UserProjects> getUserProjects() {
+        return userProjects;
     }
 
-    public Collection<SimSpecs> getSimSpecs() {
-        return simSpecs;
+    public void setUserProjects(List<UserProjects> userProjects) {
+        this.userProjects = userProjects;
     }
 }

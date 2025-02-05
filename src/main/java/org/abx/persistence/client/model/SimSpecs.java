@@ -15,10 +15,10 @@ public class SimSpecs {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserSimulations",
+    @JoinTable(name = "ProjectSimulations",
             joinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
-    private UserDetails userDetails;
+    private ProjectDetails projectDetails;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "SimExecs",
@@ -44,12 +44,12 @@ public class SimSpecs {
     private String type;
 
 
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
+    public void setProjectDetails(ProjectDetails projectDetails) {
+        this.projectDetails = projectDetails;
     }
 
-    public UserDetails getUserDetails() {
-        return userDetails;
+    public ProjectDetails getProjectDetails() {
+        return projectDetails;
     }
 
     public String getName() {

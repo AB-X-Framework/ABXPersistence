@@ -5,6 +5,7 @@ import org.abx.persistence.client.PersistenceDataLoader;
 import org.abx.persistence.client.model.RepoDetails;
 import org.abx.persistence.client.model.SimSpecs;
 import org.abx.persistence.client.model.UserDetails;
+import org.abx.persistence.client.model.UserProjects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,14 @@ public class PersistenceController {
 
     @Secured("persistence")
     @PostMapping(value = "/repo")
-    public String addRepo(HttpServletRequest request, @RequestParam String name,
+    public String addRepo(HttpServletRequest request,
+                          @RequestParam long projectId,
+                          @RequestParam String name,
                           @RequestParam String url,
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = dataLoader.createRepoIfNotFound(username, name, url, branch, creds);
+        RepoDetails repoDetails = dataLoader.createRepoIfNotFound(username, projectId, name, url, branch, creds);
         return repoDetails.getName();
     }
 
@@ -53,13 +56,15 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (RepoDetails repoDetails : userDetails.getRepoDetails()) {
-            JSONObject jsonRepo = new JSONObject();
-            jsonRepos.put(jsonRepo);
-            jsonRepo.put("name", repoDetails.getName());
-            jsonRepo.put("branch", repoDetails.getBranch());
-            jsonRepo.put("url", repoDetails.getUrl());
-            jsonRepo.put("creds", repoDetails.getCreds());
+        for (UserProjects projectDetails : userDetails.getUserProjects()) {
+            for (RepoDetails repoDetails : projectDetails.getProjectDetails().getRepoDetails()) {
+                JSONObject jsonRepo = new JSONObject();
+                jsonRepos.put(jsonRepo);
+                jsonRepo.put("name", repoDetails.getName());
+                jsonRepo.put("branch", repoDetails.getBranch());
+                jsonRepo.put("url", repoDetails.getUrl());
+                jsonRepo.put("creds", repoDetails.getCreds());
+            }
         }
         return jsonRepos.toString();
     }
@@ -67,19 +72,22 @@ public class PersistenceController {
 
     @Secured("persistence")
     @PostMapping(value = "/sim", produces = MediaType.APPLICATION_JSON_VALUE)
-    public long addSim(HttpServletRequest request, @RequestParam String name,
+    public long addSim(HttpServletRequest request,
+                       @RequestParam long projectId,
+                       @RequestParam String name,
                        @RequestParam String folder,
                        @RequestParam String path,
                        @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.createSimSpecs(username, name, folder, path, type).getSimId();
+        return dataLoader.createSimSpecs(username, projectId, name, folder, path, type).getSimId();
     }
 
     @Secured("persistence")
     @DeleteMapping(value = "/sims", produces = MediaType.APPLICATION_JSON_VALUE)
-    public int dropSims(HttpServletRequest request) throws Exception {
+    public int dropSims(HttpServletRequest request,
+                        @RequestParam long projectId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.dropSims(username);
+        return dataLoader.dropSims(username, projectId);
     }
 
     @Secured("persistence")
@@ -88,14 +96,16 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (SimSpecs repoDetails : userDetails.getSimSpecs()) {
-            JSONObject jsonRepo = new JSONObject();
-            jsonRepos.put(jsonRepo);
-            jsonRepo.put("name", repoDetails.getName());
-            jsonRepo.put("folder", repoDetails.getFolder());
-            jsonRepo.put("path", repoDetails.getPath());
-            jsonRepo.put("type", repoDetails.getType());
-            jsonRepo.put("id", repoDetails.getSimId());
+        for (UserProjects userProjects : userDetails.getUserProjects()) {
+            for (SimSpecs repoDetails : userProjects.getProjectDetails().getSimSpecs()) {
+                JSONObject jsonRepo = new JSONObject();
+                jsonRepos.put(jsonRepo);
+                jsonRepo.put("name", repoDetails.getName());
+                jsonRepo.put("folder", repoDetails.getFolder());
+                jsonRepo.put("path", repoDetails.getPath());
+                jsonRepo.put("type", repoDetails.getType());
+                jsonRepo.put("id", repoDetails.getSimId());
+            }
         }
         return jsonRepos.toString();
     }
@@ -103,9 +113,10 @@ public class PersistenceController {
 
     @Secured("persistence")
     @DeleteMapping(value = "/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean dropSim(HttpServletRequest request, @PathVariable long simId) throws Exception {
+    public boolean dropSim(HttpServletRequest request,
+                           @RequestParam long projectId,@PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.dropSim(username, simId);
+        return dataLoader.dropSim(username,projectId, simId);
     }
 
     @Secured("persistence")
@@ -125,7 +136,7 @@ public class PersistenceController {
     public long addExec(HttpServletRequest request, @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
         long execId = dataLoader.addExec(username, simId);
-        if (execId == -1){
+        if (execId == -1) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
         }
         return execId;
@@ -135,8 +146,8 @@ public class PersistenceController {
     @PostMapping(value = "/sim/{simId}/exec/{execId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getExec(HttpServletRequest request, @PathVariable long simId, @PathVariable long execId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        JSONObject exec = dataLoader.getExec(username, simId,execId);
-        if (exec == null){
+        JSONObject exec = dataLoader.getExec(username, simId, execId);
+        if (exec == null) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
         }
         return exec.toString();

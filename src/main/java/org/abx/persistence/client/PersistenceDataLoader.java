@@ -1,13 +1,7 @@
 package org.abx.persistence.client;
 
-import org.abx.persistence.client.dao.ExecDetailsRepository;
-import org.abx.persistence.client.dao.RepoDetailsRepository;
-import org.abx.persistence.client.dao.SimSpecsRepository;
-import org.abx.persistence.client.dao.UserDetailsRepository;
-import org.abx.persistence.client.model.ExecDetails;
-import org.abx.persistence.client.model.RepoDetails;
-import org.abx.persistence.client.model.SimSpecs;
-import org.abx.persistence.client.model.UserDetails;
+import org.abx.persistence.client.dao.*;
+import org.abx.persistence.client.model.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +21,8 @@ public class PersistenceDataLoader {
 
     @Autowired
     private SimSpecsRepository simSpecsRepository;
+    @Autowired
+    private ProjectDetailsRepository projectDetailsRepository;
 
     private UserDetails createOrFind(final String name) {
         UserDetails userDetails = userDetailsRepository.findByName(name);
@@ -44,13 +40,14 @@ public class PersistenceDataLoader {
 
 
     @Transactional
-    public RepoDetails createRepoIfNotFound(String username, final String name, String url, String branch, String creds) {
+    public RepoDetails createRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
+        ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         String globalName = username + "/" + name;
         UserDetails userDetails = createOrFind(username);
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
         if (repoDetails == null) {
             repoDetails = new RepoDetails(globalName);
-            repoDetails.setUserDetails(userDetails);
+            repoDetails.setProjectDetails(projectDetails);
             repoDetails.setName(name);
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
@@ -77,10 +74,11 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public SimSpecs createSimSpecs(String username, String name, String folder, String path, String type) {
+    public SimSpecs createSimSpecs(String username, long projectId, String name, String folder, String path, String type) {
         UserDetails userDetails = createOrFind(username);
+        ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         SimSpecs specs = new SimSpecs();
-        specs.setUserDetails(userDetails);
+        specs.setProjectDetails(projectDetails);
         specs.setName(name);
         specs.setFolder(folder);
         specs.setPath(path);
@@ -90,31 +88,34 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public int dropSims(String username) {
+    public int dropSims(String username,long projectId) {
+        ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         UserDetails userDetails = createOrFind(username);
-        int size = userDetails.getSimSpecs().size();
-        userDetails.getSimSpecs().clear();
+        int size = projectDetails.getSimSpecs().size();
+        projectDetails.getSimSpecs().clear();
         userDetailsRepository.save(userDetails);
         return size;
     }
 
     @Transactional
-    public boolean dropSim(String username, long simId) {
+    public boolean dropSim(String username, long projectId, long simId) {
+        ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         SimSpecs specs = simSpecsRepository.findBySimId(simId);
         if (specs == null) {
             return false;
         }
-        UserDetails user = specs.getUserDetails();
+       /* U/serDetails user = specs.getUserDetails();
         if (!username.equals(user.getName())) {
             return false;
-        }
+        }*/
         simSpecsRepository.delete(specs);
         return true;
     }
 
     @Transactional
-    public boolean updateSim(long id, String username, String name, String folder, String path, String type) {
+    public boolean updateSim(long projectId, long id, String username, String name, String folder, String path, String type) {
         UserDetails userDetails = createOrFind(username);
+        ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         SimSpecs specs = simSpecsRepository.findBySimId(id);
         if (specs == null) {
             return false;
@@ -122,7 +123,7 @@ public class PersistenceDataLoader {
         if (!username.equals(specs.getUserDetails().getName())) {
             return false;
         }
-        specs.setUserDetails(userDetails);
+        specs.setProjectDetails(userDetails);
         specs.setName(name);
         specs.setFolder(folder);
         specs.setPath(path);

@@ -13,14 +13,13 @@ public class RepoDetails {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserRepositories",
+    @JoinTable(name = "ProjectRepositories",
             joinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"),
-            inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
-    private UserDetails userDetails;
+            inverseJoinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"))
+    private ProjectDetails projectDetails;
 
     @Column(unique = true)
     private String globalName;
-
 
     @Column(length = 100)
     private String name;
@@ -76,7 +75,7 @@ public class RepoDetails {
         this.creds = creds;
     }
 
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
+    public void setProjectDetails(ProjectDetails projectDetails) {
+        this.projectDetails = projectDetails;
     }
 }
