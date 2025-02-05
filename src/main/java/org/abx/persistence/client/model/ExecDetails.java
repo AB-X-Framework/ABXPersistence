@@ -16,6 +16,11 @@ public class ExecDetails {
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
     private UserDetails userDetails;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "SimExecs",
+            joinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"),
+            inverseJoinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"))
+    private SimSpecs simSpecs;
 
     @Column
     private String name;
@@ -30,7 +35,7 @@ public class ExecDetails {
     @Column(length = 100)
     private String type;
 
-    @Column(length = 3000)
+    @Column(length = 10000)
     private String output;
 
     public void setUserDetails(UserDetails userDetails) {
@@ -83,5 +88,13 @@ public class ExecDetails {
 
     public void setOutput(String output) {
         this.output = output;
+    }
+
+    public SimSpecs getSimSpecs() {
+        return simSpecs;
+    }
+
+    public void setSimSpecs(SimSpecs simSpecs) {
+        this.simSpecs = simSpecs;
     }
 }

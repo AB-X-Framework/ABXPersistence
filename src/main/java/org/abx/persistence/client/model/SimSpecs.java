@@ -2,6 +2,8 @@ package org.abx.persistence.client.model;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
 @Table(name = "SimSpecs")
 public class SimSpecs {
@@ -17,6 +19,12 @@ public class SimSpecs {
             joinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
     private UserDetails userDetails;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "SimExecs",
+            joinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"),
+            inverseJoinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"))
+    private Collection<ExecDetails> execs;
 
     public SimSpecs() {
         super();
