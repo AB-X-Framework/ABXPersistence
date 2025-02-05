@@ -3,12 +3,12 @@ package org.abx.persistence.client.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "UserProjects")
-public class UserProjects {
+@Table(name = "UserProject")
+public class UserProject {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long projectId;
+    private Long userProjectId;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
@@ -28,5 +28,13 @@ public class UserProjects {
 
     public void setProjectDetails(ProjectDetails projectDetails) {
         this.projectDetails = projectDetails;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

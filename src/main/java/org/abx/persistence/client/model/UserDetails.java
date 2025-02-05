@@ -35,13 +35,13 @@ public class UserDetails {
     }
 
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
-    private List<UserProjects> userProjects;
+    private List<UserProject> userProjects;
 
-    public List<UserProjects> getUserProjects() {
+    public List<UserProject> getUserProjects() {
         return userProjects;
     }
 
-    public void setUserProjects(List<UserProjects> userProjects) {
+    public void setUserProjects(List<UserProject> userProjects) {
         this.userProjects = userProjects;
     }
 }

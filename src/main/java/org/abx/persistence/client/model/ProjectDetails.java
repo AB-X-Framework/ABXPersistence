@@ -13,20 +13,20 @@ public class ProjectDetails {
     private Long projectId;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserRepositories",
-            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
+    @JoinTable(name = "ProjectRepositories",
+            joinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"),
             inverseJoinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"))
     private Collection<RepoDetails> repoDetails;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserSimulations",
-            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
+    @JoinTable(name = "ProjectSimulations",
+            joinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"),
             inverseJoinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"))
     private Collection<SimSpecs> simSpecs;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "UserExecs",
-            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
+    @JoinTable(name = "ProjectExecs",
+            joinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"),
             inverseJoinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"))
     private Collection<ExecDetails> execs;
 
@@ -37,5 +37,18 @@ public class ProjectDetails {
 
     public Collection<SimSpecs> getSimSpecs() {
         return simSpecs;
+    }
+
+
+    @Column
+    private String name;
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

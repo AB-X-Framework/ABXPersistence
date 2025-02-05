@@ -29,6 +29,10 @@ public class PersistenceDataLoader {
         if (userDetails == null) {
             userDetails = new UserDetails(name);
             userDetails = userDetailsRepository.save(userDetails);
+            ProjectDetails projectDetails = new ProjectDetails();
+            projectDetails.setName("Personal");
+            projectDetailsRepository.save(projectDetails);
+
         }
         return userDetails;
     }
@@ -63,8 +67,8 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public boolean deleteRepo(String username, final String name) {
-        String globalName = username + "/" + name;
+    public boolean deleteRepo(String username, long projectId, String name) {
+        String globalName = projectId + "/" + name;
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
         if (repoDetails == null) {
             return false;
@@ -123,7 +127,7 @@ public class PersistenceDataLoader {
         if (!username.equals(specs.getUserDetails().getName())) {
             return false;
         }
-        specs.setProjectDetails(userDetails);
+        specs.setProjectDetails(projectDetails);
         specs.setName(name);
         specs.setFolder(folder);
         specs.setPath(path);
