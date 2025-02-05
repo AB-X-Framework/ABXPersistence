@@ -75,8 +75,7 @@ public class AddSimTest {
         Assertions.assertEquals(id, sims.getJSONObject(0).getLong("id"));
 
 
-        req = servicesClient.post("persistence", "/persistence/dropSim");
-        req.addPart("simId",id+"");
+        req = servicesClient.delete("persistence", "/persistence/sim/"+id);
         req.jwt(token);
         resp = servicesClient.process(req);
         Assertions.assertTrue(resp.asBoolean());

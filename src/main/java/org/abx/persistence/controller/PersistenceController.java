@@ -10,9 +10,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/persistence")
@@ -104,10 +102,22 @@ public class PersistenceController {
 
 
     @Secured("persistence")
-    @RequestMapping(value = "/dropSim", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean dropSim(HttpServletRequest request, @RequestParam long simId) throws Exception {
+    @DeleteMapping(value = "/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean dropSim(HttpServletRequest request, @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
         return dataLoader.dropSim(username, simId);
+    }
+
+    @Secured("persistence")
+    @PatchMapping(value = "/sim", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean updateSim(HttpServletRequest request,
+                             @RequestParam long simId,
+                             @RequestParam String name,
+                             @RequestParam String folder,
+                             @RequestParam String path,
+                             @RequestParam String type) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        return dataLoader.updateSim(simId, username, name, folder, path, type);
     }
 
 }
