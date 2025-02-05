@@ -3,7 +3,7 @@ package org.abx.persistence.client.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "repodetails")
+@Table(name = "RepoDetails")
 public class RepoDetails {
 
     @Id
@@ -12,22 +12,26 @@ public class RepoDetails {
     private Long repoId;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "userRepositories",
-            joinColumns    = @JoinColumn(name = "repoId", referencedColumnName = "repoId"),
+            joinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
     private UserDetails userDetails;
 
     @Column(unique = true)
     private String globalName;
 
-    @Column
+
+    @Column(length = 100)
     private String name;
+
     @Column
     private String url;
-    @Column
+
+    @Column(length = 100)
     private String branch;
-    @Column
+
+    @Column(length = 1000)
     private String creds;
 
     public RepoDetails() {
@@ -39,7 +43,7 @@ public class RepoDetails {
         this.globalName = globalName;
     }
 
-    
+
     public String getName() {
         return name;
     }

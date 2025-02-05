@@ -1,10 +1,9 @@
 package org.abx.persistence.client.model;
 
 import jakarta.persistence.*;
-import org.apache.catalina.User;
 
 @Entity
-@Table(name = "simspecs")
+@Table(name = "SimSpecs")
 public class SimSpecs {
 
     @Id
@@ -13,7 +12,7 @@ public class SimSpecs {
     private Long simId;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "userSimulations",
             joinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
@@ -32,7 +31,8 @@ public class SimSpecs {
     @Column
     private String path;
 
-    @Column
+
+    @Column(length = 100)
     private String type;
 
 

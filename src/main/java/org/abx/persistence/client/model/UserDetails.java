@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "userdetails")
+@Table(name = "UserDetails")
 public class UserDetails {
 
     @Id
@@ -13,18 +13,19 @@ public class UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
+    @Column(length = 100)
     private String name;
 
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "userRepositories",
-            joinColumns    = @JoinColumn(name = "userId", referencedColumnName = "userId"),
-            inverseJoinColumns   = @JoinColumn(name = "repoId", referencedColumnName = "repoId"))
+            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"))
     private Collection<RepoDetails> repoDetails;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "userSimulations",
-            joinColumns   = @JoinColumn(name = "userId", referencedColumnName = "userId"),
+            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
             inverseJoinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"))
     private Collection<SimSpecs> simSpecs;
 
