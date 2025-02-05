@@ -13,7 +13,7 @@ public class SimSpecs {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "userSimulations",
+    @JoinTable(name = "UserSimulations",
             joinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
     private UserDetails userDetails;

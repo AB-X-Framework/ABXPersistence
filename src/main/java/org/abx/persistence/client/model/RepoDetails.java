@@ -13,7 +13,7 @@ public class RepoDetails {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "userRepositories",
+    @JoinTable(name = "UserRepositories",
             joinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
     private UserDetails userDetails;

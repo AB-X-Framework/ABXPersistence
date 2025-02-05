@@ -18,13 +18,13 @@ public class UserDetails {
 
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "userRepositories",
+    @JoinTable(name = "UserRepositories",
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
             inverseJoinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"))
     private Collection<RepoDetails> repoDetails;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "userSimulations",
+    @JoinTable(name = "UserSimulations",
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
             inverseJoinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"))
     private Collection<SimSpecs> simSpecs;
