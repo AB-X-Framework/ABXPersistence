@@ -66,7 +66,7 @@ public class PersistenceController {
 
 
     @Secured("persistence")
-    @RequestMapping(value = "/addSim", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/sim", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addSim(HttpServletRequest request, @RequestParam String name,
                        @RequestParam String folder,
                        @RequestParam String path,
@@ -76,14 +76,14 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @RequestMapping(value = "/dropSims", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public int dropSims(HttpServletRequest request) throws Exception {
         String username = request.getUserPrincipal().getName();
         return dataLoader.dropSims(username);
     }
 
     @Secured("persistence")
-    @RequestMapping(value = "/sims", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public String sims(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();

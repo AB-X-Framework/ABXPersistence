@@ -42,12 +42,12 @@ public class AddSimTest {
                 List.of("persistence"));
 
 
-        ServiceRequest req = servicesClient.get("persistence", "/persistence/dropSims");
+        ServiceRequest req = servicesClient.get("persistence", "/persistence/sims");
         req.jwt(token);
         servicesClient.process(req);
 
 
-        req = servicesClient.post("persistence", "/persistence/addSim");
+        req = servicesClient.post("persistence", "/persistence/sim");
         req.jwt(token);
         String simName = "basic";
         String folder = "src/folder/";
