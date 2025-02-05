@@ -8,9 +8,11 @@ import org.abx.persistence.client.model.UserDetails;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/persistence")
@@ -22,10 +24,8 @@ public class PersistenceController {
     @Secured("persistence")
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest request) {
-
         String username = request.getUserPrincipal().getName();
         UserDetails details = dataLoader.createUserIfNotFound(username);
-
         return details.getName();
     }
 
@@ -120,4 +120,25 @@ public class PersistenceController {
         return dataLoader.updateSim(simId, username, name, folder, path, type);
     }
 
+    @Secured("persistence")
+    @PostMapping(value = "/sim/{simId}/exec", produces = MediaType.APPLICATION_JSON_VALUE)
+    public long addExec(HttpServletRequest request, @PathVariable long simId) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        long execId = dataLoader.addExec(username, simId);
+        if (execId == -1){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
+        }
+        return execId;
+    }
+
+    @Secured("persistence")
+    @PostMapping(value = "/sim/{simId}/exec/{execId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getExec(HttpServletRequest request, @PathVariable long simId, @PathVariable long execId) throws Exception {
+        String username = request.getUserPrincipal().getName();
+        JSONObject exec = dataLoader.getExec(username, simId,execId);
+        if (exec == null){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
+        }
+        return exec.toString();
+    }
 }

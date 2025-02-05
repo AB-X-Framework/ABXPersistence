@@ -1,11 +1,14 @@
 package org.abx.persistence.client;
 
+import org.abx.persistence.client.dao.ExecDetailsRepository;
 import org.abx.persistence.client.dao.RepoDetailsRepository;
 import org.abx.persistence.client.dao.SimSpecsRepository;
 import org.abx.persistence.client.dao.UserDetailsRepository;
+import org.abx.persistence.client.model.ExecDetails;
 import org.abx.persistence.client.model.RepoDetails;
 import org.abx.persistence.client.model.SimSpecs;
 import org.abx.persistence.client.model.UserDetails;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,8 @@ public class PersistenceDataLoader {
     @Autowired
     private UserDetailsRepository userDetailsRepository;
 
+    @Autowired
+    private ExecDetailsRepository execDetailsRepository;
 
     @Autowired
     private RepoDetailsRepository repoDetailsRepository;
@@ -39,8 +44,7 @@ public class PersistenceDataLoader {
 
 
     @Transactional
-    public RepoDetails createRepoIfNotFound(String username, final String name, String url,
-                                            String branch, String creds) {
+    public RepoDetails createRepoIfNotFound(String username, final String name, String url, String branch, String creds) {
         String globalName = username + "/" + name;
         UserDetails userDetails = createOrFind(username);
         RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
@@ -97,16 +101,17 @@ public class PersistenceDataLoader {
     @Transactional
     public boolean dropSim(String username, long simId) {
         SimSpecs specs = simSpecsRepository.findBySimId(simId);
-        if (specs == null){
+        if (specs == null) {
             return false;
         }
         UserDetails user = specs.getUserDetails();
-        if (!username.equals(user.getName())){
+        if (!username.equals(user.getName())) {
             return false;
         }
         simSpecsRepository.delete(specs);
         return true;
     }
+
     @Transactional
     public boolean updateSim(long id, String username, String name, String folder, String path, String type) {
         UserDetails userDetails = createOrFind(username);
@@ -126,5 +131,45 @@ public class PersistenceDataLoader {
         return true;
     }
 
+    @Transactional
+    public long addExec( String username, long simId) {
+        UserDetails userDetails = createOrFind(username);
+        SimSpecs specs = simSpecsRepository.findBySimId(simId);
+        if (specs == null) {
+           return -1;
+        }
+        if (!username.equals(specs.getUserDetails().getName())) {
+            return -1;
+        }
+        ExecDetails execDetails = new ExecDetails();
+        execDetails.setName(specs.getName());
+        execDetails.setPath(specs.getPath());
+        execDetails.setFolder(specs.getFolder());
+        execDetails.setUserDetails(userDetails);
+        execDetails.setSimSpecs(specs);
+        execDetails.setOutput("");
+        return execDetailsRepository.save(execDetails).getExecId();
+    }
+
+    @Transactional
+    public JSONObject getExec(String username, long simId, long execId) throws Exception{
+        ExecDetails execDetails = execDetailsRepository.findByExecId(execId);
+        if (execDetails == null) {
+            return null;
+        }
+        if (!username.equals(execDetails.getUserDetails().getName())) {
+            return null;
+        }
+        if (simId != execDetails.getSimSpecs().getSimId()) {
+            return null;
+        }
+        JSONObject exec = new JSONObject();
+        exec.put("name",execDetails.getName());
+        exec.put("path",execDetails.getPath());
+        exec.put("folder",execDetails.getFolder());
+        exec.put("type",execDetails.getType());
+        exec.put("output",execDetails.getOutput());
+        return exec;
+    }
 }
 
