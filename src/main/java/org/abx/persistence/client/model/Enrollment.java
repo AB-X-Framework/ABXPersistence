@@ -3,8 +3,8 @@ package org.abx.persistence.client.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "UserProject")
-public class UserProject {
+@Table(name = "Enrollment")
+public class Enrollment {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)

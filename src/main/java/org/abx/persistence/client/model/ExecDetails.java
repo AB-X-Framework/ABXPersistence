@@ -14,7 +14,7 @@ public class ExecDetails {
     @JoinTable(name = "UserExecs",
             joinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
-    private UserDetails userDetails;
+    private ProjectDetails projectDetails;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "SimExecs",
@@ -38,12 +38,12 @@ public class ExecDetails {
     @Column(length = 10000)
     private String output;
 
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
+    public void setProjectDetails(ProjectDetails projectDetails) {
+        this.projectDetails = projectDetails;
     }
 
-    public UserDetails getUserDetails() {
-        return userDetails;
+    public ProjectDetails getUserDetails() {
+        return projectDetails;
     }
 
     public String getName() {

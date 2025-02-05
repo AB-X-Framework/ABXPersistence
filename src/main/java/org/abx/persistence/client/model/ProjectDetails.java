@@ -30,6 +30,8 @@ public class ProjectDetails {
             inverseJoinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"))
     private Collection<ExecDetails> execs;
 
+    @OneToMany(mappedBy = "projectDetails", cascade = CascadeType.ALL)
+    private Collection<Enrollment> enrollment;
 
     public Collection<RepoDetails> getRepoDetails() {
         return repoDetails;
@@ -51,4 +53,17 @@ public class ProjectDetails {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Collection<Enrollment> getEnrollment() {
+        return enrollment;
+    }
+
+    public void setEnrollment(Collection<Enrollment> enrollment) {
+        this.enrollment = enrollment;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
 }

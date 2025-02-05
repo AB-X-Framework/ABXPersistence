@@ -2,10 +2,10 @@ package org.abx.persistence.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.persistence.client.PersistenceDataLoader;
+import org.abx.persistence.client.model.Enrollment;
 import org.abx.persistence.client.model.RepoDetails;
 import org.abx.persistence.client.model.SimSpecs;
 import org.abx.persistence.client.model.UserDetails;
-import org.abx.persistence.client.model.UserProject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (UserProject projectDetails : userDetails.getUserProjects()) {
+        for (Enrollment projectDetails : userDetails.getUserProjects()) {
             for (RepoDetails repoDetails : projectDetails.getProjectDetails().getRepoDetails()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
@@ -98,8 +98,8 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (UserProject userProject : userDetails.getUserProjects()) {
-            for (SimSpecs repoDetails : userProject.getProjectDetails().getSimSpecs()) {
+        for (Enrollment enrollment : userDetails.getUserProjects()) {
+            for (SimSpecs repoDetails : enrollment.getProjectDetails().getSimSpecs()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
                 jsonRepo.put("name", repoDetails.getName());
@@ -116,9 +116,9 @@ public class PersistenceController {
     @Secured("persistence")
     @DeleteMapping(value = "/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSim(HttpServletRequest request,
-                           @RequestParam long projectId,@PathVariable long simId) throws Exception {
+                           @RequestParam long projectId, @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.dropSim(username,projectId, simId);
+        return dataLoader.dropSim(username, projectId, simId);
     }
 
     @Secured("persistence")
@@ -131,14 +131,15 @@ public class PersistenceController {
                              @RequestParam String path,
                              @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.updateSim(projectId, simId, username, name, folder, path, type);
+        return dataLoader.updateSim(username, projectId, simId, name, folder, path, type);
     }
 
     @Secured("persistence")
-    @PostMapping(value = "/sim/{simId}/exec", produces = MediaType.APPLICATION_JSON_VALUE)
-    public long addExec(HttpServletRequest request, @PathVariable long simId) throws Exception {
+    @PostMapping(value = "/project/{projectId}/sim/{simId}/exec", produces = MediaType.APPLICATION_JSON_VALUE)
+    public long addExec(HttpServletRequest request,
+                        @PathVariable long projectId, @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        long execId = dataLoader.addExec(username, simId);
+        long execId = dataLoader.addExec(username, projectId, simId);
         if (execId == -1) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
         }
@@ -146,10 +147,13 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @PostMapping(value = "/sim/{simId}/exec/{execId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getExec(HttpServletRequest request, @PathVariable long simId, @PathVariable long execId) throws Exception {
+    @PostMapping(value = "/project/{projectId}/sim/{simId}/exec/{execId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getExec(HttpServletRequest request,
+                          @PathVariable long projectId,
+                          @PathVariable long simId,
+                          @PathVariable long execId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        JSONObject exec = dataLoader.getExec(username, simId, execId);
+        JSONObject exec = dataLoader.getExec(username, projectId, simId, execId);
         if (exec == null) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
         }

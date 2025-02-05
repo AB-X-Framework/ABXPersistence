@@ -14,6 +14,9 @@ public class PersistenceDataLoader {
     private UserDetailsRepository userDetailsRepository;
 
     @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
+    @Autowired
     private ExecDetailsRepository execDetailsRepository;
 
     @Autowired
@@ -92,7 +95,7 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public int dropSims(String username,long projectId) {
+    public int dropSims(String username, long projectId) {
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         UserDetails userDetails = createOrFind(username);
         int size = projectDetails.getSimSpecs().size();
@@ -116,18 +119,29 @@ public class PersistenceDataLoader {
         return true;
     }
 
-    @Transactional
-    public boolean updateSim(long projectId, long id, String username, String name, String folder, String path, String type) {
+    private SimSpecs validSimSpecs(String username, long projectId, long simId) {
         UserDetails userDetails = createOrFind(username);
-        ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
-        SimSpecs specs = simSpecsRepository.findBySimId(id);
+        if (!enrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
+                (userDetails.getUserId(), projectId)) {
+            return null;
+        }
+        SimSpecs specs = simSpecsRepository.findBySimId(simId);
         if (specs == null) {
+            return null;
+        }
+        if (specs.getProjectDetails().getProjectId() != projectId) {
+            return null;
+        }
+        return specs;
+    }
+
+    @Transactional
+    public boolean updateSim(String username, long projectId, long simId,
+                             String name, String folder, String path, String type) {
+        SimSpecs specs = validSimSpecs(username, projectId, simId);
+        if (specs == null){
             return false;
         }
-        if (!username.equals(specs.getUserDetails().getName())) {
-            return false;
-        }
-        specs.setProjectDetails(projectDetails);
         specs.setName(name);
         specs.setFolder(folder);
         specs.setPath(path);
@@ -137,43 +151,40 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public long addExec( String username, long simId) {
-        UserDetails userDetails = createOrFind(username);
-        SimSpecs specs = simSpecsRepository.findBySimId(simId);
-        if (specs == null) {
-           return -1;
-        }
-        if (!username.equals(specs.getUserDetails().getName())) {
+    public long addExec(String username,  long projectId, long simId) {
+        SimSpecs specs = validSimSpecs(username, projectId, simId);
+        if (specs == null){
             return -1;
         }
         ExecDetails execDetails = new ExecDetails();
         execDetails.setName(specs.getName());
         execDetails.setPath(specs.getPath());
         execDetails.setFolder(specs.getFolder());
-        execDetails.setUserDetails(userDetails);
+        execDetails.setProjectDetails(specs.getProjectDetails());
         execDetails.setSimSpecs(specs);
         execDetails.setOutput("");
         return execDetailsRepository.save(execDetails).getExecId();
     }
 
     @Transactional
-    public JSONObject getExec(String username, long simId, long execId) throws Exception{
-        ExecDetails execDetails = execDetailsRepository.findByExecId(execId);
-        if (execDetails == null) {
+    public JSONObject getExec(String username, long projectId, long simId, long execId) throws Exception {
+        SimSpecs simSpecs = validSimSpecs(username, projectId, simId);
+        if (simSpecs == null){
             return null;
         }
-        if (!username.equals(execDetails.getUserDetails().getName())) {
+        ExecDetails execDetails = execDetailsRepository.findByExecId(execId);
+        if (execDetails == null) {
             return null;
         }
         if (simId != execDetails.getSimSpecs().getSimId()) {
             return null;
         }
         JSONObject exec = new JSONObject();
-        exec.put("name",execDetails.getName());
-        exec.put("path",execDetails.getPath());
-        exec.put("folder",execDetails.getFolder());
-        exec.put("type",execDetails.getType());
-        exec.put("output",execDetails.getOutput());
+        exec.put("name", execDetails.getName());
+        exec.put("path", execDetails.getPath());
+        exec.put("folder", execDetails.getFolder());
+        exec.put("type", execDetails.getType());
+        exec.put("output", execDetails.getOutput());
         return exec;
     }
 }
