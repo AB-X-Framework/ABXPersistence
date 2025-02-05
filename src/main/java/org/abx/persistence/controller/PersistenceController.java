@@ -109,9 +109,9 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @PatchMapping(value = "/sim", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean updateSim(HttpServletRequest request,
-                             @RequestParam long simId,
+                             @PathVariable long simId,
                              @RequestParam String name,
                              @RequestParam String folder,
                              @RequestParam String path,
