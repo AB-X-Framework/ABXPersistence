@@ -29,6 +29,11 @@ public class UserDetails {
             inverseJoinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"))
     private Collection<SimSpecs> simSpecs;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "UserExecs",
+            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"))
+    private Collection<ExecDetails> execs;
 
     public UserDetails() {
         super();
