@@ -31,7 +31,7 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @RequestMapping(value = "/newRepo")
+    @PostMapping(value = "/repo")
     public String addRepo(HttpServletRequest request, @RequestParam String name,
                           @RequestParam String url,
                           @RequestParam String branch,

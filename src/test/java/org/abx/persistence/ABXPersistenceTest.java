@@ -50,7 +50,7 @@ class ABXPersistenceTest {
         String branch = "main";
         String url = "git@github.com:AB-X-Framework/ABXPersistence.git";
         String creds = "{\"password\":\"123\"}";
-        req = servicesClient.post("persistence", "/persistence/newRepo");
+        req = servicesClient.post("persistence", "/persistence/repo");
         req.addPart("name", repoName);
         req.addPart("branch", branch);
         req.addPart("url", url);
@@ -71,7 +71,7 @@ class ABXPersistenceTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
         branch = "newBranch";
-        req = servicesClient.post("persistence", "/persistence/newRepo");
+        req = servicesClient.post("persistence", "/persistence/repo");
         req.addPart("name", repoName);
         req.addPart("branch", branch);
         req.addPart("url", url);
