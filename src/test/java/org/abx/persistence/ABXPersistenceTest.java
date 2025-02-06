@@ -46,7 +46,7 @@ class ABXPersistenceTest {
         ServiceResponse resp = servicesClient.process(req);
         Assertions.assertEquals(username, resp.asString());
 
-        int projectId =  servicesClient.process(
+        int projectId = servicesClient.process(
                 servicesClient.get("persistence", "/persistence/projects").jwt(token)
         ).asJSONArray().getJSONObject(0).getInt("id");
 
@@ -54,7 +54,7 @@ class ABXPersistenceTest {
         String branch = "main";
         String url = "git@github.com:AB-X-Framework/ABXPersistence.git";
         String creds = "{\"password\":\"123\"}";
-        req = servicesClient.post("persistence", "/persistence/projects/"+projectId+"/repo");
+        req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repo");
         req.addPart("repoName", repoName);
         req.addPart("branch", branch);
         req.addPart("url", url);
@@ -63,7 +63,7 @@ class ABXPersistenceTest {
         resp = servicesClient.process(req);
         Assertions.assertEquals(repoName, resp.asString());
 
-        req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/repos");
+        req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
         resp = servicesClient.process(req);
         JSONArray repos = resp.asJSONArray();
@@ -75,15 +75,16 @@ class ABXPersistenceTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
         branch = "newBranch";
-        req = servicesClient.post("persistence", "/persistence/projects/"+projectId+"/repo");
+        req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repo");
         req.addPart("repoName", repoName);
         req.addPart("branch", branch);
         req.addPart("url", url);
         req.addPart("creds", creds);
         req.jwt(token);
-       String data= servicesClient.process(req).asString();
+        resp = servicesClient.process(req);
+        Assertions.assertEquals(repoName, resp.asString());
 
-        req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/repos");
+        req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
         resp = servicesClient.process(req);
         repos = resp.asJSONArray();
@@ -95,13 +96,13 @@ class ABXPersistenceTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
 
-        req = servicesClient.delete("persistence", "/persistence/repo/"+repoName);
+        req = servicesClient.delete("persistence", "/persistence/projects/" + projectId + "/repo/"+repoName);
         req.jwt(token);
         resp = servicesClient.process(req);
-        boolean status  = resp.asBoolean();
+        boolean status = resp.asBoolean();
         Assertions.assertTrue(status);
 
-        req = servicesClient.get("persistence", "/persistence/repos");
+        req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
         resp = servicesClient.process(req);
         repos = resp.asJSONArray();
