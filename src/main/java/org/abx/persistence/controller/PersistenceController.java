@@ -27,7 +27,7 @@ public class PersistenceController {
     public String user(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         UserDetails details = dataLoader.createUserIfNotFound(username);
-        return details.getName();
+        return details.getUsername();
     }
 
     @Secured("persistence")

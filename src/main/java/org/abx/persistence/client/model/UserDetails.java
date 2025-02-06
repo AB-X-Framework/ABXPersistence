@@ -14,24 +14,24 @@ public class UserDetails {
     private Long userId;
 
     @Column(length = 100)
-    private String name;
+    private String username;
 
 
     public UserDetails() {
         super();
     }
 
-    public UserDetails(final String name) {
+    public UserDetails(final String username) {
         super();
-        this.name = name;
+        this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setUsername(final String name) {
+        this.username = name;
     }
 
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
