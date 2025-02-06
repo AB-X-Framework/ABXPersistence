@@ -191,12 +191,12 @@ public class PersistenceDataLoader {
 
     @Transactional
     public boolean updateSim(String username, long projectId, long simId,
-                             String name, String folder, String path, String type) {
+                             String simName, String folder, String path, String type) {
         SimSpecs specs = validSimSpecs(username, projectId, simId);
         if (specs == null){
             return false;
         }
-        specs.setSimName(name);
+        specs.setSimName(simName);
         specs.setFolder(folder);
         specs.setPath(path);
         specs.setType(type);

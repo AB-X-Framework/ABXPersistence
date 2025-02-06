@@ -104,6 +104,7 @@ public class AddSimTest {
         req = servicesClient.delete("persistence", "/persistence/projects/"+projectId+"/sim/"+id);
         req.jwt(token);
         resp = servicesClient.process(req);
+        String data = resp.asString();
         Assertions.assertTrue(resp.asBoolean());
 
 

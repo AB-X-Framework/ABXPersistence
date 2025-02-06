@@ -130,7 +130,8 @@ public class PersistenceController {
     @Secured("persistence")
     @DeleteMapping(value = "/projects/{projectId}/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSim(HttpServletRequest request,
-                           @RequestParam long projectId, @PathVariable long simId) throws Exception {
+                           @PathVariable long projectId,
+                           @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
         return dataLoader.dropSim(username, projectId, simId);
     }
@@ -140,12 +141,12 @@ public class PersistenceController {
     public boolean updateSim(HttpServletRequest request,
                              @PathVariable long projectId,
                              @PathVariable long simId,
-                             @RequestParam String name,
+                             @RequestParam String simName,
                              @RequestParam String folder,
                              @RequestParam String path,
                              @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.updateSim(username, projectId, simId, name, folder, path, type);
+        return dataLoader.updateSim(username, projectId, simId, simName, folder, path, type);
     }
 
     @Secured("persistence")
