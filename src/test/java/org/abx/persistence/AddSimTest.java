@@ -41,26 +41,29 @@ public class AddSimTest {
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("persistence"));
 
+        int projectId = servicesClient.process(
+                servicesClient.get("persistence", "/persistence/projects").jwt(token)
+        ).asJSONArray().getJSONObject(0).getInt("id");
 
-        ServiceRequest req = servicesClient.get("persistence", "/persistence/sims");
+        ServiceRequest req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/sims");
         req.jwt(token);
         servicesClient.process(req);
 
 
-        req = servicesClient.post("persistence", "/persistence/sim");
+        req = servicesClient.post("persistence", "/persistence/projects/"+projectId+"/sim");
         req.jwt(token);
         String simName = "basic";
         String folder = "src/folder/";
         String path = "script.js";
         String type = "test";
-        req.addPart("name", simName);
+        req.addPart("simName", simName);
         req.addPart("folder", folder);
         req.addPart("path", path);
         req.addPart("type", type);
         ServiceResponse resp = servicesClient.process(req);
         long id = resp.asLong();
 
-        req = servicesClient.get("persistence", "/persistence/sims");
+        req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/sims");
         req.jwt(token);
         resp = servicesClient.process(req);
         JSONArray sims = resp.asJSONArray();
@@ -75,9 +78,9 @@ public class AddSimTest {
         Assertions.assertEquals(id, sims.getJSONObject(0).getLong("id"));
 
         simName = simName+"new";
-        req = servicesClient.patch("persistence", "/persistence/sim/"+id);
+        req = servicesClient.patch("persistence", "/persistence/projects/"+projectId+"/sim/"+id);
         req.jwt(token);
-        req.addPart("name", simName);
+        req.addPart("simName", simName);
         req.addPart("folder", folder);
         req.addPart("path", path);
         req.addPart("type", type);
@@ -85,7 +88,7 @@ public class AddSimTest {
         Assertions.assertTrue(resp.asBoolean());
 
 
-        req = servicesClient.get("persistence", "/persistence/sims");
+        req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/sims");
         req.jwt(token);
         resp = servicesClient.process(req);
          sims = resp.asJSONArray();
@@ -98,13 +101,13 @@ public class AddSimTest {
         Assertions.assertEquals(type, sims.getJSONObject(0).getString("type"));
         Assertions.assertEquals(id, sims.getJSONObject(0).getLong("id"));
 
-        req = servicesClient.delete("persistence", "/persistence/sim/"+id);
+        req = servicesClient.delete("persistence", "/persistence/projects/"+projectId+"/sim/"+id);
         req.jwt(token);
         resp = servicesClient.process(req);
         Assertions.assertTrue(resp.asBoolean());
 
 
-        req = servicesClient.get("persistence", "/persistence/sims");
+        req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/sims");
         req.jwt(token);
         resp = servicesClient.process(req);
         Assertions.assertEquals(0,resp.asJSONArray().length());

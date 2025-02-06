@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Component
 public class PersistenceDataLoader {
 
@@ -54,6 +56,7 @@ public class PersistenceDataLoader {
             enrollment.setUserDetails(userDetails);
             enrollment.setRole(ProjectRole.Owner.name());
             enrollmentRepository.save(enrollment);
+            userDetails.setEnrollments(List.of(enrollment));
         }
         return userDetails;
     }
@@ -66,7 +69,7 @@ public class PersistenceDataLoader {
     @Transactional
     public JSONArray enrollments(final String username) {
         JSONArray jsonEnrollments = new JSONArray();
-        for (Enrollment enrollment: createOrFind(username).getUserProjects()){
+        for (Enrollment enrollment: createOrFind(username).getEnrollments()){
             JSONObject jsonEnrollment = new JSONObject();
             jsonEnrollments.put(jsonEnrollment);
             jsonEnrollment.put("projectName",enrollment.getProjectDetails().getProjectName());
@@ -124,7 +127,7 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public SimSpecs createSimSpecs(String username, long projectId, String name, String folder, String path, String type) {
+    public SimSpecs createSimSpecs(String username, long projectId, String simName, String folder, String path, String type) {
         UserDetails userDetails = createOrFind(username);
         if (!enrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
                 (userDetails.getUserId(), projectId)) {
@@ -133,7 +136,7 @@ public class PersistenceDataLoader {
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         SimSpecs specs = new SimSpecs();
         specs.setProjectDetails(projectDetails);
-        specs.setSimName(name);
+        specs.setSimName(simName);
         specs.setFolder(folder);
         specs.setPath(path);
         specs.setType(type);

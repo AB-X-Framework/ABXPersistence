@@ -72,7 +72,7 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (Enrollment projectDetails : userDetails.getUserProjects()) {
+        for (Enrollment projectDetails : userDetails.getEnrollments()) {
             for (RepoDetails repoDetails : projectDetails.getProjectDetails().getRepoDetails()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
@@ -89,13 +89,13 @@ public class PersistenceController {
     @Secured("persistence")
     @PostMapping(value = "/projects/{projectId}/sim", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addSim(HttpServletRequest request,
-                       @RequestParam long projectId,
-                       @RequestParam String name,
+                       @PathVariable long projectId,
+                       @RequestParam String simName,
                        @RequestParam String folder,
                        @RequestParam String path,
                        @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.createSimSpecs(username, projectId, name, folder, path, type).getSimId();
+        return dataLoader.createSimSpecs(username, projectId, simName, folder, path, type).getSimId();
     }
 
     @Secured("persistence")
@@ -112,7 +112,7 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (Enrollment enrollment : userDetails.getUserProjects()) {
+        for (Enrollment enrollment : userDetails.getEnrollments()) {
             for (SimSpecs repoDetails : enrollment.getProjectDetails().getSimSpecs()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);

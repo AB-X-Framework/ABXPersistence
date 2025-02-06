@@ -37,11 +37,11 @@ public class UserDetails {
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private List<Enrollment> enrollments;
 
-    public List<Enrollment> getUserProjects() {
+    public List<Enrollment> getEnrollments() {
         return enrollments;
     }
 
-    public void setUserProjects(List<Enrollment> enrollments) {
+    public void setEnrollments(List<Enrollment> enrollments) {
         this.enrollments = enrollments;
     }
 
