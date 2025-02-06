@@ -31,7 +31,14 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @PostMapping(value = "/project/{projectId}/repo")
+    @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String addRepo(HttpServletRequest request) {
+        String username = request.getUserPrincipal().getName();
+        return dataLoader.enrollments(username).toString();
+    }
+
+    @Secured("persistence")
+    @PostMapping(value = "/projects/{projectId}/repo")
     public String addRepo(HttpServletRequest request,
                           @PathVariable long projectId,
                           @RequestParam String name,
@@ -44,7 +51,7 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @DeleteMapping(value = "/project/{projectId}/repo/{reponame}")
+    @DeleteMapping(value = "/projects/{projectId}/repo/{reponame}")
     public boolean deleteRepo(HttpServletRequest request,
                               @PathVariable long projectId,
                               @PathVariable String reponame) {
@@ -53,7 +60,7 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @GetMapping(value = "/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
     public String repos(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
@@ -73,7 +80,7 @@ public class PersistenceController {
 
 
     @Secured("persistence")
-    @PostMapping(value = "/sim", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/projects/{projectId}/sim", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addSim(HttpServletRequest request,
                        @RequestParam long projectId,
                        @RequestParam String name,
@@ -85,7 +92,7 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @DeleteMapping(value = "/sims", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public int dropSims(HttpServletRequest request,
                         @RequestParam long projectId) throws Exception {
         String username = request.getUserPrincipal().getName();
@@ -93,7 +100,7 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @GetMapping(value = "/sims", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public String sims(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
@@ -114,7 +121,7 @@ public class PersistenceController {
 
 
     @Secured("persistence")
-    @DeleteMapping(value = "/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/projects/{projectId}/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSim(HttpServletRequest request,
                            @RequestParam long projectId, @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
@@ -122,7 +129,7 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @PatchMapping(value = "/project/{projectId}/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/projects/{projectId}/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean updateSim(HttpServletRequest request,
                              @PathVariable long projectId,
                              @PathVariable long simId,

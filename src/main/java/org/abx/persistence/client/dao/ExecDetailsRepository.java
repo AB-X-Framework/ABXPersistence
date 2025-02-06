@@ -13,5 +13,5 @@ public interface ExecDetailsRepository extends JpaRepository<ExecDetails, Long> 
     @Override
     void delete(ExecDetails execDetails);
 
-    List<ExecDetails> findByUserDetailsUserIdOrderByExecIdDesc(Long userDetails, Pageable pageable);
+    List<ExecDetails> findByProjectDetailsProjectIdOrderByExecId(Long projectId, Pageable pageable);
 }

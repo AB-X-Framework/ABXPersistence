@@ -2,10 +2,13 @@ package org.abx.persistence.client;
 
 import org.abx.persistence.client.dao.*;
 import org.abx.persistence.client.model.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 public class PersistenceDataLoader {
@@ -43,6 +46,19 @@ public class PersistenceDataLoader {
     @Transactional
     public UserDetails createUserIfNotFound(final String name) {
         return createOrFind(name);
+    }
+
+    @Transactional
+    public JSONArray enrollments(final String username) {
+        JSONArray jsonEnrollments = new JSONArray();
+        for (Enrollment enrollment: createOrFind(username).getUserProjects()){
+            JSONObject jsonEnrollment = new JSONObject();
+            jsonEnrollments.put(jsonEnrollment);
+            jsonEnrollment.put("name",enrollment.getProjectDetails().getName());
+            jsonEnrollment.put("name",enrollment.getProjectDetails().getName());
+
+        }
+        return jsonEnrollments;
     }
 
 
