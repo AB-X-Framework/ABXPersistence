@@ -31,7 +31,7 @@ public class SimSpecs {
     }
 
     @Column
-    private String name;
+    private String simName;
 
     @Column
     private String folder;
@@ -52,12 +52,12 @@ public class SimSpecs {
         return projectDetails;
     }
 
-    public String getName() {
-        return name;
+    public String getSimName() {
+        return simName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSimName(String name) {
+        this.simName = name;
     }
 
     public String getFolder() {

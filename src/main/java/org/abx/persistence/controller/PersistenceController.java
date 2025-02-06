@@ -109,7 +109,7 @@ public class PersistenceController {
             for (SimSpecs repoDetails : enrollment.getProjectDetails().getSimSpecs()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
-                jsonRepo.put("name", repoDetails.getName());
+                jsonRepo.put("name", repoDetails.getSimName());
                 jsonRepo.put("folder", repoDetails.getFolder());
                 jsonRepo.put("path", repoDetails.getPath());
                 jsonRepo.put("type", repoDetails.getType());

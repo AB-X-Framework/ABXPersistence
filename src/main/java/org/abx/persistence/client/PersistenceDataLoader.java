@@ -99,7 +99,7 @@ public class PersistenceDataLoader {
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         SimSpecs specs = new SimSpecs();
         specs.setProjectDetails(projectDetails);
-        specs.setName(name);
+        specs.setSimName(name);
         specs.setFolder(folder);
         specs.setPath(path);
         specs.setType(type);
@@ -155,7 +155,7 @@ public class PersistenceDataLoader {
         if (specs == null){
             return false;
         }
-        specs.setName(name);
+        specs.setSimName(name);
         specs.setFolder(folder);
         specs.setPath(path);
         specs.setType(type);
@@ -170,7 +170,7 @@ public class PersistenceDataLoader {
             return -1;
         }
         ExecDetails execDetails = new ExecDetails();
-        execDetails.setName(specs.getName());
+        execDetails.setExecName(specs.getSimName());
         execDetails.setPath(specs.getPath());
         execDetails.setFolder(specs.getFolder());
         execDetails.setProjectDetails(specs.getProjectDetails());
@@ -193,7 +193,7 @@ public class PersistenceDataLoader {
             return null;
         }
         JSONObject exec = new JSONObject();
-        exec.put("name", execDetails.getName());
+        exec.put("name", execDetails.getExecName());
         exec.put("path", execDetails.getPath());
         exec.put("folder", execDetails.getFolder());
         exec.put("type", execDetails.getType());

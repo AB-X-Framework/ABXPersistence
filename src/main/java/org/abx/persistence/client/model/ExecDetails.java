@@ -23,7 +23,7 @@ public class ExecDetails {
     private SimSpecs simSpecs;
 
     @Column
-    private String name;
+    private String execName;
 
     @Column
     private String folder;
@@ -46,12 +46,12 @@ public class ExecDetails {
         return projectDetails;
     }
 
-    public String getName() {
-        return name;
+    public String getExecName() {
+        return execName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setExecName(String name) {
+        this.execName = name;
     }
 
     public String getFolder() {
