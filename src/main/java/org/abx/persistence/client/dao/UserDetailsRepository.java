@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> {
 
-    UserDetails findByName(String name);
+    UserDetails findByUsername(String name);
 
     @Override
     void delete(UserDetails userDetails);
