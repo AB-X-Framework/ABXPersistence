@@ -7,13 +7,13 @@
       <option name="url" value="https://repo.eclipse.org/content/repositories/jgit-releases/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="central" />
-      <option name="name" value="Central Repository" />
+      <option name="id" value="1_central" />
+      <option name="name" value="central" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="1_central" />
-      <option name="name" value="central" />
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
@@ -22,14 +22,14 @@
       <option name="url" value="https://nexus.janelia.org/repository/maven-releases" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="4_artifact-manager-s3" />
-      <option name="name" value="4_artifact-manager-s3" />
-      <option name="url" value="s3://aiq-jenkins-artifacts/snapshots" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="3_gael" />
       <option name="name" value="gael" />
       <option name="url" value="https://repository.gael-systems.com/repository/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="4_artifact-manager-s3" />
+      <option name="name" value="4_artifact-manager-s3" />
+      <option name="url" value="s3://aiq-jenkins-artifacts/snapshots" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="1_central" />
@@ -47,14 +47,14 @@
       <option name="url" value="https://repo.jenkins-ci.org/releases" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="2_mavencentral" />
-      <option name="name" value="2_mavencentral" />
-      <option name="url" value="https://mvnrepository.com/repos/central" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="github-ABXUSArch" />
       <option name="name" value="github-ABXUSArch" />
       <option name="url" value="https://maven.pkg.github.com/AB-X-Framework/ABXUSArch" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="2_mavencentral" />
+      <option name="name" value="2_mavencentral" />
+      <option name="url" value="https://mvnrepository.com/repos/central" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="8_janelia" />
@@ -82,14 +82,14 @@
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="3_gael" />
-      <option name="name" value="3_gael" />
-      <option name="url" value="https://repository.gael-systems.com/repository/public/" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="4_artifact-manager-s3" />
       <option name="name" value="appvance" />
       <option name="url" value="s3://aiq-jenkins-artifacts/snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="3_gael" />
+      <option name="name" value="3_gael" />
+      <option name="url" value="https://repository.gael-systems.com/repository/public/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="2_mavencentral" />

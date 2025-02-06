@@ -13,7 +13,7 @@ public class ExecDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "UserExecs",
             joinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"),
-            inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
+            inverseJoinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"))
     private ProjectDetails projectDetails;
 
     @ManyToOne(fetch = FetchType.LAZY)

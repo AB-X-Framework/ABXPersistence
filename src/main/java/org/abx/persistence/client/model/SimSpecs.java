@@ -17,7 +17,7 @@ public class SimSpecs {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "ProjectSimulations",
             joinColumns = @JoinColumn(name = "simId", referencedColumnName = "simId"),
-            inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "userId"))
+            inverseJoinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"))
     private ProjectDetails projectDetails;
 
     @OneToMany(fetch = FetchType.LAZY)
