@@ -55,7 +55,7 @@ class ABXPersistenceTest {
         String url = "git@github.com:AB-X-Framework/ABXPersistence.git";
         String creds = "{\"password\":\"123\"}";
         req = servicesClient.post("persistence", "/persistence/projects/"+projectId+"/repo");
-        req.addPart("name", repoName);
+        req.addPart("repoName", repoName);
         req.addPart("branch", branch);
         req.addPart("url", url);
         req.addPart("creds", creds);
@@ -63,19 +63,19 @@ class ABXPersistenceTest {
         resp = servicesClient.process(req);
         Assertions.assertEquals(repoName, resp.asString());
 
-        req = servicesClient.get("persistence", "/persistence/repos");
+        req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/repos");
         req.jwt(token);
         resp = servicesClient.process(req);
         JSONArray repos = resp.asJSONArray();
         Assertions.assertEquals(1, repos.length());
 
-        Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("name"));
+        Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("repoName"));
         Assertions.assertEquals(branch, repos.getJSONObject(0).getString("branch"));
         Assertions.assertEquals(url, repos.getJSONObject(0).getString("url"));
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
         branch = "newBranch";
-        req = servicesClient.post("persistence", "/persistence/repo");
+        req = servicesClient.post("persistence", "/persistence/projects/"+projectId+"/repo");
         req.addPart("name", repoName);
         req.addPart("branch", branch);
         req.addPart("url", url);
@@ -83,13 +83,13 @@ class ABXPersistenceTest {
         req.jwt(token);
         servicesClient.process(req);
 
-        req = servicesClient.get("persistence", "/persistence/repos");
+        req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/repos");
         req.jwt(token);
         resp = servicesClient.process(req);
         repos = resp.asJSONArray();
         Assertions.assertEquals(1, repos.length());
 
-        Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("name"));
+        Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("repoName"));
         Assertions.assertEquals(branch, repos.getJSONObject(0).getString("branch"));
         Assertions.assertEquals(url, repos.getJSONObject(0).getString("url"));
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));

@@ -58,12 +58,12 @@ public class PersistenceController {
     }
 
     @Secured("persistence")
-    @DeleteMapping(value = "/projects/{projectId}/repo/{reponame}")
+    @DeleteMapping(value = "/projects/{projectId}/repo/{repoName}")
     public boolean deleteRepo(HttpServletRequest request,
                               @PathVariable long projectId,
-                              @PathVariable String reponame) {
+                              @PathVariable String repoName) {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.deleteRepo(username, projectId, reponame);
+        return dataLoader.deleteRepo(username, projectId, repoName);
     }
 
     @Secured("persistence")
@@ -76,7 +76,7 @@ public class PersistenceController {
             for (RepoDetails repoDetails : projectDetails.getProjectDetails().getRepoDetails()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
-                jsonRepo.put("name", repoDetails.getRepoName());
+                jsonRepo.put("repoName", repoDetails.getRepoName());
                 jsonRepo.put("branch", repoDetails.getBranch());
                 jsonRepo.put("url", repoDetails.getUrl());
                 jsonRepo.put("creds", repoDetails.getCreds());
@@ -100,7 +100,7 @@ public class PersistenceController {
 
     @Secured("persistence")
     @DeleteMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
-    public int dropSims(HttpServletRequest request,
+    public boolean dropSims(HttpServletRequest request,
                         @RequestParam long projectId) throws Exception {
         String username = request.getUserPrincipal().getName();
         return dataLoader.dropSims(username, projectId);
