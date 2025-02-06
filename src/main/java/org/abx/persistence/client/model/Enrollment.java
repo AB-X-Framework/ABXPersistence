@@ -37,4 +37,12 @@ public class Enrollment {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public UserDetails getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
+    }
 }

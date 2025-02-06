@@ -36,17 +36,24 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         return dataLoader.enrollments(username).toString();
     }
+    @Secured("persistence")
+    @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Long addProject(HttpServletRequest request,
+                              @RequestParam String projectName) {
+        String username = request.getUserPrincipal().getName();
+        return dataLoader.addProject(username,projectName);
+    }
 
     @Secured("persistence")
     @PostMapping(value = "/projects/{projectId}/repo")
     public String addRepo(HttpServletRequest request,
                           @PathVariable long projectId,
-                          @RequestParam String name,
+                          @RequestParam String repoName,
                           @RequestParam String url,
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = dataLoader.createRepoIfNotFound(username, projectId, name, url, branch, creds);
+        RepoDetails repoDetails = dataLoader.createRepoIfNotFound(username, projectId, repoName, url, branch, creds);
         return repoDetails.getRepoName();
     }
 

@@ -46,11 +46,15 @@ class ABXPersistenceTest {
         ServiceResponse resp = servicesClient.process(req);
         Assertions.assertEquals(username, resp.asString());
 
+        int projectId =  servicesClient.process(
+                servicesClient.get("persistence", "/persistence/projects").jwt(token)
+        ).asJSONArray().getJSONObject(0).getInt("id");
+
         String repoName = "myRepo";
         String branch = "main";
         String url = "git@github.com:AB-X-Framework/ABXPersistence.git";
         String creds = "{\"password\":\"123\"}";
-        req = servicesClient.post("persistence", "/persistence/repo");
+        req = servicesClient.post("persistence", "/persistence/projects/"+projectId+"/repo");
         req.addPart("name", repoName);
         req.addPart("branch", branch);
         req.addPart("url", url);

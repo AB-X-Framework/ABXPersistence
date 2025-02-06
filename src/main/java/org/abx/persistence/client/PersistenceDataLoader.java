@@ -28,15 +28,32 @@ public class PersistenceDataLoader {
     @Autowired
     private ProjectDetailsRepository projectDetailsRepository;
 
+    private Long addProject( UserDetails userDetails, String projectName) {
+        ProjectDetails projectDetails = new ProjectDetails();
+        projectDetails.setProjectName(projectName);
+        projectDetailsRepository.save(projectDetails);
+        Enrollment enrollment = new Enrollment();
+        enrollment.setProjectDetails(projectDetails);
+        enrollment.setUserDetails(userDetails);
+        enrollment.setRole(ProjectRole.Owner.name());
+        enrollmentRepository.save(enrollment);
+        return projectDetails.getProjectId();
+    }
+
+
     private UserDetails createOrFind(final String name) {
-        UserDetails userDetails = userDetailsRepository.findByName(name);
+        UserDetails userDetails = userDetailsRepository.findByUsername(name);
         if (userDetails == null) {
             userDetails = new UserDetails(name);
             userDetails = userDetailsRepository.save(userDetails);
             ProjectDetails projectDetails = new ProjectDetails();
             projectDetails.setProjectName("Personal");
             projectDetailsRepository.save(projectDetails);
-
+            Enrollment enrollment = new Enrollment();
+            enrollment.setProjectDetails(projectDetails);
+            enrollment.setUserDetails(userDetails);
+            enrollment.setRole(ProjectRole.Owner.name());
+            enrollmentRepository.save(enrollment);
         }
         return userDetails;
     }
@@ -57,7 +74,11 @@ public class PersistenceDataLoader {
         }
         return jsonEnrollments;
     }
-
+    @Transactional
+    public Long addProject(final String username, String projectName) {
+        UserDetails userDetails = createOrFind(username);
+        return addProject(userDetails, projectName);
+    }
 
     @Transactional
     public RepoDetails createRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
