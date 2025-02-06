@@ -43,15 +43,15 @@ public class ProjectDetails {
 
 
     @Column
-    private String name;
+    private String projectName;
 
 
-    public String getName() {
-        return name;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public Collection<Enrollment> getEnrollment() {

@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Component
 public class PersistenceDataLoader {
 
@@ -36,7 +34,7 @@ public class PersistenceDataLoader {
             userDetails = new UserDetails(name);
             userDetails = userDetailsRepository.save(userDetails);
             ProjectDetails projectDetails = new ProjectDetails();
-            projectDetails.setName("Personal");
+            projectDetails.setProjectName("Personal");
             projectDetailsRepository.save(projectDetails);
 
         }
@@ -54,9 +52,8 @@ public class PersistenceDataLoader {
         for (Enrollment enrollment: createOrFind(username).getUserProjects()){
             JSONObject jsonEnrollment = new JSONObject();
             jsonEnrollments.put(jsonEnrollment);
-            jsonEnrollment.put("name",enrollment.getProjectDetails().getName());
-            jsonEnrollment.put("name",enrollment.getProjectDetails().getName());
-
+            jsonEnrollment.put("projectName",enrollment.getProjectDetails().getProjectName());
+            jsonEnrollment.put("id",enrollment.getProjectDetails().getProjectId());
         }
         return jsonEnrollments;
     }
@@ -71,7 +68,7 @@ public class PersistenceDataLoader {
         if (repoDetails == null) {
             repoDetails = new RepoDetails(globalName);
             repoDetails.setProjectDetails(projectDetails);
-            repoDetails.setName(name);
+            repoDetails.setRepoName(name);
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);

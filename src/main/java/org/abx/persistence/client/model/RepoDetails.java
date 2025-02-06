@@ -22,7 +22,7 @@ public class RepoDetails {
     private String globalName;
 
     @Column(length = 100)
-    private String name;
+    private String repoName;
 
     @Column
     private String url;
@@ -43,12 +43,12 @@ public class RepoDetails {
     }
 
 
-    public String getName() {
-        return name;
+    public String getRepoName() {
+        return repoName;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setRepoName(final String name) {
+        this.repoName = name;
     }
 
     public String getUrl() {

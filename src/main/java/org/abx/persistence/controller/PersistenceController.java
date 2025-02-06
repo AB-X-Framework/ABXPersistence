@@ -47,7 +47,7 @@ public class PersistenceController {
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
         RepoDetails repoDetails = dataLoader.createRepoIfNotFound(username, projectId, name, url, branch, creds);
-        return repoDetails.getName();
+        return repoDetails.getRepoName();
     }
 
     @Secured("persistence")
@@ -69,7 +69,7 @@ public class PersistenceController {
             for (RepoDetails repoDetails : projectDetails.getProjectDetails().getRepoDetails()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
-                jsonRepo.put("name", repoDetails.getName());
+                jsonRepo.put("name", repoDetails.getRepoName());
                 jsonRepo.put("branch", repoDetails.getBranch());
                 jsonRepo.put("url", repoDetails.getUrl());
                 jsonRepo.put("creds", repoDetails.getCreds());
