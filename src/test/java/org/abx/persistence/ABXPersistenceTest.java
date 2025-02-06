@@ -76,12 +76,12 @@ class ABXPersistenceTest {
 
         branch = "newBranch";
         req = servicesClient.post("persistence", "/persistence/projects/"+projectId+"/repo");
-        req.addPart("name", repoName);
+        req.addPart("repoName", repoName);
         req.addPart("branch", branch);
         req.addPart("url", url);
         req.addPart("creds", creds);
         req.jwt(token);
-        servicesClient.process(req);
+       String data= servicesClient.process(req).asString();
 
         req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/repos");
         req.jwt(token);
