@@ -8,7 +8,6 @@ public class RepoDetails {
 
     @Id
     @Column(unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long repoId;
 
 
@@ -17,9 +16,6 @@ public class RepoDetails {
             joinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"),
             inverseJoinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"))
     private ProjectDetails projectDetails;
-
-    @Column(unique = true)
-    private String globalName;
 
     @Column(length = 100)
     private String repoName;
@@ -36,12 +32,6 @@ public class RepoDetails {
     public RepoDetails() {
         super();
     }
-
-    public RepoDetails(final String globalName) {
-        super();
-        this.globalName = globalName;
-    }
-
 
     public String getRepoName() {
         return repoName;
@@ -77,5 +67,13 @@ public class RepoDetails {
 
     public void setProjectDetails(ProjectDetails projectDetails) {
         this.projectDetails = projectDetails;
+    }
+
+    public Long getRepoId() {
+        return repoId;
+    }
+
+    public void setRepoId(Long repoId) {
+        this.repoId = repoId;
     }
 }

@@ -83,6 +83,10 @@ public class PersistenceDataLoader {
         return addProject(userDetails, projectName);
     }
 
+    public long repoId(long projecId, String repoName){
+        return (projecId+"/"+repoName).hashCode();
+    }
+
     @Transactional
     public RepoDetails createRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
        UserDetails userDetails = createOrFind(username);
@@ -91,10 +95,11 @@ public class PersistenceDataLoader {
             return null;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
-        String globalName = projectId + "/" + name;
-        RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
+        long repoId = repoId(projectId , name);
+        RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
         if (repoDetails == null) {
-            repoDetails = new RepoDetails(globalName);
+            repoDetails = new RepoDetails();
+            repoDetails.setRepoId(repoId);
             repoDetails.setProjectDetails(projectDetails);
             repoDetails.setRepoName(name);
             repoDetails.setUrl(url);
@@ -117,8 +122,8 @@ public class PersistenceDataLoader {
                 (userDetails.getUserId(), projectId)) {
             return false;
         }
-        String globalName = projectId + "/" + name;
-        RepoDetails repoDetails = repoDetailsRepository.findByGlobalName(globalName);
+        long repoId = repoId(projectId , name);
+        RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
         if (repoDetails == null) {
             return false;
         }
