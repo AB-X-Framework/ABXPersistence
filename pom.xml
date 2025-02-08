@@ -17,7 +17,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
-	<groupId>org.abx.persitence</groupId>
+	<groupId>org.abx.persistence</groupId>
 	<artifactId>persistence</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>ABX Persistence</name>
