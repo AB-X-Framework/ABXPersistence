@@ -1,5 +1,6 @@
 package org.abx.persistence.spring;
 
+import org.abx.spring.ConfigReader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,9 +13,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "org.abx.persistence.controller"})
 public class ABXPersistenceEntry {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         System.out.println("ABXPersistenceEntry starting");
-        SpringApplication.run(ABXPersistenceEntry.class, args);
+        SpringApplication.run(ABXPersistenceEntry.class, ConfigReader.checkArgs(args));
 
     }
 
