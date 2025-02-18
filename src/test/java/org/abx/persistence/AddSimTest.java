@@ -39,7 +39,7 @@ public class AddSimTest {
     public void doBasicTest() throws Exception {
         String username = "SimUser";
         String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("persistence"));
+                List.of("Persistence"));
 
         int projectId = servicesClient.process(
                 servicesClient.get("persistence", "/persistence/projects").jwt(token)

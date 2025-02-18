@@ -22,7 +22,7 @@ public class PersistenceController {
     @Autowired
     private PersistenceDataLoader dataLoader;
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
@@ -30,13 +30,13 @@ public class PersistenceController {
         return details.getUsername();
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public String enrollments(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         return dataLoader.enrollments(username).toString();
     }
-    @Secured("persistence")
+    @Secured("Persistence")
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public Long addProject(HttpServletRequest request,
                               @RequestParam String projectName) {
@@ -44,7 +44,7 @@ public class PersistenceController {
         return dataLoader.addProject(username,projectName);
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/repo")
     public String addRepo(HttpServletRequest request,
                           @PathVariable long projectId,
@@ -57,7 +57,7 @@ public class PersistenceController {
         return repoDetails.getRepoName();
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/repo/{repoName}")
     public boolean deleteRepo(HttpServletRequest request,
                               @PathVariable long projectId,
@@ -66,7 +66,7 @@ public class PersistenceController {
         return dataLoader.deleteRepo(username, projectId, repoName);
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
     public String repos(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
@@ -86,7 +86,7 @@ public class PersistenceController {
     }
 
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/sim", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addSim(HttpServletRequest request,
                        @PathVariable long projectId,
@@ -98,7 +98,7 @@ public class PersistenceController {
         return dataLoader.createSimSpecs(username, projectId, simName, folder, path, type).getSimId();
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSims(HttpServletRequest request,
                         @RequestParam long projectId) throws Exception {
@@ -106,7 +106,7 @@ public class PersistenceController {
         return dataLoader.dropSims(username, projectId);
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public String sims(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
@@ -127,7 +127,7 @@ public class PersistenceController {
     }
 
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSim(HttpServletRequest request,
                            @PathVariable long projectId,
@@ -136,7 +136,7 @@ public class PersistenceController {
         return dataLoader.dropSim(username, projectId, simId);
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @PatchMapping(value = "/projects/{projectId}/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean updateSim(HttpServletRequest request,
                              @PathVariable long projectId,
@@ -149,7 +149,7 @@ public class PersistenceController {
         return dataLoader.updateSim(username, projectId, simId, simName, folder, path, type);
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @PostMapping(value = "/project/{projectId}/sim/{simId}/exec", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addExec(HttpServletRequest request,
                         @PathVariable long projectId, @PathVariable long simId) throws Exception {
@@ -161,7 +161,7 @@ public class PersistenceController {
         return execId;
     }
 
-    @Secured("persistence")
+    @Secured("Persistence")
     @PostMapping(value = "/project/{projectId}/sim/{simId}/exec/{execId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getExec(HttpServletRequest request,
                           @PathVariable long projectId,

@@ -39,7 +39,7 @@ class ABXPersistenceTest {
     public void doBasicTest() throws Exception {
         String username = "root";
         String token = JWTUtils.generateToken(username, privateKey, 60,
-                List.of("persistence"));
+                List.of("Persistence"));
 
         ServiceRequest req = servicesClient.get("persistence", "/persistence/user");
         req.jwt(token);
