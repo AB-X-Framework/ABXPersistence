@@ -1,6 +1,7 @@
 package org.abx.persistence.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.abx.persistence.client.DashboardDataLoader;
 import org.abx.persistence.client.PersistenceDataLoader;
 import org.abx.persistence.client.model.Enrollment;
 import org.abx.persistence.client.model.RepoDetails;
@@ -22,6 +23,8 @@ public class PersistenceController {
     @Autowired
     private PersistenceDataLoader dataLoader;
 
+    @Autowired
+    private DashboardDataLoader dashboardDataLoader;
     @Secured("Persistence")
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest request) {
@@ -150,7 +153,7 @@ public class PersistenceController {
     }
 
     @Secured("Persistence")
-    @PostMapping(value = "/project/{projectId}/sim/{simId}/exec", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/projects/{projectId}/sim/{simId}/exec", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addExec(HttpServletRequest request,
                         @PathVariable long projectId, @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
@@ -162,7 +165,7 @@ public class PersistenceController {
     }
 
     @Secured("Persistence")
-    @PostMapping(value = "/project/{projectId}/sim/{simId}/exec/{execId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/projects/{projectId}/sim/{simId}/exec/{execId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getExec(HttpServletRequest request,
                           @PathVariable long projectId,
                           @PathVariable long simId,
@@ -173,5 +176,43 @@ public class PersistenceController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
         }
         return exec.toString();
+    }
+
+    @Secured("Persistence")
+    @GetMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String dasboards(HttpServletRequest request) {
+        String username = request.getUserPrincipal().getName();
+        return dashboardDataLoader.getDashboards(username).toString();
+    }
+
+    @Secured("Persistence")
+    @GetMapping(value = "/dashboards/{dashboardId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getDashboard(HttpServletRequest request,
+                            @PathVariable long dashboardId) {
+        String username = request.getUserPrincipal().getName();
+        return dashboardDataLoader.getDashboard(dashboardId, username).toString();
+    }
+
+    @Secured("Persistence")
+    @PostMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Long createDashboard(HttpServletRequest request,
+                                @RequestParam String dashboardName) {
+        String username = request.getUserPrincipal().getName();
+        return  dashboardDataLoader.createDashboard(username,dashboardName);
+    }
+
+    @Secured("Persistence")
+    @DeleteMapping(value = "/dashboards/{dashboardId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean createDashboard(HttpServletRequest request,
+                                @PathVariable long dashboardId) {
+        String username = request.getUserPrincipal().getName();
+        return  dashboardDataLoader.deleteDashboard(dashboardId,username);
+    }
+
+    @Secured("Persistence")
+    @DeleteMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean deleteDashboard(HttpServletRequest request) {
+        String username = request.getUserPrincipal().getName();
+        return  dashboardDataLoader.purgeDashboards(username);
     }
 }
