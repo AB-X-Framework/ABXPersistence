@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "UserDetails")
+@Table(name = "UserDetails", indexes = {
+        @Index(name = "idx_username", columnList = "username") // Index for better query performance
+})
 public class UserDetails {
 
     @Id
@@ -34,10 +36,12 @@ public class UserDetails {
         this.username = name;
     }
 
+    //userDetails  is the variable in Enrollment
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private List<Enrollment> enrollments;
 
-    @OneToMany(mappedBy = "dashboardDetails", cascade = CascadeType.ALL)
+    //userDetails  is the variable in DashboardDetails
+    @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private List<DashboardDetails> dashboardDetails;
 
     public List<Enrollment> getEnrollments() {

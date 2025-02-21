@@ -38,4 +38,12 @@ public class DashboardDetails {
     public void setDashboardId(Long dashboardId) {
         this.dashboardId = dashboardId;
     }
+
+    public UserDetails getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
+    }
 }
