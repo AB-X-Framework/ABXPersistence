@@ -196,9 +196,9 @@ public class PersistenceController {
     @Secured("Persistence")
     @PostMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     public Long createDashboard(HttpServletRequest request,
-                                @RequestParam String dashboardName) {
+                                @RequestParam String name) {
         String username = request.getUserPrincipal().getName();
-        return  dashboardDataLoader.createDashboard(username,dashboardName);
+        return  dashboardDataLoader.createDashboard(username,name);
     }
 
     @Secured("Persistence")

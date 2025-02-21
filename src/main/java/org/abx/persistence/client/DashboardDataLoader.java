@@ -56,6 +56,7 @@ public class DashboardDataLoader {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
         DashboardDetails dd = new DashboardDetails();
         dd.setDashboardName(name);
+        dd.setUserDetails(userDetails);
         dashboardDetailsRepository.save(dd);
         return dd.getDashboardId();
     }

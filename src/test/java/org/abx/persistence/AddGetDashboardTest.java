@@ -45,8 +45,8 @@ public class AddGetDashboardTest {
         Assertions.assertEquals(true, resp.asBoolean());
 
 
-        req = servicesClient.post("persistence", "/persistence/dashboards");
-        req.addPart("name",dashboardName);
+        req = servicesClient.post("persistence", "/persistence/dashboards").
+                addPart("name",dashboardName);
         resp = servicesClient.process(req.jwt(token));
         long id = resp.asLong();
 
