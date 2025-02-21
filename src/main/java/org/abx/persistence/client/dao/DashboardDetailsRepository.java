@@ -1,8 +1,6 @@
 package org.abx.persistence.client.dao;
 
 import org.abx.persistence.client.model.DashboardDetails;
-import org.abx.persistence.client.model.Enrollment;
-import org.abx.persistence.client.model.UserDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DashboardDetailsRepository  extends JpaRepository<DashboardDetails, Long> {
