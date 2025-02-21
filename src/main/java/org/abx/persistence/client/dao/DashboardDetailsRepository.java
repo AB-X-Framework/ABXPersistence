@@ -7,7 +7,6 @@ public interface DashboardDetailsRepository  extends JpaRepository<DashboardDeta
     @Override
     void delete(DashboardDetails dashboardDetails);
 
-
     DashboardDetails findByDashboardId(long dashboardId);
 
 }

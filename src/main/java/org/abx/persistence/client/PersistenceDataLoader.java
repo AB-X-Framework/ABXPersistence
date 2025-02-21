@@ -27,6 +27,7 @@ public class PersistenceDataLoader {
 
     @Autowired
     private SimSpecsRepository simSpecsRepository;
+
     @Autowired
     private ProjectDetailsRepository projectDetailsRepository;
 
@@ -44,9 +45,6 @@ public class PersistenceDataLoader {
         enrollmentRepository.save(enrollment);
         return projectDetails.getProjectId();
     }
-
-
-
 
     @Transactional
     public UserDetails createUserIfNotFound(final String name) {
