@@ -37,6 +37,9 @@ public class UserDetails {
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private List<Enrollment> enrollments;
 
+    @OneToMany(mappedBy = "dashboardDetails", cascade = CascadeType.ALL)
+    private List<DashboardDetails> dashboardDetails;
+
     public List<Enrollment> getEnrollments() {
         return enrollments;
     }
@@ -49,4 +52,11 @@ public class UserDetails {
         return userId;
     }
 
+    public List<DashboardDetails> getDashboardDetails() {
+        return dashboardDetails;
+    }
+
+    public void setDashboardDetails(List<DashboardDetails> dashboardDetails) {
+        this.dashboardDetails = dashboardDetails;
+    }
 }
