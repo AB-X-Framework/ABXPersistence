@@ -36,15 +36,59 @@ public class AddGetDashboardTest {
     @Test
     public void doBasicTest() throws Exception {
         String username = "root";
+        String dashboardName = "My Dashboard";
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Persistence"));
 
         ServiceRequest req = servicesClient.delete("persistence", "/persistence/dashboards");
-        req.jwt(token);
-        ServiceResponse resp = servicesClient.process(req);
-        Assertions.assertEquals(true, resp.asString());
+        ServiceResponse resp = servicesClient.process(req.jwt(token));
+        Assertions.assertEquals(true, resp.asBoolean());
 
 
+        req = servicesClient.post("persistence", "/persistence/dashboards");
+        req.addPart("name",dashboardName);
+        resp = servicesClient.process(req.jwt(token));
+        long id = resp.asLong();
+
+
+        req = servicesClient.get("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req.jwt(token));
+        Assertions.assertEquals(1, resp.asJSONArray().length());
+
+
+        req = servicesClient.get("persistence", "/persistence/dashboards/"+id);
+        resp = servicesClient.process(req.jwt(token));
+        Assertions.assertEquals(dashboardName, resp.asJSONObject().get("name"));
+
+
+        req = servicesClient.delete("persistence", "/persistence/dashboards/"+id);
+        resp = servicesClient.process(req.jwt(token));
+        Assertions.assertEquals(true, resp.asBoolean());
+
+
+        req = servicesClient.get("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req.jwt(token));
+        Assertions.assertEquals(0, resp.asJSONArray().length());
+
+
+        req = servicesClient.post("persistence", "/persistence/dashboards");
+        req.addPart("name",dashboardName);
+        resp = servicesClient.process(req.jwt(token));
+
+
+        req = servicesClient.get("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req.jwt(token));
+        Assertions.assertEquals(1, resp.asJSONArray().length());
+
+
+        req = servicesClient.delete("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req.jwt(token));
+        Assertions.assertEquals(true, resp.asBoolean());
+
+
+        req = servicesClient.get("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req.jwt(token));
+        Assertions.assertEquals(0, resp.asJSONArray().length());
 
     }
 
