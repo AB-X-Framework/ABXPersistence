@@ -180,7 +180,7 @@ public class PersistenceController {
 
     @Secured("Persistence")
     @GetMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String dasboards(HttpServletRequest request) {
+    public String dashboards(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         return dashboardDataLoader.getDashboards(username).toString();
     }
