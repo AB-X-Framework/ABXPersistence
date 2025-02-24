@@ -2,6 +2,7 @@ package org.abx.persistence;
 
 import org.abx.jwt.JWTUtils;
 import org.abx.persistence.spring.ABXPersistenceEntry;
+import org.abx.services.JWTServicesClient;
 import org.abx.services.ServiceRequest;
 import org.abx.services.ServiceResponse;
 import org.abx.services.ServicesClient;
@@ -39,55 +40,56 @@ public class AddGetDashboardTest {
         String dashboardName = "My Dashboard";
         String token = JWTUtils.generateToken(username, privateKey, 60,
                 List.of("Persistence"));
+        JWTServicesClient jwtServicesClient = servicesClient.withJWT(token);
 
-        ServiceRequest req = servicesClient.delete("persistence", "/persistence/dashboards");
-        ServiceResponse resp = servicesClient.process(req.jwt(token));
+        ServiceRequest req = jwtServicesClient.delete("persistence", "/persistence/dashboards");
+        ServiceResponse resp = servicesClient.process(req);
         Assertions.assertEquals(true, resp.asBoolean());
 
 
-        req = servicesClient.post("persistence", "/persistence/dashboards").
+        req = jwtServicesClient.post("persistence", "/persistence/dashboards").
                 addPart("name",dashboardName);
-        resp = servicesClient.process(req.jwt(token));
+        resp = servicesClient.process(req);
         long id = resp.asLong();
 
 
-        req = servicesClient.get("persistence", "/persistence/dashboards");
-        resp = servicesClient.process(req.jwt(token));
+        req = jwtServicesClient.get("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req);
         Assertions.assertEquals(1, resp.asJSONArray().length());
 
 
-        req = servicesClient.get("persistence", "/persistence/dashboards/"+id);
-        resp = servicesClient.process(req.jwt(token));
+        req = jwtServicesClient.get("persistence", "/persistence/dashboards/"+id);
+        resp = servicesClient.process(req);
         Assertions.assertEquals(dashboardName, resp.asJSONObject().get("name"));
 
 
-        req = servicesClient.delete("persistence", "/persistence/dashboards/"+id);
-        resp = servicesClient.process(req.jwt(token));
+        req = jwtServicesClient.delete("persistence", "/persistence/dashboards/"+id);
+        resp = servicesClient.process(req);
         Assertions.assertEquals(true, resp.asBoolean());
 
 
-        req = servicesClient.get("persistence", "/persistence/dashboards");
-        resp = servicesClient.process(req.jwt(token));
+        req = jwtServicesClient.get("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req);
         Assertions.assertEquals(0, resp.asJSONArray().length());
 
 
-        req = servicesClient.post("persistence", "/persistence/dashboards");
+        req = jwtServicesClient.post("persistence", "/persistence/dashboards");
         req.addPart("name",dashboardName);
-        resp = servicesClient.process(req.jwt(token));
+        resp = servicesClient.process(req);
 
 
-        req = servicesClient.get("persistence", "/persistence/dashboards");
-        resp = servicesClient.process(req.jwt(token));
+        req = jwtServicesClient.get("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req);
         Assertions.assertEquals(1, resp.asJSONArray().length());
 
 
-        req = servicesClient.delete("persistence", "/persistence/dashboards");
-        resp = servicesClient.process(req.jwt(token));
+        req = jwtServicesClient.delete("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req);
         Assertions.assertEquals(true, resp.asBoolean());
 
 
-        req = servicesClient.get("persistence", "/persistence/dashboards");
-        resp = servicesClient.process(req.jwt(token));
+        req = jwtServicesClient.get("persistence", "/persistence/dashboards");
+        resp = servicesClient.process(req);
         Assertions.assertEquals(0, resp.asJSONArray().length());
 
     }
