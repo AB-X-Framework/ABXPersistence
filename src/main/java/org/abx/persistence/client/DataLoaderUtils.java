@@ -10,6 +10,7 @@ import org.abx.persistence.client.model.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -37,6 +38,7 @@ public class DataLoaderUtils {
             enrollment.setRole(ProjectRole.Owner.name());
             enrollmentRepository.save(enrollment);
             userDetails.setEnrollments(List.of(enrollment));
+            userDetails.setDashboardDetails(new ArrayList<>());
         }
         return userDetails;
     }
