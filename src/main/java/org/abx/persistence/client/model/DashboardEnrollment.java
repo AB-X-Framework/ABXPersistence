@@ -10,7 +10,7 @@ public class DashboardEnrollment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long dashboardEnrollmentId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "userId", nullable = false)
     private UserDetails userDetails;
 
