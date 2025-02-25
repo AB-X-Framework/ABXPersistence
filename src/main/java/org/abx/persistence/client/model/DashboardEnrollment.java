@@ -15,7 +15,7 @@ public class DashboardEnrollment {
     private UserDetails userDetails;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "dashboardId", nullable = false)
     private DashboardDetails dashboardDetails;
 

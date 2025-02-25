@@ -44,7 +44,7 @@ public class DashboardDetails {
         return dashboardEnrollments;
     }
 
-    public void setDashboardEnrollments(Collection<DashboardEnrollment> userDetails) {
+    public void setDashboardEnrollments(Collection<DashboardEnrollment> dashboardEnrollments) {
         this.dashboardEnrollments = dashboardEnrollments;
     }
 }
