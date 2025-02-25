@@ -30,7 +30,7 @@ public class ProjectDetails {
             inverseJoinColumns = @JoinColumn(name = "execId", referencedColumnName = "execId"))
     private Collection<ExecDetails> execs;
 
-    @OneToMany(mappedBy = "projectDetails", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "projectDetails")
     private Collection<ProjectEnrollment> projectEnrollment;
 
     public Collection<RepoDetails> getRepoDetails() {

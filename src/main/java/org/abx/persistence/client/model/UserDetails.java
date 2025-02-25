@@ -37,11 +37,11 @@ public class UserDetails {
     }
 
     //userDetails  is the variable in Enrollment
-    @OneToMany(mappedBy = "userDetails", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "userDetails")
     private List<ProjectEnrollment> projectEnrollments;
 
     //userDetails  is the variable in DashboardDetails
-    @OneToMany(mappedBy = "userDetails", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "userDetails")
     private List<DashboardEnrollment> dashboardEnrollments;
 
     public List<ProjectEnrollment> getProjectEnrollments() {
