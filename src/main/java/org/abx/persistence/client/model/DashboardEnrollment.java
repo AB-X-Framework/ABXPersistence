@@ -12,13 +12,13 @@ public class DashboardEnrollment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long dashboardEnrollmentId;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserDetails userDetails;
 
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "dashboardId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private DashboardDetails dashboardDetails;

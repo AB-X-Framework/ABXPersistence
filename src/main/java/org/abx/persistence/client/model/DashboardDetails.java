@@ -15,7 +15,7 @@ public class DashboardDetails {
     @Column(length = 200)
     private String dashboardName;
 
-    @OneToMany(mappedBy = "dashboardDetails", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "dashboardDetails")
     private Collection<DashboardEnrollment> dashboardEnrollments;
 
     public DashboardDetails() {
