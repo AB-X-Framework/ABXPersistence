@@ -3,7 +3,7 @@ package org.abx.persistence.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.persistence.client.DashboardDataLoader;
 import org.abx.persistence.client.PersistenceDataLoader;
-import org.abx.persistence.client.model.Enrollment;
+import org.abx.persistence.client.model.ProjectEnrollment;
 import org.abx.persistence.client.model.RepoDetails;
 import org.abx.persistence.client.model.SimSpecs;
 import org.abx.persistence.client.model.UserDetails;
@@ -75,7 +75,7 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (Enrollment projectDetails : userDetails.getEnrollments()) {
+        for (ProjectEnrollment projectDetails : userDetails.getEnrollments()) {
             for (RepoDetails repoDetails : projectDetails.getProjectDetails().getRepoDetails()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
@@ -115,8 +115,8 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (Enrollment enrollment : userDetails.getEnrollments()) {
-            for (SimSpecs repoDetails : enrollment.getProjectDetails().getSimSpecs()) {
+        for (ProjectEnrollment projectEnrollment : userDetails.getEnrollments()) {
+            for (SimSpecs repoDetails : projectEnrollment.getProjectDetails().getSimSpecs()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
                 jsonRepo.put("name", repoDetails.getSimName());

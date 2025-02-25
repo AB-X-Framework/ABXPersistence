@@ -3,12 +3,12 @@ package org.abx.persistence.client.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Enrollment")
-public class Enrollment {
+@Table(name = "ProjectEnrollment")
+public class ProjectEnrollment {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userProjectId;
+    private Long projectEnrollmentId;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)

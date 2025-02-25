@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Component
 public class PersistenceDataLoader {
 
@@ -17,7 +15,7 @@ public class PersistenceDataLoader {
     private UserDetailsRepository userDetailsRepository;
 
     @Autowired
-    private EnrollmentRepository enrollmentRepository;
+    private ProjectEnrollmentRepository projectEnrollmentRepository;
 
     @Autowired
     private ExecDetailsRepository execDetailsRepository;
@@ -38,11 +36,11 @@ public class PersistenceDataLoader {
         ProjectDetails projectDetails = new ProjectDetails();
         projectDetails.setProjectName(projectName);
         projectDetailsRepository.save(projectDetails);
-        Enrollment enrollment = new Enrollment();
-        enrollment.setProjectDetails(projectDetails);
-        enrollment.setUserDetails(userDetails);
-        enrollment.setRole(ProjectRole.Owner.name());
-        enrollmentRepository.save(enrollment);
+        ProjectEnrollment projectEnrollment = new ProjectEnrollment();
+        projectEnrollment.setProjectDetails(projectDetails);
+        projectEnrollment.setUserDetails(userDetails);
+        projectEnrollment.setRole(ProjectRole.Owner.name());
+        projectEnrollmentRepository.save(projectEnrollment);
         return projectDetails.getProjectId();
     }
 
@@ -54,11 +52,11 @@ public class PersistenceDataLoader {
     @Transactional
     public JSONArray enrollments(final String username) {
         JSONArray jsonEnrollments = new JSONArray();
-        for (Enrollment enrollment: dataLoaderUtils.createOrFind(username).getEnrollments()){
+        for (ProjectEnrollment projectEnrollment : dataLoaderUtils.createOrFind(username).getEnrollments()){
             JSONObject jsonEnrollment = new JSONObject();
             jsonEnrollments.put(jsonEnrollment);
-            jsonEnrollment.put("projectName",enrollment.getProjectDetails().getProjectName());
-            jsonEnrollment.put("id",enrollment.getProjectDetails().getProjectId());
+            jsonEnrollment.put("projectName", projectEnrollment.getProjectDetails().getProjectName());
+            jsonEnrollment.put("id", projectEnrollment.getProjectDetails().getProjectId());
         }
         return jsonEnrollments;
     }
@@ -75,7 +73,7 @@ public class PersistenceDataLoader {
     @Transactional
     public RepoDetails createRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!enrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
+        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
                 (userDetails.getUserId(), projectId)) {
             return null;
         }
@@ -103,7 +101,7 @@ public class PersistenceDataLoader {
     @Transactional
     public boolean deleteRepo(String username, long projectId, String name) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!enrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
+        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
                 (userDetails.getUserId(), projectId)) {
             return false;
         }
@@ -119,7 +117,7 @@ public class PersistenceDataLoader {
     @Transactional
     public SimSpecs createSimSpecs(String username, long projectId, String simName, String folder, String path, String type) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!enrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
+        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
                 (userDetails.getUserId(), projectId)) {
             return null;
         }
@@ -137,7 +135,7 @@ public class PersistenceDataLoader {
     @Transactional
     public boolean dropSims(String username, long projectId) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!enrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
+        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
                 (userDetails.getUserId(), projectId)) {
             return false;
         }
@@ -151,7 +149,7 @@ public class PersistenceDataLoader {
     @Transactional
     public boolean dropSim(String username, long projectId, long simId) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!enrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
+        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
                 (userDetails.getUserId(), projectId)) {
             return false;
         }
@@ -165,7 +163,7 @@ public class PersistenceDataLoader {
 
     private SimSpecs validSimSpecs(String username, long projectId, long simId) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!enrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
+        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
                 (userDetails.getUserId(), projectId)) {
             return null;
         }

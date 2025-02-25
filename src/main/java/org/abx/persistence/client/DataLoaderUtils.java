@@ -1,9 +1,9 @@
 package org.abx.persistence.client;
 
-import org.abx.persistence.client.dao.EnrollmentRepository;
+import org.abx.persistence.client.dao.ProjectEnrollmentRepository;
 import org.abx.persistence.client.dao.ProjectDetailsRepository;
 import org.abx.persistence.client.dao.UserDetailsRepository;
-import org.abx.persistence.client.model.Enrollment;
+import org.abx.persistence.client.model.ProjectEnrollment;
 import org.abx.persistence.client.model.ProjectDetails;
 import org.abx.persistence.client.model.ProjectRole;
 import org.abx.persistence.client.model.UserDetails;
@@ -22,7 +22,7 @@ public class DataLoaderUtils {
     private UserDetailsRepository userDetailsRepository;
 
     @Autowired
-    private EnrollmentRepository enrollmentRepository;
+    private ProjectEnrollmentRepository projectEnrollmentRepository;
 
     public UserDetails createOrFind(final String name) {
         UserDetails userDetails = userDetailsRepository.findByUsername(name);
@@ -32,12 +32,12 @@ public class DataLoaderUtils {
             ProjectDetails projectDetails = new ProjectDetails();
             projectDetails.setProjectName("Personal");
             projectDetailsRepository.save(projectDetails);
-            Enrollment enrollment = new Enrollment();
-            enrollment.setProjectDetails(projectDetails);
-            enrollment.setUserDetails(userDetails);
-            enrollment.setRole(ProjectRole.Owner.name());
-            enrollmentRepository.save(enrollment);
-            userDetails.setEnrollments(List.of(enrollment));
+            ProjectEnrollment projectEnrollment = new ProjectEnrollment();
+            projectEnrollment.setProjectDetails(projectDetails);
+            projectEnrollment.setUserDetails(userDetails);
+            projectEnrollment.setRole(ProjectRole.Owner.name());
+            projectEnrollmentRepository.save(projectEnrollment);
+            userDetails.setEnrollments(List.of(projectEnrollment));
             userDetails.setDashboardDetails(new ArrayList<>());
         }
         return userDetails;

@@ -31,7 +31,7 @@ public class ProjectDetails {
     private Collection<ExecDetails> execs;
 
     @OneToMany(mappedBy = "projectDetails", cascade = CascadeType.ALL)
-    private Collection<Enrollment> enrollment;
+    private Collection<ProjectEnrollment> projectEnrollment;
 
     public Collection<RepoDetails> getRepoDetails() {
         return repoDetails;
@@ -54,12 +54,12 @@ public class ProjectDetails {
         this.projectName = projectName;
     }
 
-    public Collection<Enrollment> getEnrollment() {
-        return enrollment;
+    public Collection<ProjectEnrollment> getEnrollment() {
+        return projectEnrollment;
     }
 
-    public void setEnrollment(Collection<Enrollment> enrollment) {
-        this.enrollment = enrollment;
+    public void setEnrollment(Collection<ProjectEnrollment> projectEnrollment) {
+        this.projectEnrollment = projectEnrollment;
     }
 
     public Long getProjectId() {
