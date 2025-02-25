@@ -76,17 +76,17 @@ public class DashboardDataLoader {
      * @return
      */
     @Transactional
-    public boolean deleteDashboard(long dashboardEnrollmentId,String username) {
-        return deleteDashboardByEnrollment(dashboardEnrollmentId, username);
-    }
-
-    private boolean deleteDashboardByEnrollment(long dashboardEnrollmentId,String username) {
-        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardEnrollmentId(dashboardEnrollmentId);
+    public boolean deleteDashboard(long dashboardId,String username) {
+        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId,username);
         if (dashboardEnrollment == null) {
             return false;
         }
-        UserDetails userDetails = dashboardEnrollment.getUserDetails();
-        if (!username.equals(userDetails.getUsername())) {
+        return deleteDashboardByEnrollment(dashboardEnrollment.getDashboardEnrollmentId());
+    }
+
+    private boolean deleteDashboardByEnrollment(long dashboardEnrollmentId) {
+        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardEnrollmentId(dashboardEnrollmentId);
+        if (dashboardEnrollment == null) {
             return false;
         }
         if (dashboardEnrollment.getRole().equals( ProjectRole.Owner.toString())) {
@@ -103,7 +103,7 @@ public class DashboardDataLoader {
     public boolean purgeDashboards(String username) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
         for (DashboardEnrollment dashboardEnrollment : userDetails.getDashboardEnrollments()) {
-            deleteDashboardByEnrollment(dashboardEnrollment.getDashboardEnrollmentId(), username);
+            deleteDashboardByEnrollment(dashboardEnrollment.getDashboardEnrollmentId());
         }
         return true;
     }
