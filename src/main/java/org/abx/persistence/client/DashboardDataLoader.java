@@ -29,8 +29,8 @@ public class DashboardDataLoader {
         for (DashboardDetails dashboardDetails : userDetails.getDashboardDetails()) {
             JSONObject jsonDashboard = new JSONObject();
             jsonDashboards.put(jsonDashboard);
-            jsonDashboard.put("id", dashboardDetails.getDashboardId());
-            jsonDashboard.put("name", dashboardDetails.getDashboardName());
+            jsonDashboard.put("dashboardId", dashboardDetails.getDashboardId());
+            jsonDashboard.put("dashboardName", dashboardDetails.getDashboardName());
         }
         return jsonDashboards;
     }

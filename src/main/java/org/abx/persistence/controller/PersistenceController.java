@@ -35,7 +35,7 @@ public class PersistenceController {
 
     @Secured("Persistence")
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String enrollments(HttpServletRequest request) {
+    public String projectEnrollments(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         return dataLoader.projectEnrollments(username).toString();
     }
