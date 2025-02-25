@@ -48,7 +48,7 @@ class ABXPersistenceTest {
 
         int projectId = servicesClient.process(
                 servicesClient.get("persistence", "/persistence/projects").jwt(token)
-        ).asJSONArray().getJSONObject(0).getInt("id");
+        ).asJSONArray().getJSONObject(0).getInt("projectId");
 
         String repoName = "myRepo";
         String branch = "main";

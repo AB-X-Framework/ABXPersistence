@@ -46,16 +46,16 @@ public class DashboardDataLoader {
             return null;
         }
         JSONObject jsonDashboard = new JSONObject();
-        jsonDashboard.put("id", dashboardDetails.getDashboardId());
-        jsonDashboard.put("name", dashboardDetails.getDashboardName());
+        jsonDashboard.put("dashboardId", dashboardDetails.getDashboardId());
+        jsonDashboard.put("dashboardName", dashboardDetails.getDashboardName());
         return jsonDashboard;
     }
 
     @Transactional
-    public long createDashboard(String username, String name) {
+    public long createDashboard(String username, String dashboardName) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
         DashboardDetails dd = new DashboardDetails();
-        dd.setDashboardName(name);
+        dd.setDashboardName(dashboardName);
         dd.setUserDetails(userDetails);
         dashboardDetailsRepository.save(dd);
         return dd.getDashboardId();

@@ -48,7 +48,7 @@ public class AddGetDashboardTest {
 
 
         req = jwtServicesClient.post("persistence", "/persistence/dashboards").
-                addPart("name",dashboardName);
+                addPart("dashboardName",dashboardName);
         resp = servicesClient.process(req);
         long id = resp.asLong();
 
@@ -60,7 +60,7 @@ public class AddGetDashboardTest {
 
         req = jwtServicesClient.get("persistence", "/persistence/dashboards/"+id);
         resp = servicesClient.process(req);
-        Assertions.assertEquals(dashboardName, resp.asJSONObject().get("name"));
+        Assertions.assertEquals(dashboardName, resp.asJSONObject().get("dashboardName"));
 
 
         req = jwtServicesClient.delete("persistence", "/persistence/dashboards/"+id);
@@ -74,7 +74,7 @@ public class AddGetDashboardTest {
 
 
         req = jwtServicesClient.post("persistence", "/persistence/dashboards");
-        req.addPart("name",dashboardName);
+        req.addPart("dashboardName",dashboardName);
         resp = servicesClient.process(req);
 
 

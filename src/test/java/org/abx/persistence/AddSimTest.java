@@ -43,7 +43,7 @@ public class AddSimTest {
 
         int projectId = servicesClient.process(
                 servicesClient.get("persistence", "/persistence/projects").jwt(token)
-        ).asJSONArray().getJSONObject(0).getInt("id");
+        ).asJSONArray().getJSONObject(0).getInt("projectId");
 
         ServiceRequest req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/sims");
         req.jwt(token);

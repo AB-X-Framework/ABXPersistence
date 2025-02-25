@@ -50,13 +50,13 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public JSONArray enrollments(final String username) {
+    public JSONArray projectEnrollments(final String username) {
         JSONArray jsonEnrollments = new JSONArray();
         for (ProjectEnrollment projectEnrollment : dataLoaderUtils.createOrFind(username).getEnrollments()){
             JSONObject jsonEnrollment = new JSONObject();
             jsonEnrollments.put(jsonEnrollment);
             jsonEnrollment.put("projectName", projectEnrollment.getProjectDetails().getProjectName());
-            jsonEnrollment.put("id", projectEnrollment.getProjectDetails().getProjectId());
+            jsonEnrollment.put("projectId", projectEnrollment.getProjectDetails().getProjectId());
         }
         return jsonEnrollments;
     }
@@ -66,8 +66,8 @@ public class PersistenceDataLoader {
         return addProject(userDetails, projectName);
     }
 
-    public long repoId(long projecId, String repoName){
-        return (projecId+"/"+repoName).hashCode();
+    public long repoId(long projectId, String repoName){
+        return (projectId+"/"+repoName).hashCode();
     }
 
     @Transactional

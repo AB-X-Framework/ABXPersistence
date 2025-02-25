@@ -37,7 +37,7 @@ public class PersistenceController {
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public String enrollments(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.enrollments(username).toString();
+        return dataLoader.projectEnrollments(username).toString();
     }
     @Secured("Persistence")
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -196,9 +196,9 @@ public class PersistenceController {
     @Secured("Persistence")
     @PostMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     public Long createDashboard(HttpServletRequest request,
-                                @RequestParam String name) {
+                                @RequestParam String dashboardName) {
         String username = request.getUserPrincipal().getName();
-        return  dashboardDataLoader.createDashboard(username,name);
+        return  dashboardDataLoader.createDashboard(username,dashboardName);
     }
 
     @Secured("Persistence")
