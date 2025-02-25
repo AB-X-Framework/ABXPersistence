@@ -10,5 +10,7 @@ public interface DashboardEnrollmentRepository extends JpaRepository<DashboardEn
     @Override
     void delete(DashboardEnrollment projectEnrollment);
 
+    DashboardEnrollment findByDashboardDetailsDashboardIdAndUserDetailsUsername(long dashboardId, String userName);
+
     boolean existsByUserDetailsUserIdAndDashboardDetailsDashboardId(Long userId, Long projectId);
 }

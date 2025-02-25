@@ -42,13 +42,9 @@ public class DashboardDataLoader {
     }
 
     @Transactional
-    public JSONObject getDashboard(long dashboardEnrollmentId, String username) {
-        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardEnrollmentId(dashboardEnrollmentId);
+    public JSONObject getDashboard(long dashboardId, String username) {
+        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId,username);
         if (dashboardEnrollment == null) {
-            return null;
-        }
-        UserDetails userDetails = dashboardEnrollment.getUserDetails();
-        if (!username.equals(userDetails.getUsername())) {
             return null;
         }
         DashboardDetails dashboardDetails = dashboardEnrollment.getDashboardDetails();
