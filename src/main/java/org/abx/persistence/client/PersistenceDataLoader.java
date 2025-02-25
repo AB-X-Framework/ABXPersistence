@@ -17,8 +17,6 @@ public class PersistenceDataLoader {
     @Autowired
     private ProjectEnrollmentRepository projectEnrollmentRepository;
 
-    @Autowired
-    private DashboardEnrollmentRepository dashboardEnrollmentRepository;
 
     @Autowired
     private ExecDetailsRepository execDetailsRepository;
@@ -58,26 +56,24 @@ public class PersistenceDataLoader {
         for (ProjectEnrollment projectEnrollment : dataLoaderUtils.createOrFind(username).getProjectEnrollments()) {
             JSONObject jsonEnrollment = new JSONObject();
             jsonEnrollments.put(jsonEnrollment);
-            jsonEnrollment.put("projectName", projectEnrollment.getProjectDetails().getProjectName());
-            jsonEnrollment.put("projectId", projectEnrollment.getProjectDetails().getProjectId());
+            ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
+            jsonEnrollment.put("projectName", projectDetails.getProjectName());
+            jsonEnrollment.put("projectId", projectDetails.getProjectId());
         }
         return jsonEnrollments;
     }
 
     @Transactional
-    public JSONObject projectEnrollments(String username, final long enrollmentId) {
+    public JSONObject getProjectDetails(String username, final long projectId) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.findByProjectEnrollmentId(enrollmentId);
+        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
         if (projectEnrollment == null) {
-            return null;
-        }
-        if (projectEnrollment.getUserDetails() != userDetails) {
             return null;
         }
         JSONObject jsonEnrollments = new JSONObject();
         ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
         jsonEnrollments.put("projectName", projectDetails.getProjectName());
-        jsonEnrollments.put("projectId", enrollmentId);
+        jsonEnrollments.put("projectId", projectId);
         return jsonEnrollments;
     }
 

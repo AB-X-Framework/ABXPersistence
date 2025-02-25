@@ -52,7 +52,7 @@ public class PersistenceController {
     public String getProject(HttpServletRequest request,
                           @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
-        JSONObject repoDetails = dataLoader.projectEnrollments(username, projectId);
+        JSONObject repoDetails = dataLoader.getProjectDetails(username, projectId);
         return repoDetails.toString();
     }
 
