@@ -44,11 +44,11 @@ public class UserDetails {
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private List<DashboardDetails> dashboardDetails;
 
-    public List<ProjectEnrollment> getEnrollments() {
+    public List<ProjectEnrollment> getProjectEnrollments() {
         return projectEnrollments;
     }
 
-    public void setEnrollments(List<ProjectEnrollment> projectEnrollments) {
+    public void setProjectEnrollments(List<ProjectEnrollment> projectEnrollments) {
         this.projectEnrollments = projectEnrollments;
     }
 

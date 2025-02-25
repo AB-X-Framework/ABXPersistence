@@ -84,7 +84,7 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (ProjectEnrollment projectDetails : userDetails.getEnrollments()) {
+        for (ProjectEnrollment projectDetails : userDetails.getProjectEnrollments()) {
             for (RepoDetails repoDetails : projectDetails.getProjectDetails().getRepoDetails()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
@@ -124,7 +124,7 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
-        for (ProjectEnrollment projectEnrollment : userDetails.getEnrollments()) {
+        for (ProjectEnrollment projectEnrollment : userDetails.getProjectEnrollments()) {
             for (SimSpecs repoDetails : projectEnrollment.getProjectDetails().getSimSpecs()) {
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);

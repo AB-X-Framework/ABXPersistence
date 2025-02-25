@@ -18,6 +18,9 @@ public class PersistenceDataLoader {
     private ProjectEnrollmentRepository projectEnrollmentRepository;
 
     @Autowired
+    private DashboardEnrollmentRepository dashboardEnrollmentRepository;
+
+    @Autowired
     private ExecDetailsRepository execDetailsRepository;
 
     @Autowired
@@ -52,7 +55,7 @@ public class PersistenceDataLoader {
     @Transactional
     public JSONArray projectEnrollments(final String username) {
         JSONArray jsonEnrollments = new JSONArray();
-        for (ProjectEnrollment projectEnrollment : dataLoaderUtils.createOrFind(username).getEnrollments()) {
+        for (ProjectEnrollment projectEnrollment : dataLoaderUtils.createOrFind(username).getProjectEnrollments()) {
             JSONObject jsonEnrollment = new JSONObject();
             jsonEnrollments.put(jsonEnrollment);
             jsonEnrollment.put("projectName", projectEnrollment.getProjectDetails().getProjectName());
