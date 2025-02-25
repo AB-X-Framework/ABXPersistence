@@ -57,6 +57,14 @@ public class PersistenceController {
     }
 
     @Secured("Persistence")
+    @DeleteMapping(value = "/projects/{projectId}")
+    public boolean deleteProject(HttpServletRequest request,
+                             @PathVariable long projectId) {
+        String username = request.getUserPrincipal().getName();
+        return  dataLoader.deleteProject(username, projectId);
+    }
+
+    @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/repo")
     public String addRepo(HttpServletRequest request,
                           @PathVariable long projectId,

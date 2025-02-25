@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Component
 public class PersistenceDataLoader {
 
@@ -65,7 +67,6 @@ public class PersistenceDataLoader {
 
     @Transactional
     public JSONObject getProjectDetails(String username, final long projectId) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
         if (projectEnrollment == null) {
             return null;
@@ -75,6 +76,22 @@ public class PersistenceDataLoader {
         jsonEnrollments.put("projectName", projectDetails.getProjectName());
         jsonEnrollments.put("projectId", projectId);
         return jsonEnrollments;
+    }
+
+
+    @Transactional
+    public boolean deleteProject(String username, final long projectId) {
+        ProjectEnrollment projectEnrollment =
+                projectEnrollmentRepository.findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
+        if (projectEnrollment == null) {
+            return false;
+        }
+        if (Objects.equals(projectEnrollment.getRole(), ProjectRole.Owner.name())) {
+            projectDetailsRepository.delete(projectEnrollment.getProjectDetails());
+        }else {
+            projectEnrollmentRepository.delete(projectEnrollment);
+        }
+        return true;
     }
 
     @Transactional
