@@ -48,6 +48,15 @@ public class PersistenceController {
     }
 
     @Secured("Persistence")
+    @GetMapping(value = "/projects/{projectId}")
+    public String getProject(HttpServletRequest request,
+                          @PathVariable long projectId) {
+        String username = request.getUserPrincipal().getName();
+        JSONObject repoDetails = dataLoader.projectEnrollments(username, projectId);
+        return repoDetails.toString();
+    }
+
+    @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/repo")
     public String addRepo(HttpServletRequest request,
                           @PathVariable long projectId,

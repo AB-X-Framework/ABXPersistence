@@ -32,7 +32,7 @@ public class PersistenceDataLoader {
     @Autowired
     private DataLoaderUtils dataLoaderUtils;
 
-    private Long addProject( UserDetails userDetails, String projectName) {
+    private Long addProject(UserDetails userDetails, String projectName) {
         ProjectDetails projectDetails = new ProjectDetails();
         projectDetails.setProjectName(projectName);
         projectDetailsRepository.save(projectDetails);
@@ -52,7 +52,7 @@ public class PersistenceDataLoader {
     @Transactional
     public JSONArray projectEnrollments(final String username) {
         JSONArray jsonEnrollments = new JSONArray();
-        for (ProjectEnrollment projectEnrollment : dataLoaderUtils.createOrFind(username).getEnrollments()){
+        for (ProjectEnrollment projectEnrollment : dataLoaderUtils.createOrFind(username).getEnrollments()) {
             JSONObject jsonEnrollment = new JSONObject();
             jsonEnrollments.put(jsonEnrollment);
             jsonEnrollment.put("projectName", projectEnrollment.getProjectDetails().getProjectName());
@@ -60,25 +60,43 @@ public class PersistenceDataLoader {
         }
         return jsonEnrollments;
     }
+
+    @Transactional
+    public JSONObject projectEnrollments(String username, final long enrollmentId) {
+        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.findByProjectEnrollmentId(enrollmentId);
+        if (projectEnrollment == null) {
+            return null;
+        }
+        if (projectEnrollment.getUserDetails() != userDetails) {
+            return null;
+        }
+        JSONObject jsonEnrollments = new JSONObject();
+        ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
+        jsonEnrollments.put("projectName", projectDetails.getProjectName());
+        jsonEnrollments.put("projectId", enrollmentId);
+        return jsonEnrollments;
+    }
+
     @Transactional
     public Long addProject(final String username, String projectName) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
         return addProject(userDetails, projectName);
     }
 
-    public long repoId(long projectId, String repoName){
-        return (projectId+"/"+repoName).hashCode();
+    public long repoId(long projectId, String repoName) {
+        return (projectId + "/" + repoName).hashCode();
     }
 
     @Transactional
     public RepoDetails createRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
-       UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
         if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
                 (userDetails.getUserId(), projectId)) {
             return null;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
-        long repoId = repoId(projectId , name);
+        long repoId = repoId(projectId, name);
         RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
         if (repoDetails == null) {
             repoDetails = new RepoDetails();
@@ -105,7 +123,7 @@ public class PersistenceDataLoader {
                 (userDetails.getUserId(), projectId)) {
             return false;
         }
-        long repoId = repoId(projectId , name);
+        long repoId = repoId(projectId, name);
         RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
         if (repoDetails == null) {
             return false;
@@ -181,7 +199,7 @@ public class PersistenceDataLoader {
     public boolean updateSim(String username, long projectId, long simId,
                              String simName, String folder, String path, String type) {
         SimSpecs specs = validSimSpecs(username, projectId, simId);
-        if (specs == null){
+        if (specs == null) {
             return false;
         }
         specs.setSimName(simName);
@@ -193,9 +211,9 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public long addExec(String username,  long projectId, long simId) {
+    public long addExec(String username, long projectId, long simId) {
         SimSpecs specs = validSimSpecs(username, projectId, simId);
-        if (specs == null){
+        if (specs == null) {
             return -1;
         }
         ExecDetails execDetails = new ExecDetails();
@@ -211,7 +229,7 @@ public class PersistenceDataLoader {
     @Transactional
     public JSONObject getExec(String username, long projectId, long simId, long execId) throws Exception {
         SimSpecs simSpecs = validSimSpecs(username, projectId, simId);
-        if (simSpecs == null){
+        if (simSpecs == null) {
             return null;
         }
         ExecDetails execDetails = execDetailsRepository.findByExecId(execId);
