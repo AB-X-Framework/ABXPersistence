@@ -2,6 +2,8 @@ package org.abx.persistence.client.model;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
 @Table(name = "DashboardDetails")
 public class DashboardDetails {
@@ -13,9 +15,8 @@ public class DashboardDetails {
     @Column(length = 200)
     private String dashboardName;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private UserDetails userDetails;
+    @OneToMany(mappedBy = "projectDetails", cascade = CascadeType.ALL)
+    private Collection<DashboardEnrollment> dashboardEnrollments;
 
     public DashboardDetails() {
         super();
@@ -39,11 +40,11 @@ public class DashboardDetails {
         this.dashboardId = dashboardId;
     }
 
-    public UserDetails getUserDetails() {
-        return userDetails;
+    public Collection<DashboardEnrollment> getDashboardEnrollments() {
+        return dashboardEnrollments;
     }
 
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
+    public void setDashboardEnrollments(Collection<DashboardEnrollment> userDetails) {
+        this.dashboardEnrollments = dashboardEnrollments;
     }
 }
