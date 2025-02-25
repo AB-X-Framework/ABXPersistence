@@ -11,5 +11,4 @@ public interface DashboardDetailsRepository  extends JpaRepository<DashboardDeta
 
     DashboardDetails findByDashboardId(long dashboardId);
 
-    void deleteDashboardDetailsByUserDetailsUserId( long userId);
 }

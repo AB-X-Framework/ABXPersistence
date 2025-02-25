@@ -15,7 +15,7 @@ public class DashboardDetails {
     @Column(length = 200)
     private String dashboardName;
 
-    @OneToMany(mappedBy = "projectDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dashboardDetails", cascade = CascadeType.ALL)
     private Collection<DashboardEnrollment> dashboardEnrollments;
 
     public DashboardDetails() {

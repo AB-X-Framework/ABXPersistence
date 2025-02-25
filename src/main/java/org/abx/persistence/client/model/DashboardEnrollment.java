@@ -45,4 +45,12 @@ public class DashboardEnrollment {
     public void setUserDetails(UserDetails userDetails) {
         this.userDetails = userDetails;
     }
+
+    public Long getDashboardEnrollmentId() {
+        return dashboardEnrollmentId;
+    }
+
+    public void setDashboardEnrollmentId(Long dashboardEnrollmentId) {
+        this.dashboardEnrollmentId = dashboardEnrollmentId;
+    }
 }

@@ -2,9 +2,11 @@ package org.abx.persistence.client;
 
 
 import org.abx.persistence.client.dao.DashboardDetailsRepository;
+import org.abx.persistence.client.dao.DashboardEnrollmentRepository;
 import org.abx.persistence.client.dao.UserDetailsRepository;
 import org.abx.persistence.client.model.DashboardDetails;
 import org.abx.persistence.client.model.DashboardEnrollment;
+import org.abx.persistence.client.model.ProjectRole;
 import org.abx.persistence.client.model.UserDetails;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +24,8 @@ public class DashboardDataLoader {
     private DataLoaderUtils dataLoaderUtils;
     @Autowired
     private DashboardDetailsRepository dashboardDetailsRepository;
+    @Autowired
+    private DashboardEnrollmentRepository dashboardEnrollmentRepository;
 
     @Transactional
     public JSONArray getDashboards(String username) {
@@ -38,15 +42,16 @@ public class DashboardDataLoader {
     }
 
     @Transactional
-    public JSONObject getDashboard(long dashboardId, String username) {
-        DashboardDetails dashboardDetails = dashboardDetailsRepository.findByDashboardId(dashboardId);
-        if (dashboardDetails == null) {
+    public JSONObject getDashboard(long dashboardEnrollmentId, String username) {
+        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardEnrollmentId(dashboardEnrollmentId);
+        if (dashboardEnrollment == null) {
             return null;
         }
-        UserDetails userDetails = dashboardDetails.getUserDetails();
+        UserDetails userDetails = dashboardEnrollment.getUserDetails();
         if (!username.equals(userDetails.getUsername())) {
             return null;
         }
+        DashboardDetails dashboardDetails = dashboardEnrollment.getDashboardDetails();
         JSONObject jsonDashboard = new JSONObject();
         jsonDashboard.put("dashboardId", dashboardDetails.getDashboardId());
         jsonDashboard.put("dashboardName", dashboardDetails.getDashboardName());
@@ -58,32 +63,52 @@ public class DashboardDataLoader {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
         DashboardDetails dd = new DashboardDetails();
         dd.setDashboardName(dashboardName);
-        dd.setUserDetails(userDetails);
         dashboardDetailsRepository.save(dd);
+        DashboardEnrollment dashboardEnrollment = new DashboardEnrollment();
+        dashboardEnrollment.setUserDetails(userDetails);
+        dashboardEnrollment.setDashboardDetails(dd);
+        dashboardEnrollment.setRole(ProjectRole.Owner.toString());
+        dashboardEnrollmentRepository.save(dashboardEnrollment);
         return dd.getDashboardId();
     }
 
 
+    /**
+     * Deletes dashboard or enrollment
+     * @param dashboardEnrollmentId the dashboard enrollment
+     * @param username
+     * @return
+     */
     @Transactional
-    public boolean deleteDashboard(long dashboardId,String username) {
-        DashboardDetails dashboardDetails = dashboardDetailsRepository.findByDashboardId(dashboardId);
-        if (dashboardDetails == null) {
+    public boolean deleteDashboard(long dashboardEnrollmentId,String username) {
+        return deleteDashboardByEnrollment(dashboardEnrollmentId, username);
+    }
+
+    private boolean deleteDashboardByEnrollment(long dashboardEnrollmentId,String username) {
+        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardEnrollmentId(dashboardEnrollmentId);
+        if (dashboardEnrollment == null) {
             return false;
         }
-        UserDetails userDetails = dashboardDetails.getUserDetails();
+        UserDetails userDetails = dashboardEnrollment.getUserDetails();
         if (!username.equals(userDetails.getUsername())) {
             return false;
         }
-        dashboardDetailsRepository.delete(dashboardDetails);
+        if (dashboardEnrollment.getRole().equals( ProjectRole.Owner.toString())) {
+            DashboardDetails dashboardDetails = dashboardEnrollment.getDashboardDetails();
+            dashboardDetailsRepository.delete(dashboardDetails);
+        }else {
+            dashboardEnrollmentRepository.delete(dashboardEnrollment);
+        }
         return true;
 
     }
 
-
     @Transactional
     public boolean purgeDashboards(String username) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        dashboardDetailsRepository.deleteDashboardDetailsByUserDetailsUserId(userDetails.getUserId());
+        for (DashboardEnrollment dashboardEnrollment : userDetails.getDashboardEnrollments()) {
+            deleteDashboardByEnrollment(dashboardEnrollment.getDashboardEnrollmentId(), username);
+        }
         return true;
     }
 }
