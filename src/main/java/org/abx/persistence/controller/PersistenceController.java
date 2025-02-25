@@ -212,7 +212,7 @@ public class PersistenceController {
 
     @Secured("Persistence")
     @DeleteMapping(value = "/dashboards/{dashboardId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean createDashboard(HttpServletRequest request,
+    public boolean deleteDashboard(HttpServletRequest request,
                                 @PathVariable long dashboardId) {
         String username = request.getUserPrincipal().getName();
         return  dashboardDataLoader.deleteDashboard(dashboardId,username);

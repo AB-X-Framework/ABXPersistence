@@ -1,6 +1,8 @@
 package org.abx.persistence.client.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "DashboardEnrollment")
@@ -12,11 +14,13 @@ public class DashboardEnrollment {
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "userId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserDetails userDetails;
 
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "dashboardId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private DashboardDetails dashboardDetails;
 
     @Column
