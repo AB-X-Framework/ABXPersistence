@@ -38,7 +38,7 @@ public class DataLoaderUtils {
             projectEnrollment.setRole(ProjectRole.Owner.name());
             projectEnrollmentRepository.save(projectEnrollment);
             userDetails.setProjectEnrollments(List.of(projectEnrollment));
-            userDetails.setDashboardDetails(new ArrayList<>());
+            userDetails.setDashboardEnrollments(new ArrayList<>());
         }
         return userDetails;
     }

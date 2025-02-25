@@ -42,7 +42,7 @@ public class UserDetails {
 
     //userDetails  is the variable in DashboardDetails
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
-    private List<DashboardDetails> dashboardDetails;
+    private List<DashboardEnrollment> dashboardEnrollments;
 
     public List<ProjectEnrollment> getProjectEnrollments() {
         return projectEnrollments;
@@ -56,11 +56,11 @@ public class UserDetails {
         return userId;
     }
 
-    public List<DashboardDetails> getDashboardDetails() {
-        return dashboardDetails;
+    public List<DashboardEnrollment> getDashboardEnrollments() {
+        return dashboardEnrollments;
     }
 
-    public void setDashboardDetails(List<DashboardDetails> dashboardDetails) {
-        this.dashboardDetails = dashboardDetails;
+    public void setDashboardEnrollments(List<DashboardEnrollment> dashboardEnrollments) {
+        this.dashboardEnrollments = dashboardEnrollments;
     }
 }

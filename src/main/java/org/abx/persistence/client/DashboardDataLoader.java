@@ -4,6 +4,7 @@ package org.abx.persistence.client;
 import org.abx.persistence.client.dao.DashboardDetailsRepository;
 import org.abx.persistence.client.dao.UserDetailsRepository;
 import org.abx.persistence.client.model.DashboardDetails;
+import org.abx.persistence.client.model.DashboardEnrollment;
 import org.abx.persistence.client.model.UserDetails;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,9 +27,10 @@ public class DashboardDataLoader {
     public JSONArray getDashboards(String username) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
         JSONArray jsonDashboards = new JSONArray();
-        for (DashboardDetails dashboardDetails : userDetails.getDashboardDetails()) {
+        for (DashboardEnrollment dashboardEnrollment : userDetails.getDashboardEnrollments()) {
             JSONObject jsonDashboard = new JSONObject();
             jsonDashboards.put(jsonDashboard);
+            DashboardDetails dashboardDetails = dashboardEnrollment.getDashboardDetails();
             jsonDashboard.put("dashboardId", dashboardDetails.getDashboardId());
             jsonDashboard.put("dashboardName", dashboardDetails.getDashboardName());
         }
