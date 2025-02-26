@@ -13,6 +13,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import static org.abx.persistence.client.PersistenceDataLoader.Project;
+
 @RestController
 @RequestMapping("/persistence")
 public class PersistenceController {
@@ -70,7 +72,7 @@ public class PersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = dataLoader.createRepoIfNotFound(username, projectId, repoName, url, branch, creds);
+        RepoDetails repoDetails = dataLoader.createProjectRepoIfNotFound(username, projectId, repoName, url, branch, creds);
         return repoDetails.getRepoName();
     }
 
@@ -80,7 +82,7 @@ public class PersistenceController {
                               @PathVariable long projectId,
                               @PathVariable String repoName) {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.deleteRepo(username, projectId, repoName);
+        return dataLoader.deleteRepo(Project,username, projectId, repoName);
     }
 
     @Secured("Persistence")
@@ -230,5 +232,18 @@ public class PersistenceController {
     public boolean deleteDashboard(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         return  dashboardDataLoader.purgeDashboards(username);
+    }
+
+    @Secured("Persistence")
+    @PostMapping(value = "/dashboards/{dashboardId}/repo")
+    public String addDashboardRepo(HttpServletRequest request,
+                          @PathVariable long dashboardId,
+                          @RequestParam String repoName,
+                          @RequestParam String url,
+                          @RequestParam String branch,
+                          @RequestParam String creds) {
+        String username = request.getUserPrincipal().getName();
+        RepoDetails repoDetails = dataLoader.createProjectRepoIfNotFound(username, dashboardId, repoName, url, branch, creds);
+        return repoDetails.getRepoName();
     }
 }

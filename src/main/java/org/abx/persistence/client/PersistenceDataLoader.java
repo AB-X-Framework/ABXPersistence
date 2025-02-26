@@ -13,11 +13,20 @@ import java.util.Objects;
 @Component
 public class PersistenceDataLoader {
 
+    public final static String Project = "Project";
+    private final static String Dashboard = "Dashboard";
     @Autowired
     private UserDetailsRepository userDetailsRepository;
 
     @Autowired
     private ProjectEnrollmentRepository projectEnrollmentRepository;
+
+
+    @Autowired
+    private DashboardEnrollmentRepository dashboardEnrollmentRepository;
+
+    @Autowired
+    private DashboardRepoRepository dashboardRepoRepository;
 
 
     @Autowired
@@ -103,18 +112,18 @@ public class PersistenceDataLoader {
         return addProject(userDetails, projectName);
     }
 
-    public long repoId(long projectId, String repoName) {
-        return (projectId + "/" + repoName).hashCode();
+    public long repoId(String type, long projectId, String repoName) {
+        return (type +"/"+projectId + "/" + repoName).hashCode();
     }
 
     @Transactional
-    public RepoDetails createRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
+    public RepoDetails createProjectRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
         if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
                 (username, projectId)) {
             return null;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
-        long repoId = repoId(projectId, name);
+        long repoId = repoId(Project, projectId, name);
         RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
         if (repoDetails == null) {
             repoDetails = new RepoDetails();
@@ -141,12 +150,47 @@ public class PersistenceDataLoader {
     }
 
     @Transactional
-    public boolean deleteRepo(String username, long projectId, String name) {
+    public RepoDetails createDashboardRepoIfNotFound(String username, long dashboardId, final String repoName,
+                                                     String url, String branch, String creds) {
+        DashboardEnrollment dashboardEnrollment =
+                dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId,username);
+        if (dashboardEnrollment == null){
+            return null;
+        }
+        DashboardDetails dashboardDetails = dashboardEnrollment.getDashboardDetails();
+        long repoId = repoId(Dashboard, dashboardId, repoName);
+        RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
+        if (repoDetails == null) {
+            repoDetails = new RepoDetails();
+            repoDetails.setRepoId(repoId);
+            repoDetails.setRepoName(repoName);
+            repoDetails.setUrl(url);
+            repoDetails.setBranch(branch);
+            repoDetails.setCreds(creds);
+            repoDetails = repoDetailsRepository.save(repoDetails);
+
+            DashboardRepo projectRepo = new DashboardRepo();
+            projectRepo.setDashboardRepoId(repoId);
+            projectRepo.setDashboardDetails(dashboardDetails);
+            projectRepo.setRepoDetails(repoDetails);
+            dashboardRepoRepository.save(projectRepo);
+        } else {
+            repoDetails.setUrl(url);
+            repoDetails.setBranch(branch);
+            repoDetails.setCreds(creds);
+            repoDetails = repoDetailsRepository.save(repoDetails);
+
+        }
+        return repoDetails;
+    }
+
+    @Transactional
+    public boolean deleteRepo(String type, String username, long projectId, String name) {
         if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
                 (username, projectId)) {
             return false;
         }
-        long repoId = repoId(projectId, name);
+        long repoId = repoId(type, projectId, name);
         RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
         if (repoDetails == null) {
             return false;
