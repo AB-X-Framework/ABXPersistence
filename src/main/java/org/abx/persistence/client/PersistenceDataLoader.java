@@ -14,7 +14,7 @@ import java.util.Objects;
 public class PersistenceDataLoader {
 
     public final static String Project = "Project";
-    private final static String Dashboard = "Dashboard";
+    public final static String Dashboard = "Dashboard";
     @Autowired
     private UserDetailsRepository userDetailsRepository;
 

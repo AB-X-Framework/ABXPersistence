@@ -13,6 +13,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import static org.abx.persistence.client.PersistenceDataLoader.Dashboard;
 import static org.abx.persistence.client.PersistenceDataLoader.Project;
 
 @RestController
@@ -243,7 +244,18 @@ public class PersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = dataLoader.createProjectRepoIfNotFound(username, dashboardId, repoName, url, branch, creds);
+        RepoDetails repoDetails = dataLoader.createDashboardRepoIfNotFound(username, dashboardId, repoName, url, branch, creds);
         return repoDetails.getRepoName();
     }
+
+
+    @Secured("Persistence")
+    @DeleteMapping(value = "/dashboards/{dashboardId}/repo/{repoName}")
+    public boolean deleteDashboardRepo(HttpServletRequest request,
+                              @PathVariable long dashboardId,
+                              @PathVariable String repoName) {
+        String username = request.getUserPrincipal().getName();
+        return dataLoader.deleteRepo(Dashboard,username, dashboardId, repoName);
+    }
+
 }
