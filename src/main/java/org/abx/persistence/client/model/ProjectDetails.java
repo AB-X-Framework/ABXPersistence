@@ -13,7 +13,7 @@ public class ProjectDetails {
     private Long projectId;
 
     @OneToMany(mappedBy = "projectDetails")
-    private Collection<ProjectRepo> projectRepo;
+    private Collection<ProjectRepo> projectRepos;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ProjectSimulations",
@@ -59,11 +59,11 @@ public class ProjectDetails {
         return projectId;
     }
 
-    public Collection<ProjectRepo> getProjectRepo() {
-        return projectRepo;
+    public Collection<ProjectRepo> getProjectRepos() {
+        return projectRepos;
     }
 
-    public void setProjectRepo(Collection<ProjectRepo> projectRepo) {
-        this.projectRepo = projectRepo;
+    public void setProjectRepos(Collection<ProjectRepo> projectRepo) {
+        this.projectRepos = projectRepo;
     }
 }

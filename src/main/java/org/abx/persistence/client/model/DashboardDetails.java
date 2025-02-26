@@ -18,6 +18,8 @@ public class DashboardDetails {
     @OneToMany(mappedBy = "dashboardDetails")
     private Collection<DashboardEnrollment> dashboardEnrollments;
 
+    @OneToMany(mappedBy = "dashboardDetails")
+    private Collection<DashboardRepo> dashboardRepos;
     public DashboardDetails() {
         super();
     }
@@ -46,5 +48,13 @@ public class DashboardDetails {
 
     public void setDashboardEnrollments(Collection<DashboardEnrollment> dashboardEnrollments) {
         this.dashboardEnrollments = dashboardEnrollments;
+    }
+
+    public Collection<DashboardRepo> getDashboardRepos() {
+        return dashboardRepos;
+    }
+
+    public void setDashboardRepos(Collection<DashboardRepo> dashboardRepos) {
+        this.dashboardRepos = dashboardRepos;
     }
 }

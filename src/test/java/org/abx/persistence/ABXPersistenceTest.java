@@ -1,6 +1,7 @@
 package org.abx.persistence;
 
 import org.abx.jwt.JWTUtils;
+import org.abx.persistence.client.dao.ProjectRepoRepository;
 import org.abx.persistence.spring.ABXPersistenceEntry;
 import org.abx.services.ServiceRequest;
 import org.abx.services.ServiceResponse;
@@ -25,6 +26,9 @@ class ABXPersistenceTest {
     @Value("${jwt.private}")
     private String privateKey;
 
+
+    @Autowired
+    private ProjectRepoRepository projectRepoRepository;
 
     private static ConfigurableApplicationContext context;
     @Autowired
@@ -90,6 +94,7 @@ class ABXPersistenceTest {
         repos = resp.asJSONArray();
         Assertions.assertEquals(1, repos.length());
 
+        long repoId = repos.getJSONObject(0).getLong("id");
         Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("repoName"));
         Assertions.assertEquals(branch, repos.getJSONObject(0).getString("branch"));
         Assertions.assertEquals(url, repos.getJSONObject(0).getString("url"));
@@ -101,6 +106,7 @@ class ABXPersistenceTest {
         resp = servicesClient.process(req);
         boolean status = resp.asBoolean();
         Assertions.assertTrue(status);
+        Assertions.assertNull(projectRepoRepository.findByProjectRepoId(repoId));
 
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);

@@ -90,10 +90,11 @@ public class PersistenceController {
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
         for (ProjectEnrollment projectDetails : userDetails.getProjectEnrollments()) {
-            for (ProjectRepo projectRepo : projectDetails.getProjectDetails().getProjectRepo()) {
+            for (ProjectRepo projectRepo : projectDetails.getProjectDetails().getProjectRepos()) {
                 RepoDetails repoDetails = projectRepo.getRepoDetails();
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
+                jsonRepo.put("id", repoDetails.getRepoId());
                 jsonRepo.put("repoName", repoDetails.getRepoName());
                 jsonRepo.put("branch", repoDetails.getBranch());
                 jsonRepo.put("url", repoDetails.getUrl());
