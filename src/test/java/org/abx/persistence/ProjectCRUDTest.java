@@ -21,7 +21,7 @@ import java.util.List;
 
 
 @SpringBootTest(classes = ABXPersistenceEntry.class)
-class ABXPersistenceTest {
+class ProjectCRUDTest {
 
     @Value("${jwt.private}")
     private String privateKey;

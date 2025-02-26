@@ -1,6 +1,5 @@
 package org.abx.persistence;
 
-import io.jsonwebtoken.lang.Assert;
 import org.abx.jwt.JWTUtils;
 import org.abx.persistence.spring.ABXPersistenceEntry;
 import org.abx.services.ServiceRequest;
@@ -20,7 +19,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.List;
 
 @SpringBootTest(classes = ABXPersistenceEntry.class)
-public class AddSimTest {
+public class SimCRUDTest {
 
     @Value("${jwt.private}")
     private String privateKey;

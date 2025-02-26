@@ -19,7 +19,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.List;
 
 @SpringBootTest(classes = ABXPersistenceEntry.class)
-public class AddGetDashboardTest {
+public class DashboardCRUDTest {
 
     @Value("${jwt.private}")
     private String privateKey;
