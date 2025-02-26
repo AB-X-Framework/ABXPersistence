@@ -5,7 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "DashboardEnrollment")
+@Table(name = "DashboardEnrollments")
 public class DashboardEnrollment {
     @Id
     @Column(unique = true, nullable = false)

@@ -11,12 +11,6 @@ public class RepoDetails {
     private Long repoId;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "ProjectRepositories",
-            joinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"),
-            inverseJoinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"))
-    private ProjectDetails projectDetails;
-
     @Column(length = 100)
     private String repoName;
 
@@ -63,10 +57,6 @@ public class RepoDetails {
 
     public void setCreds(String creds) {
         this.creds = creds;
-    }
-
-    public void setProjectDetails(ProjectDetails projectDetails) {
-        this.projectDetails = projectDetails;
     }
 
     public Long getRepoId() {

@@ -12,11 +12,8 @@ public class ProjectDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long projectId;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "ProjectRepositories",
-            joinColumns = @JoinColumn(name = "projectId", referencedColumnName = "projectId"),
-            inverseJoinColumns = @JoinColumn(name = "repoId", referencedColumnName = "repoId"))
-    private Collection<RepoDetails> repoDetails;
+    @OneToMany(mappedBy = "projectDetails")
+    private Collection<ProjectRepo> projectRepo;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ProjectSimulations",
@@ -32,10 +29,6 @@ public class ProjectDetails {
 
     @OneToMany(mappedBy = "projectDetails")
     private Collection<ProjectEnrollment> projectEnrollment;
-
-    public Collection<RepoDetails> getRepoDetails() {
-        return repoDetails;
-    }
 
     public Collection<SimSpecs> getSimSpecs() {
         return simSpecs;
@@ -66,4 +59,11 @@ public class ProjectDetails {
         return projectId;
     }
 
+    public Collection<ProjectRepo> getProjectRepo() {
+        return projectRepo;
+    }
+
+    public void setProjectRepo(Collection<ProjectRepo> projectRepo) {
+        this.projectRepo = projectRepo;
+    }
 }

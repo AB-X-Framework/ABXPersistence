@@ -35,6 +35,9 @@ public class PersistenceDataLoader {
     @Autowired
     private DataLoaderUtils dataLoaderUtils;
 
+    @Autowired
+    private ProjectRepoRepository projectRepoRepository;
+
     private Long addProject(UserDetails userDetails, String projectName) {
         ProjectDetails projectDetails = new ProjectDetails();
         projectDetails.setProjectName(projectName);
@@ -116,17 +119,23 @@ public class PersistenceDataLoader {
         if (repoDetails == null) {
             repoDetails = new RepoDetails();
             repoDetails.setRepoId(repoId);
-            repoDetails.setProjectDetails(projectDetails);
             repoDetails.setRepoName(name);
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
             repoDetails = repoDetailsRepository.save(repoDetails);
+
+            ProjectRepo projectRepo = new ProjectRepo();
+            projectRepo.setProjectRepoId(repoId);
+            projectRepo.setProjectDetails(projectDetails);
+            projectRepo.setRepoDetails(repoDetails);
+            projectRepoRepository.save(projectRepo);
         } else {
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
             repoDetails = repoDetailsRepository.save(repoDetails);
+
         }
         return repoDetails;
     }

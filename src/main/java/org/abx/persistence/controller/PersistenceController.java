@@ -3,10 +3,7 @@ package org.abx.persistence.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.persistence.client.DashboardDataLoader;
 import org.abx.persistence.client.PersistenceDataLoader;
-import org.abx.persistence.client.model.ProjectEnrollment;
-import org.abx.persistence.client.model.RepoDetails;
-import org.abx.persistence.client.model.SimSpecs;
-import org.abx.persistence.client.model.UserDetails;
+import org.abx.persistence.client.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +90,8 @@ public class PersistenceController {
         JSONArray jsonRepos = new JSONArray();
         UserDetails userDetails = dataLoader.createUserIfNotFound(username);
         for (ProjectEnrollment projectDetails : userDetails.getProjectEnrollments()) {
-            for (RepoDetails repoDetails : projectDetails.getProjectDetails().getRepoDetails()) {
+            for (ProjectRepo projectRepo : projectDetails.getProjectDetails().getProjectRepo()) {
+                RepoDetails repoDetails = projectRepo.getRepoDetails();
                 JSONObject jsonRepo = new JSONObject();
                 jsonRepos.put(jsonRepo);
                 jsonRepo.put("repoName", repoDetails.getRepoName());
