@@ -106,9 +106,8 @@ public class PersistenceDataLoader {
 
     @Transactional
     public RepoDetails createRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
-                (userDetails.getUserId(), projectId)) {
+        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
+                (username, projectId)) {
             return null;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
@@ -134,9 +133,8 @@ public class PersistenceDataLoader {
 
     @Transactional
     public boolean deleteRepo(String username, long projectId, String name) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
-                (userDetails.getUserId(), projectId)) {
+        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
+                (username, projectId)) {
             return false;
         }
         long repoId = repoId(projectId, name);
@@ -150,9 +148,8 @@ public class PersistenceDataLoader {
 
     @Transactional
     public SimSpecs createSimSpecs(String username, long projectId, String simName, String folder, String path, String type) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
-                (userDetails.getUserId(), projectId)) {
+        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
+                (username, projectId)) {
             return null;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
@@ -169,8 +166,8 @@ public class PersistenceDataLoader {
     @Transactional
     public boolean dropSims(String username, long projectId) {
         UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
-                (userDetails.getUserId(), projectId)) {
+        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
+                (username, projectId)) {
             return false;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
@@ -182,9 +179,8 @@ public class PersistenceDataLoader {
 
     @Transactional
     public boolean dropSim(String username, long projectId, long simId) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
-                (userDetails.getUserId(), projectId)) {
+        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
+                (username, projectId)) {
             return false;
         }
         SimSpecs specs = validSimSpecs(username, projectId, simId);
@@ -196,9 +192,8 @@ public class PersistenceDataLoader {
     }
 
     private SimSpecs validSimSpecs(String username, long projectId, long simId) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
-        if (!projectEnrollmentRepository.existsByUserDetailsUserIdAndProjectDetailsProjectId
-                (userDetails.getUserId(), projectId)) {
+        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
+                (username, projectId)) {
             return null;
         }
         SimSpecs specs = simSpecsRepository.findBySimId(simId);

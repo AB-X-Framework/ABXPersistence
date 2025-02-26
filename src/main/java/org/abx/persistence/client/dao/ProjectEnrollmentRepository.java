@@ -10,5 +10,5 @@ public interface ProjectEnrollmentRepository extends JpaRepository<ProjectEnroll
     @Override
     void delete(ProjectEnrollment projectEnrollment);
 
-    boolean existsByUserDetailsUserIdAndProjectDetailsProjectId(Long userId, Long projectId);
+    boolean existsByUserDetailsUsernameAndProjectDetailsProjectId(String username, Long projectId);
 }
