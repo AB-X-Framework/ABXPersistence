@@ -3,29 +3,35 @@ package org.abx.persistence.client;
 
 import org.abx.persistence.client.dao.DashboardDetailsRepository;
 import org.abx.persistence.client.dao.DashboardEnrollmentRepository;
-import org.abx.persistence.client.dao.UserDetailsRepository;
-import org.abx.persistence.client.model.DashboardDetails;
-import org.abx.persistence.client.model.DashboardEnrollment;
-import org.abx.persistence.client.model.ProjectRole;
-import org.abx.persistence.client.model.UserDetails;
+import org.abx.persistence.client.dao.DashboardRepoRepository;
+import org.abx.persistence.client.dao.RepoDetailsRepository;
+import org.abx.persistence.client.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.abx.persistence.client.PersistenceDataLoader.Dashboard;
+import static org.abx.persistence.client.PersistenceDataLoader.repoId;
+
 @Component
 public class DashboardDataLoader {
 
     @Autowired
-    private UserDetailsRepository userDetailsRepository;
+    private DashboardEnrollmentRepository dashboardEnrollmentRepository;
+
+    @Autowired
+    private DashboardRepoRepository dashboardRepoRepository;
 
     @Autowired
     private DataLoaderUtils dataLoaderUtils;
+
     @Autowired
     private DashboardDetailsRepository dashboardDetailsRepository;
+
     @Autowired
-    private DashboardEnrollmentRepository dashboardEnrollmentRepository;
+    private RepoDetailsRepository repoDetailsRepository;
 
     @Transactional
     public JSONArray getDashboards(String username) {
@@ -43,7 +49,7 @@ public class DashboardDataLoader {
 
     @Transactional
     public JSONObject getDashboard(long dashboardId, String username) {
-        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId,username);
+        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId, username);
         if (dashboardEnrollment == null) {
             return null;
         }
@@ -71,13 +77,14 @@ public class DashboardDataLoader {
 
     /**
      * Deletes dashboard or enrollment
-     * @param dashboardEnrollmentId the dashboard enrollment
+     *
+     * @param dashboardId the dashboard enrollment
      * @param username
      * @return
      */
     @Transactional
-    public boolean deleteDashboard(long dashboardId,String username) {
-        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId,username);
+    public boolean deleteDashboard(long dashboardId, String username) {
+        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId, username);
         if (dashboardEnrollment == null) {
             return false;
         }
@@ -89,14 +96,47 @@ public class DashboardDataLoader {
         if (dashboardEnrollment == null) {
             return false;
         }
-        if (dashboardEnrollment.getRole().equals( ProjectRole.Owner.toString())) {
+        if (dashboardEnrollment.getRole().equals(ProjectRole.Owner.toString())) {
             DashboardDetails dashboardDetails = dashboardEnrollment.getDashboardDetails();
             dashboardDetailsRepository.delete(dashboardDetails);
-        }else {
+        } else {
             dashboardEnrollmentRepository.delete(dashboardEnrollment);
         }
         return true;
 
+    }
+
+    @Transactional
+    public RepoDetails createDashboardRepoIfNotFound(String username, long dashboardId, final String repoName, String url, String branch, String creds) {
+        DashboardEnrollment dashboardEnrollment = dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId, username);
+        if (dashboardEnrollment == null) {
+            return null;
+        }
+        DashboardDetails dashboardDetails = dashboardEnrollment.getDashboardDetails();
+        long repoId = repoId(Dashboard, dashboardId, repoName);
+        RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
+        if (repoDetails == null) {
+            repoDetails = new RepoDetails();
+            repoDetails.setRepoId(repoId);
+            repoDetails.setRepoName(repoName);
+            repoDetails.setUrl(url);
+            repoDetails.setBranch(branch);
+            repoDetails.setCreds(creds);
+            repoDetails = repoDetailsRepository.save(repoDetails);
+
+            DashboardRepo projectRepo = new DashboardRepo();
+            projectRepo.setDashboardRepoId(repoId);
+            projectRepo.setDashboardDetails(dashboardDetails);
+            projectRepo.setRepoDetails(repoDetails);
+            dashboardRepoRepository.save(projectRepo);
+        } else {
+            repoDetails.setUrl(url);
+            repoDetails.setBranch(branch);
+            repoDetails.setCreds(creds);
+            repoDetails = repoDetailsRepository.save(repoDetails);
+
+        }
+        return repoDetails;
     }
 
     @Transactional

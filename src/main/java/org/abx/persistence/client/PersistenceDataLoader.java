@@ -22,12 +22,6 @@ public class PersistenceDataLoader {
     private ProjectEnrollmentRepository projectEnrollmentRepository;
 
 
-    @Autowired
-    private DashboardEnrollmentRepository dashboardEnrollmentRepository;
-
-    @Autowired
-    private DashboardRepoRepository dashboardRepoRepository;
-
 
     @Autowired
     private ExecDetailsRepository execDetailsRepository;
@@ -112,7 +106,7 @@ public class PersistenceDataLoader {
         return addProject(userDetails, projectName);
     }
 
-    public long repoId(String type, long projectId, String repoName) {
+    public static long repoId(String type, long projectId, String repoName) {
         return (type +"/"+projectId + "/" + repoName).hashCode();
     }
 
@@ -139,41 +133,6 @@ public class PersistenceDataLoader {
             projectRepo.setProjectDetails(projectDetails);
             projectRepo.setRepoDetails(repoDetails);
             projectRepoRepository.save(projectRepo);
-        } else {
-            repoDetails.setUrl(url);
-            repoDetails.setBranch(branch);
-            repoDetails.setCreds(creds);
-            repoDetails = repoDetailsRepository.save(repoDetails);
-
-        }
-        return repoDetails;
-    }
-
-    @Transactional
-    public RepoDetails createDashboardRepoIfNotFound(String username, long dashboardId, final String repoName,
-                                                     String url, String branch, String creds) {
-        DashboardEnrollment dashboardEnrollment =
-                dashboardEnrollmentRepository.findByDashboardDetailsDashboardIdAndUserDetailsUsername(dashboardId,username);
-        if (dashboardEnrollment == null){
-            return null;
-        }
-        DashboardDetails dashboardDetails = dashboardEnrollment.getDashboardDetails();
-        long repoId = repoId(Dashboard, dashboardId, repoName);
-        RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
-        if (repoDetails == null) {
-            repoDetails = new RepoDetails();
-            repoDetails.setRepoId(repoId);
-            repoDetails.setRepoName(repoName);
-            repoDetails.setUrl(url);
-            repoDetails.setBranch(branch);
-            repoDetails.setCreds(creds);
-            repoDetails = repoDetailsRepository.save(repoDetails);
-
-            DashboardRepo projectRepo = new DashboardRepo();
-            projectRepo.setDashboardRepoId(repoId);
-            projectRepo.setDashboardDetails(dashboardDetails);
-            projectRepo.setRepoDetails(repoDetails);
-            dashboardRepoRepository.save(projectRepo);
         } else {
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);

@@ -244,7 +244,7 @@ public class PersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = dataLoader.createDashboardRepoIfNotFound(username, dashboardId, repoName, url, branch, creds);
+        RepoDetails repoDetails = dashboardDataLoader.createDashboardRepoIfNotFound(username, dashboardId, repoName, url, branch, creds);
         return repoDetails.getRepoName();
     }
 
