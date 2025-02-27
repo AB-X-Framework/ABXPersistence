@@ -42,9 +42,10 @@ public class PersistenceController {
     @Secured("Persistence")
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public Long addProject(HttpServletRequest request,
-                              @RequestParam String projectName) {
+                              @RequestParam String projectData) {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.addProject(username,projectName);
+        JSONObject jsonProject = new JSONObject(projectData);
+        return dataLoader.addProject(username,jsonProject.getString("name"));
     }
 
     @Secured("Persistence")
@@ -54,6 +55,16 @@ public class PersistenceController {
         String username = request.getUserPrincipal().getName();
         JSONObject repoDetails = dataLoader.getProjectDetails(username, projectId);
         return repoDetails.toString();
+    }
+
+    @Secured("Persistence")
+    @PutMapping(value = "/projects/{projectId}")
+    public boolean updateProject(HttpServletRequest request,
+                             @PathVariable long projectId,
+                                @RequestParam String projectData) {
+        String username = request.getUserPrincipal().getName();
+        JSONObject jsonProject = new JSONObject(projectData);
+        return dataLoader.updateProject(username,projectId,jsonProject.getString("name"));
     }
 
     @Secured("Persistence")

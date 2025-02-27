@@ -106,6 +106,24 @@ public class PersistenceDataLoader {
         return addProject(userDetails, projectName);
     }
 
+    @Transactional
+    public boolean updateProject(final String username, long projectId, String projectName) {
+        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
+                findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
+        if (projectEnrollment == null){
+            return false;
+        }
+        ProjectRole role = ProjectRole.valueOf(projectEnrollment.getRole());
+        if (!role.canRename()){
+            return false;
+        }
+        ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
+        projectDetails.setProjectName(projectName);
+        projectDetailsRepository.save(projectDetails);
+        return true;
+    }
+
     public static long repoId(String type, long projectId, String repoName) {
         return (type +"/"+projectId + "/" + repoName).hashCode();
     }
