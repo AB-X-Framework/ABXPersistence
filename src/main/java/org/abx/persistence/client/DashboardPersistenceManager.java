@@ -12,8 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.abx.persistence.client.ProjectPersistenceManager.Dashboard;
 import static org.abx.persistence.client.ProjectPersistenceManager.repoId;
+import static org.abx.persistence.client.RepoPersistenceManager.Dashboard;
+
 
 @Component
 public class DashboardPersistenceManager {

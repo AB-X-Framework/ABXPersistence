@@ -14,8 +14,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import static org.abx.persistence.client.ProjectPersistenceManager.Dashboard;
-import static org.abx.persistence.client.ProjectPersistenceManager.Project;
+import static org.abx.persistence.client.RepoPersistenceManager.Dashboard;
+import static org.abx.persistence.client.RepoPersistenceManager.Project;
+
 
 @RestController
 @RequestMapping("/persistence")

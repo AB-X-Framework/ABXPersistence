@@ -10,18 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+import static org.abx.persistence.client.RepoPersistenceManager.Project;
+
 @Component
 public class ProjectPersistenceManager {
 
-    public final static String Project = "Project";
-    public final static String Dashboard = "Dashboard";
     @Autowired
     private UserDetailsRepository userDetailsRepository;
 
     @Autowired
     private ProjectEnrollmentRepository projectEnrollmentRepository;
-
-
 
     @Autowired
     private ExecDetailsRepository execDetailsRepository;
