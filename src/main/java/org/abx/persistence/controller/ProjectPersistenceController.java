@@ -15,7 +15,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import static org.abx.persistence.client.RepoPersistenceManager.Dashboard;
 import static org.abx.persistence.client.RepoPersistenceManager.Project;
 
 
@@ -24,7 +23,7 @@ import static org.abx.persistence.client.RepoPersistenceManager.Project;
 public class ProjectPersistenceController {
 
     @Autowired
-    private ProjectPersistenceManager dataLoader;
+    private ProjectPersistenceManager projectPersistenceManager;
 
     @Autowired
     private UserPersistenceManager userPersistenceManager;
@@ -32,50 +31,49 @@ public class ProjectPersistenceController {
     @Autowired
     private RepoPersistenceManager repoPersistenceManager;
 
-    @Autowired
-    private DashboardPersistenceManager dashboardPersistenceManager;
 
 
     @Secured("Persistence")
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public String projectEnrollments(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.projectEnrollments(username).toString();
+        return projectPersistenceManager.projectEnrollments(username).toString();
     }
+
     @Secured("Persistence")
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public Long addProject(HttpServletRequest request,
-                              @RequestParam String projectData) {
+                           @RequestParam String projectData) {
         String username = request.getUserPrincipal().getName();
         JSONObject jsonProject = new JSONObject(projectData);
-        return dataLoader.addProject(username,jsonProject.getString("name"));
+        return projectPersistenceManager.addProject(username, jsonProject.getString("name"));
     }
 
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}")
     public String getProject(HttpServletRequest request,
-                          @PathVariable long projectId) {
+                             @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
-        JSONObject repoDetails = dataLoader.getProjectDetails(username, projectId);
+        JSONObject repoDetails = projectPersistenceManager.getProjectDetails(username, projectId);
         return repoDetails.toString();
     }
 
     @Secured("Persistence")
     @PutMapping(value = "/projects/{projectId}")
     public boolean updateProject(HttpServletRequest request,
-                             @PathVariable long projectId,
-                                @RequestParam String projectData) {
+                                 @PathVariable long projectId,
+                                 @RequestParam String projectData) {
         String username = request.getUserPrincipal().getName();
         JSONObject jsonProject = new JSONObject(projectData);
-        return dataLoader.updateProject(username,projectId,jsonProject.getString("name"));
+        return projectPersistenceManager.updateProject(username, projectId, jsonProject.getString("name"));
     }
 
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}")
     public boolean deleteProject(HttpServletRequest request,
-                             @PathVariable long projectId) {
+                                 @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
-        return  dataLoader.deleteProject(username, projectId);
+        return projectPersistenceManager.deleteProject(username, projectId);
     }
 
     @Secured("Persistence")
@@ -97,7 +95,7 @@ public class ProjectPersistenceController {
                               @PathVariable long projectId,
                               @PathVariable String repoName) {
         String username = request.getUserPrincipal().getName();
-        return repoPersistenceManager.deleteRepo(Project,username, projectId, repoName);
+        return repoPersistenceManager.deleteRepo(Project, username, projectId, repoName);
     }
 
     @Secured("Persistence")
@@ -131,15 +129,15 @@ public class ProjectPersistenceController {
                        @RequestParam String path,
                        @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.createSimSpecs(username, projectId, simName, folder, path, type).getSimId();
+        return projectPersistenceManager.createSimSpecs(username, projectId, simName, folder, path, type).getSimId();
     }
 
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSims(HttpServletRequest request,
-                        @RequestParam long projectId) throws Exception {
+                            @RequestParam long projectId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.dropSims(username, projectId);
+        return projectPersistenceManager.dropSims(username, projectId);
     }
 
     @Secured("Persistence")
@@ -169,7 +167,7 @@ public class ProjectPersistenceController {
                            @PathVariable long projectId,
                            @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.dropSim(username, projectId, simId);
+        return projectPersistenceManager.dropSim(username, projectId, simId);
     }
 
     @Secured("Persistence")
@@ -182,7 +180,7 @@ public class ProjectPersistenceController {
                              @RequestParam String path,
                              @RequestParam String type) throws Exception {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.updateSim(username, projectId, simId, simName, folder, path, type);
+        return projectPersistenceManager.updateSim(username, projectId, simId, simName, folder, path, type);
     }
 
     @Secured("Persistence")
@@ -190,7 +188,7 @@ public class ProjectPersistenceController {
     public long addExec(HttpServletRequest request,
                         @PathVariable long projectId, @PathVariable long simId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        long execId = dataLoader.addExec(username, projectId, simId);
+        long execId = projectPersistenceManager.addExec(username, projectId, simId);
         if (execId == -1) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
         }
@@ -204,72 +202,12 @@ public class ProjectPersistenceController {
                           @PathVariable long simId,
                           @PathVariable long execId) throws Exception {
         String username = request.getUserPrincipal().getName();
-        JSONObject exec = dataLoader.getExec(username, projectId, simId, execId);
+        JSONObject exec = projectPersistenceManager.getExec(username, projectId, simId, execId);
         if (exec == null) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
         }
         return exec.toString();
     }
 
-    @Secured("Persistence")
-    @GetMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String dashboards(HttpServletRequest request) {
-        String username = request.getUserPrincipal().getName();
-        return dashboardPersistenceManager.getDashboards(username).toString();
-    }
-
-    @Secured("Persistence")
-    @GetMapping(value = "/dashboards/{dashboardId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getDashboard(HttpServletRequest request,
-                            @PathVariable long dashboardId) {
-        String username = request.getUserPrincipal().getName();
-        return dashboardPersistenceManager.getDashboard(dashboardId, username).toString();
-    }
-
-    @Secured("Persistence")
-    @PostMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Long createDashboard(HttpServletRequest request,
-                                @RequestParam String dashboardName) {
-        String username = request.getUserPrincipal().getName();
-        return  dashboardPersistenceManager.createDashboard(username,dashboardName);
-    }
-
-    @Secured("Persistence")
-    @DeleteMapping(value = "/dashboards/{dashboardId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean deleteDashboard(HttpServletRequest request,
-                                @PathVariable long dashboardId) {
-        String username = request.getUserPrincipal().getName();
-        return  dashboardPersistenceManager.deleteDashboard(dashboardId,username);
-    }
-
-    @Secured("Persistence")
-    @DeleteMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean deleteDashboard(HttpServletRequest request) {
-        String username = request.getUserPrincipal().getName();
-        return  dashboardPersistenceManager.purgeDashboards(username);
-    }
-
-    @Secured("Persistence")
-    @PostMapping(value = "/dashboards/{dashboardId}/repo")
-    public String addDashboardRepo(HttpServletRequest request,
-                          @PathVariable long dashboardId,
-                          @RequestParam String repoName,
-                          @RequestParam String url,
-                          @RequestParam String branch,
-                          @RequestParam String creds) {
-        String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = dashboardPersistenceManager.createDashboardRepoIfNotFound(username, dashboardId, repoName, url, branch, creds);
-        return repoDetails.getRepoName();
-    }
-
-
-    @Secured("Persistence")
-    @DeleteMapping(value = "/dashboards/{dashboardId}/repo/{repoName}")
-    public boolean deleteDashboardRepo(HttpServletRequest request,
-                              @PathVariable long dashboardId,
-                              @PathVariable String repoName) {
-        String username = request.getUserPrincipal().getName();
-        return repoPersistenceManager.deleteRepo(Dashboard,username, dashboardId, repoName);
-    }
 
 }
