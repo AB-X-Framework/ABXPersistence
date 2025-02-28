@@ -21,24 +21,20 @@ import static org.abx.persistence.client.RepoPersistenceManager.Project;
 
 @RestController
 @RequestMapping("/persistence")
-public class PersistenceController {
+public class ProjectPersistenceController {
 
     @Autowired
     private ProjectPersistenceManager dataLoader;
+
     @Autowired
     private UserPersistenceManager userPersistenceManager;
+
     @Autowired
     private RepoPersistenceManager repoPersistenceManager;
 
     @Autowired
     private DashboardPersistenceManager dashboardPersistenceManager;
-    @Secured("Persistence")
-    @RequestMapping(value = "/user")
-    public String user(HttpServletRequest request) {
-        String username = request.getUserPrincipal().getName();
-        UserDetails details = userPersistenceManager.createUserIfNotFound(username);
-        return details.getUsername();
-    }
+
 
     @Secured("Persistence")
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
