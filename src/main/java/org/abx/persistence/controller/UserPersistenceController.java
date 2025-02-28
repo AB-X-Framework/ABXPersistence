@@ -15,11 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/persistence")
 public class UserPersistenceController {
     @Autowired
-    private ProjectPersistenceManager dataLoader;
-    @Autowired
     private UserPersistenceManager userPersistenceManager;
-    @Autowired
-    private RepoPersistenceManager repoPersistenceManager;
 
     @Autowired
     private DashboardPersistenceManager dashboardPersistenceManager;
