@@ -117,57 +117,6 @@ public class ProjectPersistenceManager {
         return true;
     }
 
-    public static long repoId(String type, long projectId, String repoName) {
-        return (type +"/"+projectId + "/" + repoName).hashCode();
-    }
-
-    @Transactional
-    public RepoDetails createProjectRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
-        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
-                (username, projectId)) {
-            return null;
-        }
-        ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
-        long repoId = repoId(Project, projectId, name);
-        RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
-        if (repoDetails == null) {
-            repoDetails = new RepoDetails();
-            repoDetails.setRepoId(repoId);
-            repoDetails.setRepoName(name);
-            repoDetails.setUrl(url);
-            repoDetails.setBranch(branch);
-            repoDetails.setCreds(creds);
-            repoDetails = repoDetailsRepository.save(repoDetails);
-
-            ProjectRepo projectRepo = new ProjectRepo();
-            projectRepo.setProjectRepoId(repoId);
-            projectRepo.setProjectDetails(projectDetails);
-            projectRepo.setRepoDetails(repoDetails);
-            projectRepoRepository.save(projectRepo);
-        } else {
-            repoDetails.setUrl(url);
-            repoDetails.setBranch(branch);
-            repoDetails.setCreds(creds);
-            repoDetails = repoDetailsRepository.save(repoDetails);
-
-        }
-        return repoDetails;
-    }
-
-    @Transactional
-    public boolean deleteRepo(String type, String username, long projectId, String name) {
-        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
-                (username, projectId)) {
-            return false;
-        }
-        long repoId = repoId(type, projectId, name);
-        RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
-        if (repoDetails == null) {
-            return false;
-        }
-        repoDetailsRepository.delete(repoDetails);
-        return true;
-    }
 
     @Transactional
     public SimSpecs createSimSpecs(String username, long projectId, String simName, String folder, String path, String type) {

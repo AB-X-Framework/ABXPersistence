@@ -3,6 +3,7 @@ package org.abx.persistence.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.persistence.client.DashboardPersistenceManager;
 import org.abx.persistence.client.ProjectPersistenceManager;
+import org.abx.persistence.client.RepoPersistenceManager;
 import org.abx.persistence.client.UserPersistenceManager;
 import org.abx.persistence.client.model.*;
 import org.json.JSONArray;
@@ -26,6 +27,8 @@ public class PersistenceController {
     private ProjectPersistenceManager dataLoader;
     @Autowired
     private UserPersistenceManager userPersistenceManager;
+    @Autowired
+    private RepoPersistenceManager repoPersistenceManager;
 
     @Autowired
     private DashboardPersistenceManager dashboardPersistenceManager;
@@ -88,7 +91,7 @@ public class PersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = dataLoader.createProjectRepoIfNotFound(username, projectId, repoName, url, branch, creds);
+        RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, repoName, url, branch, creds);
         return repoDetails.getRepoName();
     }
 
@@ -98,7 +101,7 @@ public class PersistenceController {
                               @PathVariable long projectId,
                               @PathVariable String repoName) {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.deleteRepo(Project,username, projectId, repoName);
+        return repoPersistenceManager.deleteRepo(Project,username, projectId, repoName);
     }
 
     @Secured("Persistence")
@@ -270,7 +273,7 @@ public class PersistenceController {
                               @PathVariable long dashboardId,
                               @PathVariable String repoName) {
         String username = request.getUserPrincipal().getName();
-        return dataLoader.deleteRepo(Dashboard,username, dashboardId, repoName);
+        return repoPersistenceManager.deleteRepo(Dashboard,username, dashboardId, repoName);
     }
 
 }
