@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.abx.persistence.client.PersistenceDataLoader.Dashboard;
-import static org.abx.persistence.client.PersistenceDataLoader.repoId;
+import static org.abx.persistence.client.ProjectPersistenceManager.Dashboard;
+import static org.abx.persistence.client.ProjectPersistenceManager.repoId;
 
 @Component
 public class DashboardPersistenceManager {
@@ -25,7 +25,7 @@ public class DashboardPersistenceManager {
     private DashboardRepoRepository dashboardRepoRepository;
 
     @Autowired
-    private DataLoaderUtils dataLoaderUtils;
+    private UserPersistenceManager userPersistenceManager;
 
     @Autowired
     private DashboardDetailsRepository dashboardDetailsRepository;
@@ -35,7 +35,7 @@ public class DashboardPersistenceManager {
 
     @Transactional
     public JSONArray getDashboards(String username) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        UserDetails userDetails = userPersistenceManager.createOrFind(username);
         JSONArray jsonDashboards = new JSONArray();
         for (DashboardEnrollment dashboardEnrollment : userDetails.getDashboardEnrollments()) {
             JSONObject jsonDashboard = new JSONObject();
@@ -62,7 +62,7 @@ public class DashboardPersistenceManager {
 
     @Transactional
     public long createDashboard(String username, String dashboardName) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        UserDetails userDetails = userPersistenceManager.createOrFind(username);
         DashboardDetails dd = new DashboardDetails();
         dd.setDashboardName(dashboardName);
         dashboardDetailsRepository.save(dd);
@@ -141,7 +141,7 @@ public class DashboardPersistenceManager {
 
     @Transactional
     public boolean purgeDashboards(String username) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        UserDetails userDetails = userPersistenceManager.createOrFind(username);
         for (DashboardEnrollment dashboardEnrollment : userDetails.getDashboardEnrollments()) {
             deleteDashboardByEnrollment(dashboardEnrollment.getDashboardEnrollmentId());
         }

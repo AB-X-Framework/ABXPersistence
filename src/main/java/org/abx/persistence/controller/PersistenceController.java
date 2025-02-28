@@ -2,7 +2,7 @@ package org.abx.persistence.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.persistence.client.DashboardPersistenceManager;
-import org.abx.persistence.client.PersistenceDataLoader;
+import org.abx.persistence.client.ProjectPersistenceManager;
 import org.abx.persistence.client.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,15 +13,15 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import static org.abx.persistence.client.PersistenceDataLoader.Dashboard;
-import static org.abx.persistence.client.PersistenceDataLoader.Project;
+import static org.abx.persistence.client.ProjectPersistenceManager.Dashboard;
+import static org.abx.persistence.client.ProjectPersistenceManager.Project;
 
 @RestController
 @RequestMapping("/persistence")
 public class PersistenceController {
 
     @Autowired
-    private PersistenceDataLoader dataLoader;
+    private ProjectPersistenceManager dataLoader;
 
     @Autowired
     private DashboardPersistenceManager dashboardPersistenceManager;

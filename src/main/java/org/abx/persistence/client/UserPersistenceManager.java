@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class DataLoaderUtils {
+public class UserPersistenceManager {
     @Autowired
     private ProjectDetailsRepository projectDetailsRepository;
 

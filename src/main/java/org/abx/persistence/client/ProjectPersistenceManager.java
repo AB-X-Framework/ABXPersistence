@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 @Component
-public class PersistenceDataLoader {
+public class ProjectPersistenceManager {
 
     public final static String Project = "Project";
     public final static String Dashboard = "Dashboard";
@@ -36,7 +36,7 @@ public class PersistenceDataLoader {
     private ProjectDetailsRepository projectDetailsRepository;
 
     @Autowired
-    private DataLoaderUtils dataLoaderUtils;
+    private UserPersistenceManager userPersistenceManager;
 
     @Autowired
     private ProjectRepoRepository projectRepoRepository;
@@ -55,13 +55,13 @@ public class PersistenceDataLoader {
 
     @Transactional
     public UserDetails createUserIfNotFound(final String name) {
-        return dataLoaderUtils.createOrFind(name);
+        return userPersistenceManager.createOrFind(name);
     }
 
     @Transactional
     public JSONArray projectEnrollments(final String username) {
         JSONArray jsonEnrollments = new JSONArray();
-        for (ProjectEnrollment projectEnrollment : dataLoaderUtils.createOrFind(username).getProjectEnrollments()) {
+        for (ProjectEnrollment projectEnrollment : userPersistenceManager.createOrFind(username).getProjectEnrollments()) {
             JSONObject jsonEnrollment = new JSONObject();
             jsonEnrollments.put(jsonEnrollment);
             ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
@@ -102,13 +102,13 @@ public class PersistenceDataLoader {
 
     @Transactional
     public Long addProject(final String username, String projectName) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        UserDetails userDetails = userPersistenceManager.createOrFind(username);
         return addProject(userDetails, projectName);
     }
 
     @Transactional
     public boolean updateProject(final String username, long projectId, String projectName) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        UserDetails userDetails = userPersistenceManager.createOrFind(username);
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
                 findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
         if (projectEnrollment == null){
@@ -195,7 +195,7 @@ public class PersistenceDataLoader {
 
     @Transactional
     public boolean dropSims(String username, long projectId) {
-        UserDetails userDetails = dataLoaderUtils.createOrFind(username);
+        UserDetails userDetails = userPersistenceManager.createOrFind(username);
         if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
                 (username, projectId)) {
             return false;
