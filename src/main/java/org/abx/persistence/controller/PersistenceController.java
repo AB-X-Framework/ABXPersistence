@@ -3,6 +3,7 @@ package org.abx.persistence.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.abx.persistence.client.DashboardPersistenceManager;
 import org.abx.persistence.client.ProjectPersistenceManager;
+import org.abx.persistence.client.UserPersistenceManager;
 import org.abx.persistence.client.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +23,8 @@ public class PersistenceController {
 
     @Autowired
     private ProjectPersistenceManager dataLoader;
+    @Autowired
+    private UserPersistenceManager userPersistenceManager;
 
     @Autowired
     private DashboardPersistenceManager dashboardPersistenceManager;
@@ -29,7 +32,7 @@ public class PersistenceController {
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
-        UserDetails details = dataLoader.createUserIfNotFound(username);
+        UserDetails details = userPersistenceManager.createUserIfNotFound(username);
         return details.getUsername();
     }
 
@@ -102,7 +105,7 @@ public class PersistenceController {
     public String repos(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
-        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
+        UserDetails userDetails = userPersistenceManager.createUserIfNotFound(username);
         for (ProjectEnrollment projectDetails : userDetails.getProjectEnrollments()) {
             for (ProjectRepo projectRepo : projectDetails.getProjectDetails().getProjectRepos()) {
                 RepoDetails repoDetails = projectRepo.getRepoDetails();
@@ -144,7 +147,7 @@ public class PersistenceController {
     public String sims(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
         JSONArray jsonRepos = new JSONArray();
-        UserDetails userDetails = dataLoader.createUserIfNotFound(username);
+        UserDetails userDetails = userPersistenceManager.createUserIfNotFound(username);
         for (ProjectEnrollment projectEnrollment : userDetails.getProjectEnrollments()) {
             for (SimSpecs repoDetails : projectEnrollment.getProjectDetails().getSimSpecs()) {
                 JSONObject jsonRepo = new JSONObject();

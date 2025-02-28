@@ -54,11 +54,6 @@ public class ProjectPersistenceManager {
     }
 
     @Transactional
-    public UserDetails createUserIfNotFound(final String name) {
-        return userPersistenceManager.createOrFind(name);
-    }
-
-    @Transactional
     public JSONArray projectEnrollments(final String username) {
         JSONArray jsonEnrollments = new JSONArray();
         for (ProjectEnrollment projectEnrollment : userPersistenceManager.createOrFind(username).getProjectEnrollments()) {

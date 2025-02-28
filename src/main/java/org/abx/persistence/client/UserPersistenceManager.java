@@ -9,6 +9,7 @@ import org.abx.persistence.client.model.ProjectRole;
 import org.abx.persistence.client.model.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,11 @@ public class UserPersistenceManager {
 
     @Autowired
     private ProjectEnrollmentRepository projectEnrollmentRepository;
+
+    @Transactional
+    public UserDetails createUserIfNotFound(final String name) {
+        return createOrFind(name);
+    }
 
     public UserDetails createOrFind(final String name) {
         UserDetails userDetails = userDetailsRepository.findByUsername(name);
