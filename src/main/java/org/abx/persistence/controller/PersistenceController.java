@@ -1,7 +1,7 @@
 package org.abx.persistence.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.abx.persistence.client.DashboardDataLoader;
+import org.abx.persistence.client.DashboardPersistenceManager;
 import org.abx.persistence.client.PersistenceDataLoader;
 import org.abx.persistence.client.model.*;
 import org.json.JSONArray;
@@ -24,7 +24,7 @@ public class PersistenceController {
     private PersistenceDataLoader dataLoader;
 
     @Autowired
-    private DashboardDataLoader dashboardDataLoader;
+    private DashboardPersistenceManager dashboardPersistenceManager;
     @Secured("Persistence")
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest request) {
@@ -212,7 +212,7 @@ public class PersistenceController {
     @GetMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     public String dashboards(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
-        return dashboardDataLoader.getDashboards(username).toString();
+        return dashboardPersistenceManager.getDashboards(username).toString();
     }
 
     @Secured("Persistence")
@@ -220,7 +220,7 @@ public class PersistenceController {
     public String getDashboard(HttpServletRequest request,
                             @PathVariable long dashboardId) {
         String username = request.getUserPrincipal().getName();
-        return dashboardDataLoader.getDashboard(dashboardId, username).toString();
+        return dashboardPersistenceManager.getDashboard(dashboardId, username).toString();
     }
 
     @Secured("Persistence")
@@ -228,7 +228,7 @@ public class PersistenceController {
     public Long createDashboard(HttpServletRequest request,
                                 @RequestParam String dashboardName) {
         String username = request.getUserPrincipal().getName();
-        return  dashboardDataLoader.createDashboard(username,dashboardName);
+        return  dashboardPersistenceManager.createDashboard(username,dashboardName);
     }
 
     @Secured("Persistence")
@@ -236,14 +236,14 @@ public class PersistenceController {
     public boolean deleteDashboard(HttpServletRequest request,
                                 @PathVariable long dashboardId) {
         String username = request.getUserPrincipal().getName();
-        return  dashboardDataLoader.deleteDashboard(dashboardId,username);
+        return  dashboardPersistenceManager.deleteDashboard(dashboardId,username);
     }
 
     @Secured("Persistence")
     @DeleteMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean deleteDashboard(HttpServletRequest request) {
         String username = request.getUserPrincipal().getName();
-        return  dashboardDataLoader.purgeDashboards(username);
+        return  dashboardPersistenceManager.purgeDashboards(username);
     }
 
     @Secured("Persistence")
@@ -255,7 +255,7 @@ public class PersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = dashboardDataLoader.createDashboardRepoIfNotFound(username, dashboardId, repoName, url, branch, creds);
+        RepoDetails repoDetails = dashboardPersistenceManager.createDashboardRepoIfNotFound(username, dashboardId, repoName, url, branch, creds);
         return repoDetails.getRepoName();
     }
 

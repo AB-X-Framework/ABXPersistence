@@ -16,7 +16,7 @@ import static org.abx.persistence.client.PersistenceDataLoader.Dashboard;
 import static org.abx.persistence.client.PersistenceDataLoader.repoId;
 
 @Component
-public class DashboardDataLoader {
+public class DashboardPersistenceManager {
 
     @Autowired
     private DashboardEnrollmentRepository dashboardEnrollmentRepository;
