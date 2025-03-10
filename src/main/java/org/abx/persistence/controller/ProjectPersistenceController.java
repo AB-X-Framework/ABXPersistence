@@ -46,7 +46,19 @@ public class ProjectPersistenceController {
                            @RequestParam String projectData) {
         String username = request.getUserPrincipal().getName();
         JSONObject jsonProject = new JSONObject(projectData);
-        return projectPersistenceManager.addProject(username, jsonProject.getString("name"));
+        long id= projectPersistenceManager.addProject(username, jsonProject.getString("name"));
+        JSONArray repos = jsonProject.getJSONArray("repos");
+        for (int i = 0; i < repos.length(); ++i) {
+            JSONObject repo = repos.getJSONObject(i);
+            repoPersistenceManager.createProjectRepoIfNotFound(
+                    username,id,
+                    repo.getString("name"),
+                    repo.getString("url"),
+                    repo.getString("creds"),
+                    repo.getString("branch")
+            );
+        }
+        return id;
     }
 
     @Secured("Persistence")
