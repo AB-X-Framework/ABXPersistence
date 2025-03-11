@@ -54,8 +54,8 @@ public class ProjectPersistenceController {
                     username,id,
                     repo.getString("name"),
                     repo.getString("url"),
-                    repo.getString("creds"),
-                    repo.getString("branch")
+                    repo.getString("branch"),
+                    repo.getString("creds")
             );
         }
         return id;

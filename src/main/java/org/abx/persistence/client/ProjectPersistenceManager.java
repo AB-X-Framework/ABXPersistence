@@ -66,15 +66,24 @@ public class ProjectPersistenceManager {
 
     @Transactional
     public JSONObject getProjectDetails(String username, final long projectId) {
-        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
+        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
+                findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
         if (projectEnrollment == null) {
             return null;
         }
-        JSONObject jsonEnrollments = new JSONObject();
+        JSONObject jsonProjectDetails = new JSONObject();
         ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
-        jsonEnrollments.put("projectName", projectDetails.getProjectName());
-        jsonEnrollments.put("projectId", projectId);
-        return jsonEnrollments;
+        jsonProjectDetails.put("projectName", projectDetails.getProjectName());
+        jsonProjectDetails.put("projectId", projectId);
+        JSONArray jsonRepos = new JSONArray();
+        jsonProjectDetails.put("repos",jsonRepos);
+        for (ProjectRepo projectRepo:projectDetails.getProjectRepos()){
+            RepoDetails repo = projectRepo.getRepoDetails();
+            JSONObject jsonRepo = new JSONObject();
+            jsonRepos.put(jsonRepo);
+            jsonRepo.put("repoName",repo.getRepoName());
+        }
+        return jsonProjectDetails;
     }
 
 
