@@ -95,6 +95,11 @@ public class ProjectPersistenceManager {
             return false;
         }
         if (Objects.equals(projectEnrollment.getRole(), ProjectRole.Owner.name())) {
+            ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
+            for (ProjectRepo projectRepo:projectDetails.getProjectRepos()){
+                RepoDetails repo = projectRepo.getRepoDetails();
+                repoDetailsRepository.delete(repo);
+            }
             projectDetailsRepository.delete(projectEnrollment.getProjectDetails());
         }else {
             projectEnrollmentRepository.delete(projectEnrollment);
