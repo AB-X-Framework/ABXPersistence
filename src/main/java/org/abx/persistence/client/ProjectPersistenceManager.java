@@ -82,6 +82,7 @@ public class ProjectPersistenceManager {
             JSONObject jsonRepo = new JSONObject();
             jsonRepos.put(jsonRepo);
             jsonRepo.put("repoName",repo.getRepoName());
+            jsonRepo.put("repoType",repo.getRepoType());
         }
         return jsonProjectDetails;
     }

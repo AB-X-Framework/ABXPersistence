@@ -10,9 +10,12 @@ public class RepoDetails {
     @Column(unique = true, nullable = false)
     private Long repoId;
 
+    @Column(length = 10)
+    private String repoType;
 
     @Column(length = 100)
     private String repoName;
+
 
     @Column
     private String url;
@@ -65,5 +68,13 @@ public class RepoDetails {
 
     public void setRepoId(Long repoId) {
         this.repoId = repoId;
+    }
+
+    public String getRepoType() {
+        return repoType;
+    }
+
+    public void setRepoType(String repoType) {
+        this.repoType = repoType;
     }
 }

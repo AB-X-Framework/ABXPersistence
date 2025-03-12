@@ -61,6 +61,7 @@ class ProjectCRUDTest {
         req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repo");
         req.addPart("repoName", repoName);
         req.addPart("branch", branch);
+        req.addPart("type", "local");
         req.addPart("url", url);
         req.addPart("creds", creds);
         req.jwt(token);
@@ -82,6 +83,7 @@ class ProjectCRUDTest {
         req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repo");
         req.addPart("repoName", repoName);
         req.addPart("branch", branch);
+        req.addPart("type", "git");
         req.addPart("url", url);
         req.addPart("creds", creds);
         req.jwt(token);

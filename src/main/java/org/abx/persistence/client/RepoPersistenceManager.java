@@ -44,7 +44,8 @@ public class RepoPersistenceManager {
     }
 
     @Transactional
-    public RepoDetails createProjectRepoIfNotFound(String username, long projectId, final String name, String url, String branch, String creds) {
+    public RepoDetails createProjectRepoIfNotFound(String username, long projectId, final String name,
+                                                   String type,String url, String branch, String creds) {
         if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
                 (username, projectId)) {
             return null;
@@ -59,6 +60,7 @@ public class RepoPersistenceManager {
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
+            repoDetails.setRepoType(type);
             repoDetails = repoDetailsRepository.save(repoDetails);
 
             ProjectRepo projectRepo = new ProjectRepo();
@@ -70,6 +72,7 @@ public class RepoPersistenceManager {
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
+            repoDetails.setRepoType(type);
             repoDetails = repoDetailsRepository.save(repoDetails);
 
         }
