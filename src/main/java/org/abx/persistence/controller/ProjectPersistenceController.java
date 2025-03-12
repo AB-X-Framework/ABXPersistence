@@ -53,7 +53,7 @@ public class ProjectPersistenceController {
             repoPersistenceManager.createProjectRepoIfNotFound(
                     username,id,
                     repo.getString("name"),
-                    repo.getString("type"),
+                    repo.getString("engine"),
                     repo.getString("url"),
                     repo.getString("branch"),
                     repo.getString("creds")
