@@ -94,12 +94,12 @@ public class ProjectPersistenceController {
     public String addRepo(HttpServletRequest request,
                           @PathVariable long projectId,
                           @RequestParam String repoName,
-                          @RequestParam String type,
+                          @RequestParam String engine,
                           @RequestParam String url,
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, repoName, type, url, branch, creds);
+        RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, repoName, engine, url, branch, creds);
         return repoDetails.getRepoName();
     }
 

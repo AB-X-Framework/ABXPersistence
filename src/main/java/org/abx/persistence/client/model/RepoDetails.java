@@ -11,7 +11,7 @@ public class RepoDetails {
     private Long repoId;
 
     @Column(length = 10)
-    private String repoType;
+    private String engine;
 
     @Column(length = 100)
     private String repoName;
@@ -70,11 +70,11 @@ public class RepoDetails {
         this.repoId = repoId;
     }
 
-    public String getRepoType() {
-        return repoType;
+    public String getEngine() {
+        return engine;
     }
 
-    public void setRepoType(String repoType) {
-        this.repoType = repoType;
+    public void setEngine(String repoType) {
+        this.engine = repoType;
     }
 }

@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-import static org.abx.persistence.client.RepoPersistenceManager.Project;
-
 @Component
 public class ProjectPersistenceManager {
 
@@ -82,7 +80,7 @@ public class ProjectPersistenceManager {
             JSONObject jsonRepo = new JSONObject();
             jsonRepos.put(jsonRepo);
             jsonRepo.put("repoName",repo.getRepoName());
-            jsonRepo.put("repoType",repo.getRepoType());
+            jsonRepo.put("repoType",repo.getEngine());
         }
         return jsonProjectDetails;
     }

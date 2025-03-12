@@ -60,7 +60,7 @@ public class RepoPersistenceManager {
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
-            repoDetails.setRepoType(type);
+            repoDetails.setEngine(type);
             repoDetails = repoDetailsRepository.save(repoDetails);
 
             ProjectRepo projectRepo = new ProjectRepo();
@@ -72,7 +72,7 @@ public class RepoPersistenceManager {
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
-            repoDetails.setRepoType(type);
+            repoDetails.setEngine(type);
             repoDetails = repoDetailsRepository.save(repoDetails);
 
         }
