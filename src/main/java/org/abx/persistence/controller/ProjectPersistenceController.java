@@ -72,13 +72,12 @@ public class ProjectPersistenceController {
     }
 
     @Secured("Persistence")
-    @PutMapping(value = "/projects/{projectId}")
-    public boolean updateProject(HttpServletRequest request,
+    @PatchMapping(value = "/projects/{projectId}/name")
+    public boolean updateProjectName(HttpServletRequest request,
                                  @PathVariable long projectId,
-                                 @RequestParam String projectData) {
+                                 @RequestParam String projectName) {
         String username = request.getUserPrincipal().getName();
-        JSONObject jsonProject = new JSONObject(projectData);
-        return projectPersistenceManager.updateProject(username, projectId, jsonProject.getString("name"));
+        return projectPersistenceManager.updateProjectName(username, projectId, projectName);
     }
 
     @Secured("Persistence")

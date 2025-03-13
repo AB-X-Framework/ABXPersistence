@@ -113,8 +113,7 @@ public class ProjectPersistenceManager {
     }
 
     @Transactional
-    public boolean updateProject(final String username, long projectId, String projectName) {
-        UserDetails userDetails = userPersistenceManager.createOrFind(username);
+    public boolean updateProjectName(final String username, long projectId, String projectName) {
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
                 findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
         if (projectEnrollment == null){
