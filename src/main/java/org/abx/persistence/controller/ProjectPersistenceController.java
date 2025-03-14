@@ -63,7 +63,7 @@ public class ProjectPersistenceController {
     }
 
     @Secured("Persistence")
-    @GetMapping(value = "/projects/{projectId}")
+    @GetMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getProject(HttpServletRequest request,
                              @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
