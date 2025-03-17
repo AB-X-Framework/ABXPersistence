@@ -32,7 +32,6 @@ public class ProjectPersistenceController {
     private RepoPersistenceManager repoPersistenceManager;
 
 
-
     @Secured("Persistence")
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public String projectEnrollments(HttpServletRequest request) {
@@ -46,12 +45,12 @@ public class ProjectPersistenceController {
                            @RequestParam String projectData) {
         String username = request.getUserPrincipal().getName();
         JSONObject jsonProject = new JSONObject(projectData);
-        long id= projectPersistenceManager.addProject(username, jsonProject.getString("name"));
+        long id = projectPersistenceManager.addProject(username, jsonProject.getString("name"));
         JSONArray repos = jsonProject.getJSONArray("repos");
         for (int i = 0; i < repos.length(); ++i) {
             JSONObject repo = repos.getJSONObject(i);
             repoPersistenceManager.createProjectRepoIfNotFound(
-                    username,id,
+                    username, id,
                     repo.getString("name"),
                     repo.getString("engine"),
                     repo.getString("url"),
@@ -74,8 +73,8 @@ public class ProjectPersistenceController {
     @Secured("Persistence")
     @PatchMapping(value = "/projects/{projectId}/name")
     public boolean updateProjectName(HttpServletRequest request,
-                                 @PathVariable long projectId,
-                                 @RequestParam String projectName) {
+                                     @PathVariable long projectId,
+                                     @RequestParam String projectName) {
         String username = request.getUserPrincipal().getName();
         return projectPersistenceManager.updateProjectName(username, projectId, projectName);
     }
@@ -99,6 +98,25 @@ public class ProjectPersistenceController {
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
         RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, repoName, engine, url, branch, creds);
+        return repoDetails.getRepoName();
+    }
+
+
+    @Secured("Persistence")
+    @PatchMapping(value = "/projects/{projectId}/repo")
+    public String updateRepo(HttpServletRequest request,
+                             @PathVariable long projectId,
+                             @RequestParam String repoName,
+                             @RequestParam String newName,
+                             @RequestParam String engine,
+                             @RequestParam String url,
+                             @RequestParam String branch,
+                             @RequestParam String creds) {
+        String username = request.getUserPrincipal().getName();
+        if (!repoName.equals(newName)) {
+            repoPersistenceManager.deleteRepo(Project,username,projectId,repoName);
+        }
+        RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
         return repoDetails.getRepoName();
     }
 
