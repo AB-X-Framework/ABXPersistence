@@ -121,7 +121,7 @@ public class ProjectPersistenceController {
     }
 
     @Secured("Persistence")
-    @DeleteMapping(value = "/projects/{projectId}/repo/{repoName}")
+    @DeleteMapping(value = "/projects/{projectId}/repos/{repoName}")
     public boolean deleteRepo(HttpServletRequest request,
                               @PathVariable long projectId,
                               @PathVariable String repoName) {
