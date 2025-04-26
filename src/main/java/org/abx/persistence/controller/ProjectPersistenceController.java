@@ -89,7 +89,7 @@ public class ProjectPersistenceController {
 
     @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/repo")
-    public String addRepo(HttpServletRequest request,
+    public boolean addRepo(HttpServletRequest request,
                           @PathVariable long projectId,
                           @RequestParam String repoName,
                           @RequestParam String engine,
@@ -98,7 +98,7 @@ public class ProjectPersistenceController {
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
         RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, repoName, engine, url, branch, creds);
-        return repoDetails.getRepoName();
+        return repoDetails != null;
     }
 
 
