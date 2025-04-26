@@ -51,7 +51,7 @@ public class ProjectPersistenceController {
             JSONObject repo = repos.getJSONObject(i);
             repoPersistenceManager.createProjectRepoIfNotFound(
                     username, id,
-                    repo.getString("name"),
+                    repo.getString("repoName"),
                     repo.getString("engine"),
                     repo.getString("url"),
                     repo.getString("branch"),
