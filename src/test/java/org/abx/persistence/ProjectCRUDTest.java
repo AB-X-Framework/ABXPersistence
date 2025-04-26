@@ -66,7 +66,7 @@ class ProjectCRUDTest {
         req.addPart("creds", creds);
         req.jwt(token);
         resp = servicesClient.process(req);
-        Assertions.assertEquals(repoName, resp.asString());
+        Assertions.assertTrue(resp.asBoolean());
 
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
@@ -88,7 +88,7 @@ class ProjectCRUDTest {
         req.addPart("creds", creds);
         req.jwt(token);
         resp = servicesClient.process(req);
-        Assertions.assertEquals(repoName, resp.asString());
+        Assertions.assertTrue(resp.asBoolean());
 
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
@@ -103,7 +103,7 @@ class ProjectCRUDTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
 
-        req = servicesClient.delete("persistence", "/persistence/projects/" + projectId + "/repo/"+repoName);
+        req = servicesClient.delete("persistence", "/persistence/projects/" + projectId + "/repos/"+repoName);
         req.jwt(token);
         resp = servicesClient.process(req);
         boolean status = resp.asBoolean();

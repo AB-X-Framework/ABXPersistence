@@ -104,7 +104,7 @@ public class ProjectPersistenceController {
 
     @Secured("Persistence")
     @PatchMapping(value = "/projects/{projectId}/repo")
-    public String updateRepo(HttpServletRequest request,
+    public boolean updateRepo(HttpServletRequest request,
                              @PathVariable long projectId,
                              @RequestParam String repoName,
                              @RequestParam String newName,
@@ -117,7 +117,7 @@ public class ProjectPersistenceController {
             repoPersistenceManager.deleteRepo(Project,username,projectId,repoName);
         }
         RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
-        return repoDetails.getRepoName();
+        return repoDetails != null;
     }
 
     @Secured("Persistence")
