@@ -120,11 +120,12 @@ public class ProjectPersistenceController {
                 return ErrorMessage.errorString("Repo name already exists");
             }
             repoPersistenceManager.deleteRepo(Project, username, projectId, repoName);
+
         }
         return createRepoGetStatus(projectId, newName, engine, url, branch, creds, username);
     }
 
-    private String createRepoGetStatus(@PathVariable long projectId, @RequestParam String newName, @RequestParam String engine, @RequestParam String url, @RequestParam String branch, @RequestParam String creds, String username) {
+    private String createRepoGetStatus(long projectId,  String newName,  String engine,  String url,  String branch,  String creds, String username) {
         try {
             boolean created = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
             if (!created) {

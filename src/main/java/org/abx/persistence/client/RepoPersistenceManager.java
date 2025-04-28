@@ -61,19 +61,22 @@ public class RepoPersistenceManager {
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
             repoDetails.setEngine(type);
-            repoDetails = repoDetailsRepository.save(repoDetails);
+            repoDetailsRepository.save(repoDetails);
+            repoDetailsRepository.flush();
 
             ProjectRepo projectRepo = new ProjectRepo();
             projectRepo.setProjectRepoId(repoId);
             projectRepo.setProjectDetails(projectDetails);
             projectRepo.setRepoDetails(repoDetails);
             projectRepoRepository.save(projectRepo);
+            projectEnrollmentRepository.flush();
         } else {
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
             repoDetails.setEngine(type);
             repoDetailsRepository.save(repoDetails);
+            repoDetailsRepository.flush();
         }
         return true;
     }
