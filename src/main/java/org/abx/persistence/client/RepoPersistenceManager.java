@@ -44,11 +44,11 @@ public class RepoPersistenceManager {
     }
 
     @Transactional
-    public RepoDetails createProjectRepoIfNotFound(String username, long projectId, final String name,
+    public boolean createProjectRepoIfNotFound(String username, long projectId, final String name,
                                                    String type,String url, String branch, String creds) {
         if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
                 (username, projectId)) {
-            return null;
+            return false;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         long repoId = repoId(Project, projectId, name);
@@ -73,10 +73,9 @@ public class RepoPersistenceManager {
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
             repoDetails.setEngine(type);
-            repoDetails = repoDetailsRepository.save(repoDetails);
-
+            repoDetailsRepository.save(repoDetails);
         }
-        return repoDetails;
+        return true;
     }
 
     @Transactional

@@ -117,22 +117,27 @@ public class ProjectPersistenceController {
         String username = request.getUserPrincipal().getName();
         if (!repoName.equals(newName)) {
             if (projectPersistenceManager.getRepos(username, projectId).contains(newName)) {
-                return ErrorMessage.errorString("Repo already exists");
+                return ErrorMessage.errorString("Repo name already exists");
             }
-            repoPersistenceManager.deleteRepo(Project,username,projectId,repoName);
+            repoPersistenceManager.deleteRepo(Project, username, projectId, repoName);
         }
         return createRepoGetStatus(projectId, newName, engine, url, branch, creds, username);
     }
 
     private String createRepoGetStatus(@PathVariable long projectId, @RequestParam String newName, @RequestParam String engine, @RequestParam String url, @RequestParam String branch, @RequestParam String creds, String username) {
-        RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
-        boolean error = repoDetails == null;
-        if (error){
-            return ErrorMessage.errorString("Cannot create repo");
+        try {
+            boolean created = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
+            if (!created) {
+                return ErrorMessage.errorString("Cannot create repo");
+            }
+            JSONObject status = new JSONObject();
+            status.put("error", false);
+            return status.toString();
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw e;
         }
-        JSONObject status = new JSONObject();
-        status.put("error",false);
-        return status.toString();
+
     }
 
     @Secured("Persistence")
