@@ -105,10 +105,10 @@ public class ProjectPersistenceController {
 
 
     @Secured("Persistence")
-    @PatchMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String updateRepo(HttpServletRequest request,
                              @PathVariable long projectId,
-                             @RequestParam String repoName,
+                             @PathVariable String repoName,
                              @RequestParam String newName,
                              @RequestParam String engine,
                              @RequestParam String url,

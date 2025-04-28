@@ -85,8 +85,7 @@ class ProjectCRUDTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
         branch = "newBranch";
-        req = servicesClient.patch("persistence", "/persistence/projects/" + projectId + "/repos");
-        req.addPart("repoName", repoName);
+        req = servicesClient.patch("persistence", "/persistence/projects/" + projectId + "/repos/"+repoName);
         req.addPart("newName", repoName);
         req.addPart("branch", branch);
         req.addPart("engine", "git");
