@@ -116,7 +116,7 @@ public class ProjectPersistenceController {
                              @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
         if (!repoName.equals(newName)) {
-            if (projectPersistenceManager.getRepos(username, projectId).contains(repoName)) {
+            if (projectPersistenceManager.getRepos(username, projectId).contains(newName)) {
                 return ErrorMessage.errorString("Repo already exists");
             }
             repoPersistenceManager.deleteRepo(Project,username,projectId,repoName);
