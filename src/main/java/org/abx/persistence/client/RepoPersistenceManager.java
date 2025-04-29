@@ -19,7 +19,6 @@ public class RepoPersistenceManager {
     private ProjectEnrollmentRepository projectEnrollmentRepository;
 
 
-
     @Autowired
     private ExecDetailsRepository execDetailsRepository;
 
@@ -40,12 +39,12 @@ public class RepoPersistenceManager {
 
 
     public static long repoId(String type, long projectId, String repoName) {
-        return (type +"/"+projectId + "/" + repoName).hashCode();
+        return (type + "/" + projectId + "/" + repoName).hashCode();
     }
 
     @Transactional
     public boolean createProjectRepoIfNotFound(String username, long projectId, final String name,
-                                                   String type,String url, String branch, String creds) {
+                                               String type, String url, String branch, String creds) {
         if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
                 (username, projectId)) {
             return false;
@@ -62,21 +61,18 @@ public class RepoPersistenceManager {
             repoDetails.setCreds(creds);
             repoDetails.setEngine(type);
             repoDetailsRepository.save(repoDetails);
-            repoDetailsRepository.flush();
 
             ProjectRepo projectRepo = new ProjectRepo();
             projectRepo.setProjectRepoId(repoId);
             projectRepo.setProjectDetails(projectDetails);
             projectRepo.setRepoDetails(repoDetails);
             projectRepoRepository.save(projectRepo);
-            projectEnrollmentRepository.flush();
         } else {
             repoDetails.setUrl(url);
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
             repoDetails.setEngine(type);
             repoDetailsRepository.save(repoDetails);
-            repoDetailsRepository.flush();
         }
         return true;
     }
@@ -88,6 +84,11 @@ public class RepoPersistenceManager {
             return false;
         }
         long repoId = repoId(type, projectId, name);
+        ProjectRepo projectRepo = projectRepoRepository.findByProjectRepoId(repoId);
+        if (projectRepo == null) {
+            return false;
+        }
+        projectRepoRepository.delete(projectRepo);
         RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
         if (repoDetails == null) {
             return false;
