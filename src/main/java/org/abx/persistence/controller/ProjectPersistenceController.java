@@ -60,13 +60,21 @@ public class ProjectPersistenceController {
         }
         return id;
     }
-
     @Secured("Persistence")
-    @GetMapping(value = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getProject(HttpServletRequest request,
+    @GetMapping(value = "/projects/{projectId}/name", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getProjectName(HttpServletRequest request,
                              @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
-        JSONObject repoDetails = projectPersistenceManager.getProjectDetails(username, projectId);
+        JSONObject repoDetails = projectPersistenceManager.getProjectName(username, projectId);
+        return repoDetails.toString();
+    }
+
+    @Secured("Persistence")
+    @GetMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getProjectRepos(HttpServletRequest request,
+                             @PathVariable long projectId) {
+        String username = request.getUserPrincipal().getName();
+        JSONObject repoDetails = projectPersistenceManager.getProjectRepos(username, projectId);
         return repoDetails.toString();
     }
 
@@ -80,6 +88,16 @@ public class ProjectPersistenceController {
     }
 
     @Secured("Persistence")
+    @GetMapping(value = "/projects/{projectId}/enrollment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getEnrollment(HttpServletRequest request,
+                             @PathVariable long projectId) {
+        String username = request.getUserPrincipal().getName();
+        JSONObject repoDetails = projectPersistenceManager.getProjectName(username, projectId);
+        return repoDetails.toString();
+    }
+
+
+    @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}")
     public boolean deleteProject(HttpServletRequest request,
                                  @PathVariable long projectId) {
@@ -88,7 +106,7 @@ public class ProjectPersistenceController {
     }
 
     @Secured("Persistence")
-    @PostMapping(value = "/projects/{projectId}/repo")
+    @PostMapping(value = "/projects/{projectId}/repos")
     public boolean addRepo(HttpServletRequest request,
                           @PathVariable long projectId,
                           @RequestParam String repoName,
@@ -129,26 +147,7 @@ public class ProjectPersistenceController {
         return repoPersistenceManager.deleteRepo(Project, username, projectId, repoName);
     }
 
-    @Secured("Persistence")
-    @GetMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String repos(HttpServletRequest request) {
-        String username = request.getUserPrincipal().getName();
-        JSONArray jsonRepos = new JSONArray();
-        UserDetails userDetails = userPersistenceManager.createUserIfNotFound(username);
-        for (ProjectEnrollment projectDetails : userDetails.getProjectEnrollments()) {
-            for (ProjectRepo projectRepo : projectDetails.getProjectDetails().getProjectRepos()) {
-                RepoDetails repoDetails = projectRepo.getRepoDetails();
-                JSONObject jsonRepo = new JSONObject();
-                jsonRepos.put(jsonRepo);
-                jsonRepo.put("id", repoDetails.getRepoId());
-                jsonRepo.put("repoName", repoDetails.getRepoName());
-                jsonRepo.put("branch", repoDetails.getBranch());
-                jsonRepo.put("url", repoDetails.getUrl());
-                jsonRepo.put("creds", repoDetails.getCreds());
-            }
-        }
-        return jsonRepos.toString();
-    }
+
 
 
     @Secured("Persistence")

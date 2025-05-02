@@ -61,9 +61,8 @@ public class ProjectPersistenceManager {
         }
         return jsonEnrollments;
     }
-
     @Transactional
-    public JSONObject getProjectDetails(String username, final long projectId) {
+    public JSONObject getProjectName(String username, final long projectId) {
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
                 findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
         if (projectEnrollment == null) {
@@ -73,6 +72,18 @@ public class ProjectPersistenceManager {
         ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
         jsonProjectDetails.put("projectName", projectDetails.getProjectName());
         jsonProjectDetails.put("projectId", projectId);
+        return jsonProjectDetails;
+    }
+
+    @Transactional
+    public JSONObject getProjectRepos(String username, final long projectId) {
+        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
+                findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
+        if (projectEnrollment == null) {
+            return null;
+        }
+        JSONObject jsonProjectDetails = new JSONObject();
+        ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
         JSONArray jsonRepos = new JSONArray();
         jsonProjectDetails.put("repos",jsonRepos);
         for (ProjectRepo projectRepo:projectDetails.getProjectRepos()){
@@ -81,6 +92,11 @@ public class ProjectPersistenceManager {
             jsonRepos.put(jsonRepo);
             jsonRepo.put("repoName",repo.getRepoName());
             jsonRepo.put("engine",repo.getEngine());
+            jsonRepo.put("id", repo.getRepoId());
+            jsonRepo.put("repoName", repo.getRepoName());
+            jsonRepo.put("branch", repo.getBranch());
+            jsonRepo.put("url", repo.getUrl());
+            jsonRepo.put("creds", repo.getCreds());
         }
         return jsonProjectDetails;
     }

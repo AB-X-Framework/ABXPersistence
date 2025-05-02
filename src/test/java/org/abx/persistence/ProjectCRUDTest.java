@@ -58,7 +58,7 @@ class ProjectCRUDTest {
         String branch = "main";
         String url = "git@github.com:AB-X-Framework/ABXPersistence.git";
         String creds = "{\"password\":\"123\"}";
-        req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repo");
+        req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repos");
         req.addPart("repoName", repoName);
         req.addPart("branch", branch);
         req.addPart("engine", "local");
@@ -71,7 +71,7 @@ class ProjectCRUDTest {
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
         resp = servicesClient.process(req);
-        JSONArray repos = resp.asJSONArray();
+        JSONArray repos = resp.asJSONObject().getJSONArray("repos");
         Assertions.assertEquals(1, repos.length());
 
         Assertions.assertEquals(repoName, repos.getJSONObject(0).getString("repoName"));
@@ -80,7 +80,7 @@ class ProjectCRUDTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
         branch = "newBranch";
-        req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repo");
+        req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repos");
         req.addPart("repoName", repoName);
         req.addPart("branch", branch);
         req.addPart("engine", "git");
@@ -93,7 +93,7 @@ class ProjectCRUDTest {
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
         resp = servicesClient.process(req);
-        repos = resp.asJSONArray();
+        repos = resp.asJSONObject().getJSONArray("repos");
         Assertions.assertEquals(1, repos.length());
 
         long repoId = repos.getJSONObject(0).getLong("id");
@@ -113,7 +113,7 @@ class ProjectCRUDTest {
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
         resp = servicesClient.process(req);
-        repos = resp.asJSONArray();
+        repos = resp.asJSONObject().getJSONArray("repos");
         Assertions.assertEquals(0, repos.length());
 
 
