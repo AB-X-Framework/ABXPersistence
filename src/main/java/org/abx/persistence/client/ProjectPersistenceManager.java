@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Component
 public class ProjectPersistenceManager {
@@ -99,6 +103,21 @@ public class ProjectPersistenceManager {
             jsonRepo.put("creds", repo.getCreds());
         }
         return jsonProjectDetails;
+    }
+
+    @Transactional
+    public Set<String> getRepos(String username, final long projectId) {
+        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
+                findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
+        if (projectEnrollment == null) {
+            return null;
+        }
+        Set<String> repos = new HashSet<>();
+        ProjectDetails projectDetails = projectEnrollment.getProjectDetails();
+        for (ProjectRepo projectRepo:projectDetails.getProjectRepos()){
+            repos.add(projectRepo.getRepoDetails().getRepoName());
+        }
+        return repos;
     }
 
 

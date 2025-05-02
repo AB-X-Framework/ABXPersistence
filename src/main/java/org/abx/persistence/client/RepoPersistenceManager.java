@@ -19,7 +19,6 @@ public class RepoPersistenceManager {
     private ProjectEnrollmentRepository projectEnrollmentRepository;
 
 
-
     @Autowired
     private ExecDetailsRepository execDetailsRepository;
 
@@ -40,15 +39,15 @@ public class RepoPersistenceManager {
 
 
     public static long repoId(String type, long projectId, String repoName) {
-        return (type +"/"+projectId + "/" + repoName).hashCode();
+        return (type + "/" + projectId + "/" + repoName).hashCode();
     }
 
     @Transactional
-    public RepoDetails createProjectRepoIfNotFound(String username, long projectId, final String name,
-                                                   String type,String url, String branch, String creds) {
+    public boolean createProjectRepoIfNotFound(String username, long projectId, final String name,
+                                               String type, String url, String branch, String creds) {
         if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
                 (username, projectId)) {
-            return null;
+            return false;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         long repoId = repoId(Project, projectId, name);
@@ -61,7 +60,7 @@ public class RepoPersistenceManager {
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
             repoDetails.setEngine(type);
-            repoDetails = repoDetailsRepository.save(repoDetails);
+            repoDetailsRepository.save(repoDetails);
 
             ProjectRepo projectRepo = new ProjectRepo();
             projectRepo.setProjectRepoId(repoId);
@@ -73,10 +72,9 @@ public class RepoPersistenceManager {
             repoDetails.setBranch(branch);
             repoDetails.setCreds(creds);
             repoDetails.setEngine(type);
-            repoDetails = repoDetailsRepository.save(repoDetails);
-
+            repoDetailsRepository.save(repoDetails);
         }
-        return repoDetails;
+        return true;
     }
 
     @Transactional
@@ -86,6 +84,11 @@ public class RepoPersistenceManager {
             return false;
         }
         long repoId = repoId(type, projectId, name);
+        ProjectRepo projectRepo = projectRepoRepository.findByProjectRepoId(repoId);
+        if (projectRepo == null) {
+            return false;
+        }
+        projectRepoRepository.delete(projectRepo);
         RepoDetails repoDetails = repoDetailsRepository.findByRepoId(repoId);
         if (repoDetails == null) {
             return false;
