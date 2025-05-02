@@ -66,7 +66,7 @@ class ProjectCRUDTest {
         req.addPart("creds", creds);
         req.jwt(token);
         resp = servicesClient.process(req);
-        Assertions.assertTrue(resp.asBoolean());
+        Assertions.assertFalse(resp.asJSONObject().getBoolean("error"));
 
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);

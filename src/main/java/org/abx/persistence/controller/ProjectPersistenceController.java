@@ -6,6 +6,7 @@ import org.abx.persistence.client.ProjectPersistenceManager;
 import org.abx.persistence.client.RepoPersistenceManager;
 import org.abx.persistence.client.UserPersistenceManager;
 import org.abx.persistence.client.model.*;
+import org.abx.spring.ErrorMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,8 +107,8 @@ public class ProjectPersistenceController {
     }
 
     @Secured("Persistence")
-    @PostMapping(value = "/projects/{projectId}/repos")
-    public boolean addRepo(HttpServletRequest request,
+    @PostMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String addRepo(HttpServletRequest request,
                           @PathVariable long projectId,
                           @RequestParam String repoName,
                           @RequestParam String engine,
@@ -115,15 +116,32 @@ public class ProjectPersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        return repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, repoName, engine, url, branch, creds);
+        if (projectPersistenceManager.getRepos(username, projectId).contains(repoName)) {
+            return ErrorMessage.errorString("Repo already exists");
+        }
+        return createRepoGetStatus(projectId, repoName, engine, url, branch, creds, username);
     }
 
+    private String createRepoGetStatus(long projectId,  String newName,  String engine,  String url,  String branch,  String creds, String username) {
+        try {
+            boolean created = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
+            if (!created) {
+                return ErrorMessage.errorString("Cannot create repo");
+            }
+            JSONObject status = new JSONObject();
+            status.put("error", false);
+            return status.toString();
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
     @Secured("Persistence")
-    @PatchMapping(value = "/projects/{projectId}/repo")
-    public boolean updateRepo(HttpServletRequest request,
+    @PatchMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String updateRepo(HttpServletRequest request,
                              @PathVariable long projectId,
-                             @RequestParam String repoName,
+                             @PathVariable String repoName,
                              @RequestParam String newName,
                              @RequestParam String engine,
                              @RequestParam String url,
@@ -131,9 +149,12 @@ public class ProjectPersistenceController {
                              @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
         if (!repoName.equals(newName)) {
-            repoPersistenceManager.deleteRepo(Project,username,projectId,repoName);
+            if (projectPersistenceManager.getRepos(username, projectId).contains(newName)) {
+                return ErrorMessage.errorString("Repo name already exists");
+            }
+            repoPersistenceManager.deleteRepo(Project, username, projectId, repoName);
         }
-        return repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
+        return createRepoGetStatus(projectId, newName, engine, url, branch, creds, username);
     }
 
     @Secured("Persistence")
