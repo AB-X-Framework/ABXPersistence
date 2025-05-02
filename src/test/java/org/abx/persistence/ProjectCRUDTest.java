@@ -54,7 +54,9 @@ class ProjectCRUDTest {
                 servicesClient.get("persistence", "/persistence/projects").jwt(token)
         ).asJSONArray().getJSONObject(0).getInt("projectId");
 
+
         String repoName = "myRepo";
+        servicesClient.delete("persistence", "/persistence/projects/" + projectId + "/repos/" + repoName).jwt(token).process().asString();
         String branch = "main";
         String url = "git@github.com:AB-X-Framework/ABXPersistence.git";
         String creds = "{\"password\":\"123\"}";
@@ -66,6 +68,7 @@ class ProjectCRUDTest {
         req.addPart("creds", creds);
         req.jwt(token);
         resp = servicesClient.process(req);
+        System.out.println(resp.asString());
         Assertions.assertFalse(resp.asJSONObject().getBoolean("error"));
 
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
@@ -80,15 +83,15 @@ class ProjectCRUDTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
         branch = "newBranch";
-        req = servicesClient.post("persistence", "/persistence/projects/" + projectId + "/repos");
-        req.addPart("repoName", repoName);
+        req = servicesClient.patch("persistence", "/persistence/projects/" + projectId + "/repos/" + repoName);
+        req.addPart("newName", repoName);
         req.addPart("branch", branch);
         req.addPart("engine", "git");
         req.addPart("url", url);
         req.addPart("creds", creds);
         req.jwt(token);
         resp = servicesClient.process(req);
-        Assertions.assertTrue(resp.asBoolean());
+        Assertions.assertFalse(resp.asJSONObject().getBoolean("error"));
 
         req = servicesClient.get("persistence", "/persistence/projects/" + projectId + "/repos");
         req.jwt(token);
@@ -103,7 +106,7 @@ class ProjectCRUDTest {
         Assertions.assertEquals(creds, repos.getJSONObject(0).getString("creds"));
 
 
-        req = servicesClient.delete("persistence", "/persistence/projects/" + projectId + "/repos/"+repoName);
+        req = servicesClient.delete("persistence", "/persistence/projects/" + projectId + "/repos/" + repoName);
         req.jwt(token);
         resp = servicesClient.process(req);
         boolean status = resp.asBoolean();
