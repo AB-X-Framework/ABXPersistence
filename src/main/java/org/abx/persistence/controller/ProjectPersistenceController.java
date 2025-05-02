@@ -115,8 +115,7 @@ public class ProjectPersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, repoName, engine, url, branch, creds);
-        return repoDetails != null;
+        return repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, repoName, engine, url, branch, creds);
     }
 
 
@@ -134,8 +133,7 @@ public class ProjectPersistenceController {
         if (!repoName.equals(newName)) {
             repoPersistenceManager.deleteRepo(Project,username,projectId,repoName);
         }
-        RepoDetails repoDetails = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
-        return repoDetails != null;
+        return repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
     }
 
     @Secured("Persistence")
