@@ -33,6 +33,11 @@ public class ProjectPersistenceController {
     @Autowired
     private RepoPersistenceManager repoPersistenceManager;
 
+    /**
+     * Gets all user enrollment
+     * @param request THe full HTTP Request
+     * @return THe user enrollment in JSON format of projectName, projectId
+     */
     @Secured("Persistence")
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public String projectEnrollments(HttpServletRequest request) {
@@ -40,6 +45,12 @@ public class ProjectPersistenceController {
         return projectPersistenceManager.projectEnrollments(username).toString();
     }
 
+    /**
+     * Creates a new project
+     * @param request THe full HTTP Request
+     * @param projectData THe project data in JSON format
+     * @return The project id
+     */
     @Secured("Persistence")
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public Long addProject(HttpServletRequest request,
@@ -62,6 +73,12 @@ public class ProjectPersistenceController {
         return id;
     }
 
+    /**
+     * Gets project name from id
+     * @param request THe full HTTP Request
+     * @param projectId The project id
+     * @return Project name
+     */
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/name", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getProjectName(HttpServletRequest request,
