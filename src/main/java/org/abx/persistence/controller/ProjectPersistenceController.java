@@ -248,6 +248,12 @@ public class ProjectPersistenceController {
         return projectPersistenceManager.createSimSpecs(username, projectId, simName, folder, path, type).getSimId();
     }
 
+    /**
+     * Drops all simulations of a project id
+     * @param request The full HTTP Request
+     * @param projectId The project id
+     * @return true if all simulations were dropped
+     */
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSims(HttpServletRequest request,
@@ -256,6 +262,11 @@ public class ProjectPersistenceController {
         return projectPersistenceManager.dropSims(username, projectId);
     }
 
+    /**
+     * Gets all simulation from a user
+     * @param request The full HTTP Request
+     * @return A JSON Array of all simulation
+     */
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public String sims(HttpServletRequest request) {
@@ -276,7 +287,13 @@ public class ProjectPersistenceController {
         return jsonRepos.toString();
     }
 
-
+    /**
+     * Drops a simulation id
+     * @param request The full HTTP Request
+     * @param projectId The project id
+     * @param simId The simulation id
+     * @return true if the simulation was successfully remove
+     */
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSim(HttpServletRequest request,
