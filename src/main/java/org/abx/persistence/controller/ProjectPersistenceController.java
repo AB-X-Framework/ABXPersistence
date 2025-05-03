@@ -209,6 +209,13 @@ public class ProjectPersistenceController {
         return createRepoGetStatus(projectId, newName, engine, url, branch, creds, username);
     }
 
+    /**
+     * Deletes a repo from a project
+     * @param request The full HTTP Request
+     * @param projectId The project id
+     * @param repoName The repo name
+     * @return true if the repo was deleted
+     */
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/repos/{repoName}")
     public boolean deleteRepo(HttpServletRequest request,
@@ -219,6 +226,16 @@ public class ProjectPersistenceController {
     }
 
 
+    /**
+     * Adds a new simulation to the project
+     * @param request  The full HTTP Request
+     * @param projectId The project id
+     * @param simName A simulation name
+     * @param folder The folder path
+     * @param path The initial script path inside the folder
+     * @param type The simulation type
+     * @return the id of the simulation
+     */
     @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/sim", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addSim(HttpServletRequest request,
