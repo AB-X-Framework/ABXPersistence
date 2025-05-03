@@ -7,9 +7,6 @@ public enum ProjectRole {
         return this == Owner;
     }
 
-    public boolean canDelete() {
-        return canChangeOwner();
-    }
 
     public boolean canRename() {
         return canChangeOwner();
@@ -18,12 +15,12 @@ public enum ProjectRole {
     /**
      * You cannot remove owner
      *
-     * @param other
-     * @return
+     * @param other The use to be removed
+     * @return True if the user can be removed
      */
-    public boolean canRemove(ProjectRole other) {
+    /*public boolean canRemove(ProjectRole other) {
         return this == Owner || (this == Admin && other != Owner);
-    }
+    }*/
 
     public boolean canAddRepo() {
         return this == Owner || this == Admin || this == User;
@@ -33,7 +30,11 @@ public enum ProjectRole {
         return canAddRepo();
     }
 
-    public boolean canRun() {
+    /*public boolean canRun() {
         return this == Owner || this == Admin || this == User || this == CI;
+    }*/
+
+    public boolean canSeeEnrollments() {
+        return this == Owner || this == Admin;
     }
 }

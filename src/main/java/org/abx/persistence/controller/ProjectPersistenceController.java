@@ -130,7 +130,7 @@ public class ProjectPersistenceController {
     public String getEnrollment(HttpServletRequest request,
                                 @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
-        JSONObject repoDetails = projectPersistenceManager.getProjectName(username, projectId);
+        JSONObject repoDetails = projectPersistenceManager.getEnrollment(username, projectId);
         return repoDetails.toString();
     }
 
@@ -258,14 +258,22 @@ public class ProjectPersistenceController {
      */
     @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/sim", produces = MediaType.APPLICATION_JSON_VALUE)
-    public long addSim(HttpServletRequest request,
+    public String addSim(HttpServletRequest request,
                        @PathVariable long projectId,
                        @RequestParam String simName,
                        @RequestParam String folder,
                        @RequestParam String path,
                        @RequestParam String type) {
         String username = request.getUserPrincipal().getName();
-        return projectPersistenceManager.createSimSpecs(username, projectId, simName, folder, path, type).getSimId();
+        try {
+            long simId = projectPersistenceManager.createSimSpecs(username, projectId, simName, folder, path, type);
+            JSONObject sim = new JSONObject();
+            sim.put("error", false);
+            sim.put("id", simId);
+            return sim.toString();
+        } catch (Exception e) {
+            return ErrorMessage.errorString(e.getMessage());
+        }
     }
 
     /**

@@ -63,13 +63,42 @@ public class ProjectPersistenceManager {
     }
 
     /**
+     * Gets user role and other enrollments if user can see them
+     * @param username The username
+     * @param projectId The project id
+     * @return The json with role and other enrollments if user can see them, null otherwise
+     */
+    @Transactional
+    public JSONObject getEnrollment(final String username, final long projectId) {
+        JSONObject jsonEnrollment = new JSONObject();
+        ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
+                findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
+        if (projectEnrollment == null) {
+            return null;
+        }
+        String role = projectEnrollment.getRole();
+        jsonEnrollment.put("role", role);
+        if (ProjectRole.valueOf(role).canSeeEnrollments()){
+            JSONArray jsonEnrollments = new JSONArray();
+            jsonEnrollment.put("enrollments", jsonEnrollments);
+            for (ProjectEnrollment pe: projectEnrollment.getProjectDetails().getEnrollment()){
+                JSONObject userEnrollment = new JSONObject();
+                userEnrollment.put("username", pe.getUserDetails().getUsername());
+                userEnrollment.put("projectId", pe.getRole());
+
+            }
+        }
+        return jsonEnrollment;
+    }
+
+    /**
      * The project name from project id if user can see it
      * @param username The username
      * @param projectId The project id
      * @return A Json with project name if user can see it, otherwise null
      */
     @Transactional
-    public JSONObject getProjectName(String username, final long projectId) {
+    public JSONObject getProjectName(final String username, final long projectId) {
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
                 findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
         if (projectEnrollment == null) {
@@ -198,11 +227,23 @@ public class ProjectPersistenceManager {
     }
 
 
+    /**
+     * Adds a simulation if enrollment allows to
+     * @param username The username
+     * @param projectId The project id
+     * @param simName A new simulation name
+     * @param folder The resources folder path
+     * @param path The init script from the folder path
+     * @param type The simulation type
+     * @return The simulation id
+     */
     @Transactional
-    public SimSpecs createSimSpecs(String username, long projectId, String simName, String folder, String path, String type) {
-        if (!projectEnrollmentRepository.existsByUserDetailsUsernameAndProjectDetailsProjectId
-                (username, projectId)) {
-            return null;
+    public long createSimSpecs(String username, long projectId, String simName,
+                               String folder, String path, String type)throws Exception {
+        ProjectEnrollment pe  =
+                projectEnrollmentRepository.findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
+        if (pe == null || !ProjectRole.valueOf(pe.getRole()).canAddSim()) {
+           throw new Exception("User do not have enought permissions to add simulation");
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
         SimSpecs specs = new SimSpecs();
@@ -212,7 +253,7 @@ public class ProjectPersistenceManager {
         specs.setPath(path);
         specs.setType(type);
         simSpecsRepository.save(specs);
-        return specs;
+        return specs.getSimId();
     }
 
     @Transactional
