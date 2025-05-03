@@ -119,6 +119,12 @@ public class ProjectPersistenceController {
         return projectPersistenceManager.updateProjectName(username, projectId, projectName);
     }
 
+    /**
+     * Gets user enrollment status of enrollment of other users if allowed to see them
+     * @param request The full HTTP Request
+     * @param projectId The project Id
+     * @return A JSON object with project enrollments
+     */
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/enrollment", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getEnrollment(HttpServletRequest request,

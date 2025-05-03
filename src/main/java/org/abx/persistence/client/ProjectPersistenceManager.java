@@ -61,6 +61,13 @@ public class ProjectPersistenceManager {
         }
         return jsonEnrollments;
     }
+
+    /**
+     * The project name from project id if user can see it
+     * @param username The username
+     * @param projectId The project id
+     * @return A Json with project name if user can see it, otherwise null
+     */
     @Transactional
     public JSONObject getProjectName(String username, final long projectId) {
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
