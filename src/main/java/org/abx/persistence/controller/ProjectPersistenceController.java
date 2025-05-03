@@ -1,11 +1,12 @@
 package org.abx.persistence.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.abx.persistence.client.DashboardPersistenceManager;
 import org.abx.persistence.client.ProjectPersistenceManager;
 import org.abx.persistence.client.RepoPersistenceManager;
 import org.abx.persistence.client.UserPersistenceManager;
-import org.abx.persistence.client.model.*;
+import org.abx.persistence.client.model.ProjectEnrollment;
+import org.abx.persistence.client.model.SimSpecs;
+import org.abx.persistence.client.model.UserDetails;
 import org.abx.spring.ErrorMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,7 +32,6 @@ public class ProjectPersistenceController {
 
     @Autowired
     private RepoPersistenceManager repoPersistenceManager;
-
 
     @Secured("Persistence")
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,10 +61,11 @@ public class ProjectPersistenceController {
         }
         return id;
     }
+
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/name", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getProjectName(HttpServletRequest request,
-                             @PathVariable long projectId) {
+                                 @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
         JSONObject repoDetails = projectPersistenceManager.getProjectName(username, projectId);
         return repoDetails.toString();
@@ -73,7 +74,7 @@ public class ProjectPersistenceController {
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getProjectRepos(HttpServletRequest request,
-                             @PathVariable long projectId) {
+                                  @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
         JSONObject repoDetails = projectPersistenceManager.getProjectRepos(username, projectId);
         return repoDetails.toString();
@@ -91,7 +92,7 @@ public class ProjectPersistenceController {
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/enrollment", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getEnrollment(HttpServletRequest request,
-                             @PathVariable long projectId) {
+                                @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
         JSONObject repoDetails = projectPersistenceManager.getProjectName(username, projectId);
         return repoDetails.toString();
@@ -122,19 +123,15 @@ public class ProjectPersistenceController {
         return createRepoGetStatus(projectId, repoName, engine, url, branch, creds, username);
     }
 
-    private String createRepoGetStatus(long projectId,  String newName,  String engine,  String url,  String branch,  String creds, String username) {
-        try {
-            boolean created = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
-            if (!created) {
-                return ErrorMessage.errorString("Cannot create repo");
-            }
-            JSONObject status = new JSONObject();
-            status.put("error", false);
-            return status.toString();
-        } catch (Throwable e) {
-            e.printStackTrace();
-            throw e;
+    private String createRepoGetStatus(long projectId, String newName, String engine, String url,
+                                       String branch, String creds, String username) {
+        boolean created = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
+        if (!created) {
+            return ErrorMessage.errorString("Cannot create repo");
         }
+        JSONObject status = new JSONObject();
+        status.put("error", false);
+        return status.toString();
     }
 
     @Secured("Persistence")
@@ -167,8 +164,6 @@ public class ProjectPersistenceController {
     }
 
 
-
-
     @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/sim", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addSim(HttpServletRequest request,
@@ -176,7 +171,7 @@ public class ProjectPersistenceController {
                        @RequestParam String simName,
                        @RequestParam String folder,
                        @RequestParam String path,
-                       @RequestParam String type) throws Exception {
+                       @RequestParam String type) {
         String username = request.getUserPrincipal().getName();
         return projectPersistenceManager.createSimSpecs(username, projectId, simName, folder, path, type).getSimId();
     }
@@ -184,7 +179,7 @@ public class ProjectPersistenceController {
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSims(HttpServletRequest request,
-                            @RequestParam long projectId) throws Exception {
+                            @RequestParam long projectId) {
         String username = request.getUserPrincipal().getName();
         return projectPersistenceManager.dropSims(username, projectId);
     }
@@ -214,7 +209,7 @@ public class ProjectPersistenceController {
     @DeleteMapping(value = "/projects/{projectId}/sim/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean dropSim(HttpServletRequest request,
                            @PathVariable long projectId,
-                           @PathVariable long simId) throws Exception {
+                           @PathVariable long simId) {
         String username = request.getUserPrincipal().getName();
         return projectPersistenceManager.dropSim(username, projectId, simId);
     }
@@ -227,7 +222,7 @@ public class ProjectPersistenceController {
                              @RequestParam String simName,
                              @RequestParam String folder,
                              @RequestParam String path,
-                             @RequestParam String type) throws Exception {
+                             @RequestParam String type) {
         String username = request.getUserPrincipal().getName();
         return projectPersistenceManager.updateSim(username, projectId, simId, simName, folder, path, type);
     }
@@ -235,7 +230,7 @@ public class ProjectPersistenceController {
     @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/sim/{simId}/exec", produces = MediaType.APPLICATION_JSON_VALUE)
     public long addExec(HttpServletRequest request,
-                        @PathVariable long projectId, @PathVariable long simId) throws Exception {
+                        @PathVariable long projectId, @PathVariable long simId) {
         String username = request.getUserPrincipal().getName();
         long execId = projectPersistenceManager.addExec(username, projectId, simId);
         if (execId == -1) {
