@@ -87,7 +87,12 @@ public class ProjectPersistenceController {
         JSONObject repoDetails = projectPersistenceManager.getProjectName(username, projectId);
         return repoDetails.toString();
     }
-
+    /**
+     * Gets project repos from id
+     * @param request THe full HTTP Request
+     * @param projectId The project id
+     * @return Project repos in JSON format
+     */
     @Secured("Persistence")
     @GetMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getProjectRepos(HttpServletRequest request,
@@ -97,6 +102,12 @@ public class ProjectPersistenceController {
         return repoDetails.toString();
     }
 
+    /**
+     * Updates project name from id
+     * @param request THe full HTTP Request
+     * @param projectId The project id
+     * @return if project was updated
+     */
     @Secured("Persistence")
     @PatchMapping(value = "/projects/{projectId}/name")
     public boolean updateProjectName(HttpServletRequest request,
@@ -115,7 +126,12 @@ public class ProjectPersistenceController {
         return repoDetails.toString();
     }
 
-
+    /**
+     * Deletes a project with give id
+     * @param request The full HTTP Request
+     * @param projectId The project id
+     * @return If project was deleted
+     */
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}")
     public boolean deleteProject(HttpServletRequest request,
@@ -124,6 +140,17 @@ public class ProjectPersistenceController {
         return projectPersistenceManager.deleteProject(username, projectId);
     }
 
+    /**
+     * Adds a repo from project id
+     * @param request The full HTTP Request
+     * @param projectId  The project id
+     * @param repoName The repo name
+     * @param engine The repo engine
+     * @param url The repo url
+     * @param branch  The repo branch
+     * @param creds  The repo creds
+     * @return A json with error: true if there was a failure
+     */
     @Secured("Persistence")
     @PostMapping(value = "/projects/{projectId}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
     public String addRepo(HttpServletRequest request,
@@ -150,7 +177,18 @@ public class ProjectPersistenceController {
         status.put("error", false);
         return status.toString();
     }
-
+    /**
+     * Adds a repo from project id
+     * @param request The full HTTP Request
+     * @param projectId  The project id
+     * @param repoName The original repo name
+     * @param newName The new repo name
+     * @param engine The repo engine
+     * @param url The repo url
+     * @param branch  The repo branch
+     * @param creds  The repo creds
+     * @return A json with error: true if there was a failure
+     */
     @Secured("Persistence")
     @PatchMapping(value = "/projects/{projectId}/repos/{repoName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String updateRepo(HttpServletRequest request,
