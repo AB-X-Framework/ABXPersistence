@@ -161,12 +161,25 @@ public class ProjectPersistenceManager {
         return true;
     }
 
+    /**
+     * Adds a project with username name and project name
+     * @param username The username
+     * @param projectName The project name
+     * @return The project id
+     */
     @Transactional
     public Long addProject(final String username, String projectName) {
         UserDetails userDetails = userPersistenceManager.createOrFind(username);
         return addProject(userDetails, projectName);
     }
 
+    /**
+     * Updates project name if user can rename it
+     * @param username The username
+     * @param projectId The project id
+     * @param projectName The new  project name
+     * @return True if the project was renamed
+     */
     @Transactional
     public boolean updateProjectName(final String username, long projectId, String projectName) {
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
