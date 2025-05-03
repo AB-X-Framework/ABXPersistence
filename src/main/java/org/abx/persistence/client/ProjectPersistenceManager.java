@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -38,8 +36,6 @@ public class ProjectPersistenceManager {
     @Autowired
     private UserPersistenceManager userPersistenceManager;
 
-    @Autowired
-    private ProjectRepoRepository projectRepoRepository;
 
     private Long addProject(UserDetails userDetails, String projectName) {
         ProjectDetails projectDetails = new ProjectDetails();
@@ -79,6 +75,12 @@ public class ProjectPersistenceManager {
         return jsonProjectDetails;
     }
 
+    /**
+     * Returns the project repositories if user can access them
+     * @param username The username
+     * @param projectId The project id
+     * @return The repositories in JSON format
+     */
     @Transactional
     public JSONObject getProjectRepos(String username, final long projectId) {
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
@@ -105,8 +107,14 @@ public class ProjectPersistenceManager {
         return jsonProjectDetails;
     }
 
+    /**
+     * Gets the list of repository names of project if user can access them
+     * @param username The username
+     * @param projectId The project id
+     * @return A Set with repository names
+     */
     @Transactional
-    public Set<String> getRepos(String username, final long projectId) {
+    public Set<String> getRepoNames(String username, final long projectId) {
         ProjectEnrollment projectEnrollment = projectEnrollmentRepository.
                 findByProjectDetailsProjectIdAndUserDetailsUsername(projectId,username);
         if (projectEnrollment == null) {
@@ -120,7 +128,12 @@ public class ProjectPersistenceManager {
         return repos;
     }
 
-
+    /**
+     * Deletes a project if user is owner
+     * @param username The username
+     * @param projectId The project id
+     * @return True if the project was successfully deleted
+     */
     @Transactional
     public boolean deleteProject(String username, final long projectId) {
         ProjectEnrollment projectEnrollment =
@@ -190,7 +203,7 @@ public class ProjectPersistenceManager {
             return false;
         }
         ProjectDetails projectDetails = projectDetailsRepository.findByProjectId(projectId);
-        projectDetails.getSimSpecs().size();
+
         projectDetails.getSimSpecs().clear();
         userDetailsRepository.save(userDetails);
         return true;
@@ -256,8 +269,16 @@ public class ProjectPersistenceManager {
         return execDetailsRepository.save(execDetails).getExecId();
     }
 
+    /**
+     * Gets the execution
+     * @param username The username
+     * @param projectId The project id
+     * @param simId The Simulation id
+     * @param execId The execution id
+     * @return A JSON with the exectuion or null if the user does not have access to the project id
+     */
     @Transactional
-    public JSONObject getExec(String username, long projectId, long simId, long execId) throws Exception {
+    public JSONObject getExec(String username, long projectId, long simId, long execId)  {
         SimSpecs simSpecs = validSimSpecs(username, projectId, simId);
         if (simSpecs == null) {
             return null;

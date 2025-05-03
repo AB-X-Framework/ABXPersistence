@@ -161,7 +161,7 @@ public class ProjectPersistenceController {
                           @RequestParam String branch,
                           @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
-        if (projectPersistenceManager.getRepos(username, projectId).contains(repoName)) {
+        if (projectPersistenceManager.getRepoNames(username, projectId).contains(repoName)) {
             return ErrorMessage.errorString("Repo already exists");
         }
         return createRepoGetStatus(projectId, repoName, engine, url, branch, creds, username);
@@ -201,7 +201,7 @@ public class ProjectPersistenceController {
                              @RequestParam String creds) {
         String username = request.getUserPrincipal().getName();
         if (!repoName.equals(newName)) {
-            if (projectPersistenceManager.getRepos(username, projectId).contains(newName)) {
+            if (projectPersistenceManager.getRepoNames(username, projectId).contains(newName)) {
                 return ErrorMessage.errorString("Repo name already exists");
             }
             repoPersistenceManager.deleteRepo(Project, username, projectId, repoName);
@@ -299,11 +299,11 @@ public class ProjectPersistenceController {
     public String getExec(HttpServletRequest request,
                           @PathVariable long projectId,
                           @PathVariable long simId,
-                          @PathVariable long execId) throws Exception {
+                          @PathVariable long execId)  {
         String username = request.getUserPrincipal().getName();
         JSONObject exec = projectPersistenceManager.getExec(username, projectId, simId, execId);
         if (exec == null) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this resource");
+            return ErrorMessage.errorString("You are not allowed to access this resource");
         }
         return exec.toString();
     }
