@@ -19,7 +19,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import static org.abx.persistence.client.RepoPersistenceManager.Project;
 
-
+/**
+ * A controller to handle project request
+ */
 @RestController
 @RequestMapping("/persistence")
 public class ProjectPersistenceController {
@@ -167,9 +169,21 @@ public class ProjectPersistenceController {
         return createRepoGetStatus(projectId, repoName, engine, url, branch, creds, username);
     }
 
-    private String createRepoGetStatus(long projectId, String newName, String engine, String url,
+    /**
+     * Internal method to create repo and get status
+     * @param projectId The project id
+     * @param repoName The repo name
+     * @param engine The repo engine
+     * @param url The repo url
+     * @param branch The repo branch
+     * @param creds The repo creds
+     * @param username The repo username
+     * @return A JSON with error:true if the repo was not created
+     */
+    private String createRepoGetStatus(long projectId, String repoName, String engine, String url,
                                        String branch, String creds, String username) {
-        boolean created = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId, newName, engine, url, branch, creds);
+        boolean created = repoPersistenceManager.createProjectRepoIfNotFound(username, projectId,
+                repoName, engine, url, branch, creds);
         if (!created) {
             return ErrorMessage.errorString("Cannot create repo");
         }
