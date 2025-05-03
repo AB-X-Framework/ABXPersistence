@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A component for user management
+ */
 @Component
 public class UserPersistenceManager {
     @Autowired
@@ -25,6 +28,11 @@ public class UserPersistenceManager {
     @Autowired
     private ProjectEnrollmentRepository projectEnrollmentRepository;
 
+    /**
+     * Creates a user if not exist in the database
+     * @param name The username
+     * @return The user in Database
+     */
     @Transactional
     public UserDetails createUserIfNotFound(final String name) {
         return createOrFind(name);

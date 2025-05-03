@@ -19,12 +19,12 @@ public class UserPersistenceController {
     @Autowired
     private UserPersistenceManager userPersistenceManager;
 
-
     @Autowired
     private ProjectPersistenceManager projectPersistenceManager;
 
     @Autowired
     private DashboardPersistenceManager dashboardPersistenceManager;
+
     @Secured("Persistence")
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest request) {
@@ -35,7 +35,7 @@ public class UserPersistenceController {
 
     @RequestMapping(value = "/menu", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({"UseABX"})
-    public String menu(final HttpServletRequest request) throws Exception{
+    public String menu(final HttpServletRequest request) {
         try {
             String user = request.getUserPrincipal().getName();
             JSONObject jsonMenu = new JSONObject();

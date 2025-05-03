@@ -18,21 +18,11 @@ public class RepoPersistenceManager {
     @Autowired
     private ProjectEnrollmentRepository projectEnrollmentRepository;
 
-
-    @Autowired
-    private ExecDetailsRepository execDetailsRepository;
-
     @Autowired
     private RepoDetailsRepository repoDetailsRepository;
 
     @Autowired
-    private SimSpecsRepository simSpecsRepository;
-
-    @Autowired
     private ProjectDetailsRepository projectDetailsRepository;
-
-    @Autowired
-    private UserPersistenceManager userPersistenceManager;
 
     @Autowired
     private ProjectRepoRepository projectRepoRepository;
