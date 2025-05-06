@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class RepoPersistenceManager {
     public final static String Project = "Project";
     public final static String Dashboard = "Dashboard";
-    @Autowired
-    private UserDetailsRepository userDetailsRepository;
 
     @Autowired
     private ProjectEnrollmentRepository projectEnrollmentRepository;
@@ -32,6 +30,17 @@ public class RepoPersistenceManager {
         return (type + "/" + projectId + "/" + repoName).hashCode();
     }
 
+    /**
+     * Creates a repository if it does not exists
+     * @param username The username
+     * @param projectId The project id
+     * @param name The repo name
+     * @param type The repo type
+     * @param url The repo url
+     * @param branch The repo branch
+     * @param creds The creds
+     * @return true if the repo was created/updated
+     */
     @Transactional
     public boolean createProjectRepoIfNotFound(String username, long projectId, final String name,
                                                String type, String url, String branch, String creds) {
