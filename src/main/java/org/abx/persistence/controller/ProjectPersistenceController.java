@@ -284,10 +284,17 @@ public class ProjectPersistenceController {
      */
     @Secured("Persistence")
     @DeleteMapping(value = "/projects/{projectId}/sims", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean dropSims(HttpServletRequest request,
-                            @RequestParam long projectId) {
+    public String dropSims(HttpServletRequest request,
+                            @PathVariable long projectId) {
         String username = request.getUserPrincipal().getName();
-        return projectPersistenceManager.dropSims(username, projectId);
+        boolean working= projectPersistenceManager.dropSims(username, projectId);
+        if (working) {
+            JSONObject sims = new JSONObject();
+            sims.put("error", false);
+            return sims.toString();
+        }else {
+            return  ErrorMessage.errorString("Cannot drop sims");
+        }
     }
 
     /**

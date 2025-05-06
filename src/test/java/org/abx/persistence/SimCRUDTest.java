@@ -6,6 +6,7 @@ import org.abx.services.ServiceRequest;
 import org.abx.services.ServiceResponse;
 import org.abx.services.ServicesClient;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,6 +45,11 @@ public class SimCRUDTest {
                 servicesClient.get("persistence", "/persistence/projects").jwt(token)
         ).asJSONArray().getJSONObject(0).getInt("projectId");
 
+        System.out.println(servicesClient.delete("persistence", "/persistence/projects/"+projectId+"/sims").
+                jwt(token).process().asJSONObject());
+        Assertions.assertFalse(servicesClient.delete("persistence", "/persistence/projects/"+projectId+"/sims").
+                jwt(token).process().asJSONObject().getBoolean("error"));
+
         ServiceRequest req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/sims");
         req.jwt(token);
         servicesClient.process(req);
@@ -60,7 +66,9 @@ public class SimCRUDTest {
         req.addPart("path", path);
         req.addPart("type", type);
         ServiceResponse resp = servicesClient.process(req);
-        long id = resp.asLong();
+        JSONObject results = resp.asJSONObject();
+        Assertions.assertFalse(results.getBoolean("error"));
+        long id = resp.asJSONObject().getLong("id");
 
         req = servicesClient.get("persistence", "/persistence/projects/"+projectId+"/sims");
         req.jwt(token);
@@ -103,7 +111,7 @@ public class SimCRUDTest {
         req = servicesClient.delete("persistence", "/persistence/projects/"+projectId+"/sim/"+id);
         req.jwt(token);
         resp = servicesClient.process(req);
-        String data = resp.asString();
+        String resww = resp.asString();
         Assertions.assertTrue(resp.asBoolean());
 
 

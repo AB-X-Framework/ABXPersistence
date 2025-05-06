@@ -35,7 +35,7 @@ public enum ProjectRole {
     }*/
 
     public boolean canAddUser() {
-        return this == Owner || this == Admin|| this == User;
+        return this == Owner || this == Admin;
     }
 
     public boolean canSeeEnrollments() {
