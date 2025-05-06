@@ -45,8 +45,6 @@ public class SimCRUDTest {
                 servicesClient.get("persistence", "/persistence/projects").jwt(token)
         ).asJSONArray().getJSONObject(0).getInt("projectId");
 
-        System.out.println(servicesClient.delete("persistence", "/persistence/projects/"+projectId+"/sims").
-                jwt(token).process().asJSONObject());
         Assertions.assertFalse(servicesClient.delete("persistence", "/persistence/projects/"+projectId+"/sims").
                 jwt(token).process().asJSONObject().getBoolean("error"));
 
