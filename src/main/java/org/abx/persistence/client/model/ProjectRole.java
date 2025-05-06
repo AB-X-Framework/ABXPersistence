@@ -22,19 +22,23 @@ public enum ProjectRole {
         return this == Owner || (this == Admin && other != Owner);
     }*/
 
-    public boolean canAddRepo() {
+    public boolean canEditRepos() {
         return this == Owner || this == Admin || this == User;
     }
 
     public boolean canAddSim() {
-        return canAddRepo();
+        return canEditRepos();
     }
 
     /*public boolean canRun() {
         return this == Owner || this == Admin || this == User || this == CI;
     }*/
 
+    public boolean canAddUser() {
+        return this == Owner || this == Admin|| this == User;
+    }
+
     public boolean canSeeEnrollments() {
-        return this == Owner || this == Admin;
+        return this == Owner || this == Admin|| this == User;
     }
 }
